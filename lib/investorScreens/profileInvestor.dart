@@ -37,13 +37,6 @@ class _MyWidgetState extends State<ProfileInvestor> {
           ],
         ),
         actions: [
-          IconButton.filledTonal(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.notification_add_outlined,
-              color: Color.fromARGB(255, 192, 226, 190),
-            ),
-          ),
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert),
             color: Color.fromARGB(255, 192, 226, 190),

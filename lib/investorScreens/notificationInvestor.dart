@@ -10,6 +10,8 @@ class NotificationInvestor extends StatefulWidget {
 class _NotificationInvestorState extends State<NotificationInvestor> {
   @override
   Widget build(BuildContext context) {
+    final double wid = MediaQuery.of(context).size.width;
+    final double hei = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -20,12 +22,22 @@ class _NotificationInvestorState extends State<NotificationInvestor> {
             ),
           ),
         ),
-        title: Text("Notification"),
+        title: Text("Notifications"),
       ),
+      backgroundColor: Colors.grey[200],
       body: SingleChildScrollView(
-          child: Column(
-        children: [Text("Notificationsssssssss")],
-      )),
+        child: Column(
+          children: [
+            Container(
+              color: Colors.white, // White container
+              margin: EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(10),
+              width: wid - 20,
+              child: Text("Notificationsssssssss"),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

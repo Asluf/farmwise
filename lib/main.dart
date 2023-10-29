@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:device_preview/device_preview.dart';
 import 'package:farmwise/buyerScreens/buyerDashboard.dart';
 import 'package:farmwise/buyerScreens/buyerOrder.dart';
@@ -6,6 +8,7 @@ import 'package:farmwise/buyerScreens/buyerProfileEdit.dart';
 import 'package:farmwise/farmerScreens/FarmerProfile.dart';
 import 'package:farmwise/farmerScreens/FarmerProfileEdit.dart';
 import 'package:farmwise/farmerScreens/farmerDashboard.dart';
+import 'package:farmwise/farmerScreens/subscriptionPage.dart';
 import 'package:farmwise/investorScreens/dashboardInvestor.dart';
 import 'package:farmwise/investorScreens/widgets/fullScreenImage.dart';
 
@@ -54,11 +57,12 @@ class MyApp extends StatelessWidget {
         ),
       ),
       //home: const Homepage(),
-
       home: const FarmerDashboard(),
       // home: const buyerDashboard(),
       // home: const FullScreenImage(imagePath: 'assets/bg.png'),
+      // home: const DashboardInvestor(),
       //home: const DashboardInvestor(),
+
     );
   }
 }

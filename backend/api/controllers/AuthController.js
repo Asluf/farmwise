@@ -134,9 +134,10 @@ exports.loginUser = (req, res) => {
               } else {
                 res.status(200).json({
                   success: true,
-                  message: "Successfully Logged In!",
+                  message: `Successfully Logged In`,
                   data: {
                     token: token,
+                    role: user.role
                   },
                 });
               }

@@ -1,8 +1,10 @@
 import 'dart:ui';
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:farmwise/mainScreens/homePage.dart';
 import 'package:farmwise/mainScreens/registerSelection.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,6 +14,94 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // Get the token from shared preferences
+  Future<String> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('authToken') ??
+        ''; // Return an empty string if the token is not found
+  }
+
+  Future<void> saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('authToken', token);
+  }
+
+  void loginUser() async {
+    try {
+      final Map<String, String> headers = {
+        'Content-Type': 'application/json', // Set the content type
+      };
+      final Map<String, dynamic> data = {"email": email, "password": password};
+
+      final response = await http.post(
+        Uri.parse('http://localhost:5000/api/login'),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        // Request was successful
+        print('Login successfull');
+        print(response.body);
+        // call to alert fn
+        // _showLoginConfirm();
+        final Map<String, dynamic> responseBody = json.decode(response.body);
+        final String token = responseBody['data']['token'];
+        final String role = responseBody['data']['role'];
+
+        saveToken(token);
+        if (role == "farmer") {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/farmerDash', (route) => false);
+        } else if (role == "investor") {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/investorDash', (route) => false);
+        } else if (role == "buyer") {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/buyerDash', (route) => false);
+        }
+      } else {
+        // Request failed
+        print('Failed to send POST request');
+      }
+    } catch (er) {
+      print(er);
+    }
+  }
+
+  void _showLoginConfirm() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          alignment: Alignment.topCenter,
+          icon: Icon(Icons.logout),
+          buttonPadding: EdgeInsets.fromLTRB(0, 0, 30, 30),
+          // title: Text('Confirm Logout'),
+          content: Text('Login successfull'),
+          actions: [
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.pushNamed(context, '/login');
+            //   },
+            //   style: ButtonStyle(
+            //     backgroundColor:
+            //         MaterialStatePropertyAll(Color.fromARGB(255, 5, 46, 2)),
+            //     elevation: MaterialStatePropertyAll(4),
+            //     shape: MaterialStatePropertyAll(
+            //       RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(25),
+            //       ),
+            //     ),
+            //   ),
+            //   child: Text("Login"),
+            // ),
+          ],
+        );
+      },
+    );
+  }
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String? email;
@@ -153,20 +243,13 @@ class _LoginPageState extends State<LoginPage> {
                         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         width: 150,
                         child: ElevatedButton(
-                          child: const Text(
-                            'Login',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 4, 4, 4),
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              print('Valid form');
+                              print('valid form');
                               _formKey.currentState!.save();
+                              loginUser();
                             } else {
-                              print('not Valid form');
+                              print('not valid form');
                               return;
                             }
                           },
@@ -177,6 +260,14 @@ class _LoginPageState extends State<LoginPage> {
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25),
                             )),
+                          ),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 4, 4, 4),
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),

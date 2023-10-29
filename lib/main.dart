@@ -57,12 +57,12 @@ class MyApp extends StatelessWidget {
         ),
       ),
       //home: const Homepage(),
-
-      //home: const farmerDashboard(),
+      home: const FarmerDashboard(),
       // home: const buyerDashboard(),
       // home: const FullScreenImage(imagePath: 'assets/bg.png'),
       // home: const DashboardInvestor(),
-       home: subscriptionPage(),
+      //home: const DashboardInvestor(),
+
     );
   }
 }

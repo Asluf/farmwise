@@ -1,5 +1,8 @@
 import 'dart:html';
-
+import 'package:farmwise/mainScreens/login.dart';
+import 'package:farmwise/mainScreens/registerSelection.dart';
+import 'package:farmwise/test.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:farmwise/buyerScreens/buyerDashboard.dart';
 import 'package:farmwise/buyerScreens/buyerOrder.dart';
@@ -42,27 +45,31 @@ class MyApp extends StatelessWidget {
     final Color customGreenColor = Colors.green.shade700;
     //final Color accentColor = Color.fromRGBO(255, 165, 0, 1.0);
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
-
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primaryColor: customGreenColor,
-        //primaryColor: Color.fromRGBO(0, 128, 0, 1.0),
-        //accentColor: accentColor,
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedItemColor: Color.fromARGB(
-              255, 5, 46, 2), // Set the selected item color to green
+        debugShowCheckedModeBanner: false,
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
+        theme: ThemeData(
+          brightness: Brightness.light,
+          primaryColor: customGreenColor,
+          //primaryColor: Color.fromRGBO(0, 128, 0, 1.0),
+          //accentColor: accentColor,
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            selectedItemColor: Color.fromARGB(
+                255, 5, 46, 2), // Set the selected item color to green
+          ),
         ),
-      ),
-      //home: const Homepage(),
-      home: const FarmerDashboard(),
-      // home: const buyerDashboard(),
-      // home: const FullScreenImage(imagePath: 'assets/bg.png'),
-      // home: const DashboardInvestor(),
-      //home: const DashboardInvestor(),
-
-    );
+        // home: const Homepage(),
+        // home: const FarmerDashboard(),
+        // home: const buyerDashboard(),
+        // home: const FullScreenImage(imagePath: 'assets/bg.png'),
+        // home: const DashboardInvestor(),
+        //home: const DashboardInvestor(),
+        // home: const Test(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const Homepage(),
+          '/login': (context) => const LoginPage(),
+          'register': (context) => const registerSelection(),
+        });
   }
 }

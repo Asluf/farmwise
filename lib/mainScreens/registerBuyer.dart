@@ -147,6 +147,8 @@ class _FormScreenState extends State<registerBuyer> {
       validator: (text) {
         if (text!.isEmpty) {
           return "Please enter a password";
+        }else if (text != password) {
+          return "Password is not matching";
         }
         return null;
       },

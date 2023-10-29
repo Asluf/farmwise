@@ -1,4 +1,7 @@
 import 'dart:ui';
+import 'dart:convert';
+import 'package:farmwise/mainScreens/login.dart';
+import 'package:http/http.dart' as http;
 //import 'package:image_picker/image_picker.dart';
 
 import 'package:flutter/material.dart';
@@ -9,13 +12,90 @@ class registerFarmer extends StatefulWidget {
 }
 
 class _FormScreenState extends State<registerFarmer> {
+  void sendFarmer() async {
+    try {
+      final Map<String, String> headers = {
+        'Content-Type': 'application/json', // Set the content type
+      };
+      final Map<String, dynamic> data = {
+        "farmer_name": name,
+        "farmer_nic": nic,
+        "farmer_address": address,
+        "farm_name": farmName,
+        "farm_address": farmAddress,
+        "mobile_number": mobile,
+        "email": email,
+        "province": "Eastern",
+        "district": "Trinco",
+        "city": "kinniya",
+        "password": originalPassword,
+        "profile_pic": ""
+      };
+
+      final response = await http.post(
+        Uri.parse('http://localhost:5000/api/registerFarmer'),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        // Request was successful
+        print('Farmer registerred successfully');
+        print(response.body);
+        // call to alert fn
+        _showRegistrationConfirm();
+      } else {
+        // Request failed
+        print('Failed to send POST request');
+      }
+    } catch (er) {
+      print(er);
+    }
+  }
+
+  void _showRegistrationConfirm() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          alignment: Alignment.topCenter,
+          icon: Icon(Icons.logout),
+          buttonPadding: EdgeInsets.fromLTRB(0, 0, 30, 30),
+          // title: Text('Confirm Logout'),
+          content: Text('Registration successfull'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/login');
+              },
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStatePropertyAll(Color.fromARGB(255, 5, 46, 2)),
+                elevation: MaterialStatePropertyAll(4),
+                shape: MaterialStatePropertyAll(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+              ),
+              child: Text("Login"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _cropController = TextEditingController();
 
   String? name;
+  String? nic;
   String? address;
+  String? farmName;
+  String? farmAddress;
   String? email;
-  String? password;
+  String? originalPassword;
+  String? repassword;
   int? mobile;
 
   Widget _buildNameField() {
@@ -66,32 +146,7 @@ class _FormScreenState extends State<registerFarmer> {
         ),
       ),
       onSaved: (text) {
-        name = text;
-      },
-    );
-  }
-
-  Widget _buildFarmField() {
-    return TextFormField(
-      validator: (text) {
-        if (text!.isEmpty) {
-          return "Farm Name can't be empty";
-        }
-        return null;
-        //return HelperValidator.nameValidate('text');
-      },
-      maxLength: 20,
-      maxLines: 1,
-      decoration: const InputDecoration(
-        labelText: 'Farm Name',
-        hintText: 'Enter your Farm name',
-        prefixIcon: Icon(
-          Icons.agriculture,
-          color: Colors.grey,
-        ),
-      ),
-      onSaved: (text) {
-        name = text;
+        nic = text;
       },
     );
   }
@@ -119,6 +174,31 @@ class _FormScreenState extends State<registerFarmer> {
     );
   }
 
+  Widget _buildFarmField() {
+    return TextFormField(
+      validator: (text) {
+        if (text!.isEmpty) {
+          return "Farm Name can't be empty";
+        }
+        return null;
+        //return HelperValidator.nameValidate('text');
+      },
+      maxLength: 20,
+      maxLines: 1,
+      decoration: const InputDecoration(
+        labelText: 'Farm Name',
+        hintText: 'Enter your Farm name',
+        prefixIcon: Icon(
+          Icons.agriculture,
+          color: Colors.grey,
+        ),
+      ),
+      onSaved: (text) {
+        farmName = text;
+      },
+    );
+  }
+
   Widget _buildFarmAddressField() {
     return TextFormField(
       maxLength: 100,
@@ -137,30 +217,7 @@ class _FormScreenState extends State<registerFarmer> {
         ),
       ),
       onSaved: (text) {
-        address = text;
-      },
-    );
-  }
-
-  Widget _buildFarmAreaField() {
-    return TextFormField(
-      maxLength: 100,
-      validator: (text) {
-        if (text!.isEmpty) {
-          return "Arae cannot be empty";
-        }
-        return null;
-      },
-      decoration: const InputDecoration(
-        labelText: 'Area of Farm',
-        hintText: 'Enter your Farm area',
-        prefixIcon: Icon(
-          Icons.area_chart,
-          color: Colors.grey,
-        ),
-      ),
-      onSaved: (text) {
-        address = text;
+        farmAddress = text;
       },
     );
   }
@@ -188,36 +245,6 @@ class _FormScreenState extends State<registerFarmer> {
     );
   }
 
-  Widget _buildCropField() {
-    return DropdownButtonFormField<String>(
-      // value: _selectedItem,
-      onChanged: (value) {
-        setState(() {
-          _cropController.text = value!;
-        });
-      },
-      items: [
-        //DropdownMenuItem(child: Text("Select a crop"), value: ""),
-        DropdownMenuItem(child: Text("Vegetable"), value: "vegetable"),
-        DropdownMenuItem(child: Text("Chilli"), value: "chilli"),
-        DropdownMenuItem(child: Text("Leeks"), value: "leeks"),
-      ],
-      decoration: const InputDecoration(
-        labelText: 'Choose a crop',
-        prefixIcon: Icon(
-          Icons.select_all,
-          color: Colors.grey,
-        ),
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please select a crop';
-        }
-        return null;
-      },
-    );
-  }
-
   Widget _buildPasswordField() {
     return TextFormField(
       obscureText: true,
@@ -237,7 +264,10 @@ class _FormScreenState extends State<registerFarmer> {
         ),
       ),
       onSaved: (value) {
-        password = value;
+        originalPassword = value;
+      },
+      onChanged: (value) {
+        originalPassword = value;
       },
     );
   }
@@ -249,6 +279,8 @@ class _FormScreenState extends State<registerFarmer> {
       validator: (text) {
         if (text!.isEmpty) {
           return "Please enter a password";
+        } else if (text != originalPassword) {
+          return "Password is not matching";
         }
         return null;
       },
@@ -261,7 +293,7 @@ class _FormScreenState extends State<registerFarmer> {
         ),
       ),
       onSaved: (value) {
-        password = value;
+        repassword = value;
       },
     );
   }
@@ -324,10 +356,6 @@ class _FormScreenState extends State<registerFarmer> {
                     //color: Colors.black.withOpacity(0.1),
                     ),
               ),
-              // Title(
-              //   color: Colors.black,
-              //   child: const Text("Personal Information"),
-              // ),
               Container(
                 margin: const EdgeInsets.all(24.0),
                 // decoration: BoxDecoration(
@@ -342,13 +370,6 @@ class _FormScreenState extends State<registerFarmer> {
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
-                      // const Text(
-                      //   'Personal Information',
-                      //   style: TextStyle(
-                      //     fontSize: 20.0,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: _buildNameField(),
@@ -371,17 +392,8 @@ class _FormScreenState extends State<registerFarmer> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: _buildFarmAreaField(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: _buildCropField(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
                         child: _buildMobileNumberField(),
                       ),
-
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: _buildEmailField(),
@@ -394,43 +406,36 @@ class _FormScreenState extends State<registerFarmer> {
                         padding: const EdgeInsets.all(8.0),
                         child: _buildConfirmPasswordField(),
                       ),
-
-                      // const Text(
-                      //   'Cultivation Information',
-                      //   style: TextStyle(
-                      //     fontSize: 20.0,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
                       const SizedBox(height: 50),
                       Container(
                         width: 150,
-                        
                         child: ElevatedButton(
-                            child: const Text(
-                              'Submit',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 25, 25, 25),
-                                fontSize: 16.0,
-                              ),
-                            ),
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                print('valid form');
-                                _formKey.currentState!.save();
-                              } else {
-                                print('not valid form');
-                                return;
-                              }
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(
-                                  Color.fromARGB(255, 192, 226, 190)),
-                              shape: MaterialStatePropertyAll(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              )),
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              print('valid form');
+                              _formKey.currentState!.save();
+                              sendFarmer();
+                            } else {
+                              print('not valid form');
+                              return;
+                            }
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(
+                                Color.fromARGB(255, 192, 226, 190)),
+                            shape:
+                                MaterialStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
                             )),
+                          ),
+                          child: const Text(
+                            'Submit',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 25, 25, 25),
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
                       ),
                       SizedBox(height: 25)
                     ],

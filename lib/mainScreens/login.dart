@@ -77,9 +77,10 @@ class _LoginPageState extends State<LoginPage> {
         title: Text('Login'),
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context, Placeholder());
+            // Navigator.pop(context, Placeholder());
+            Navigator.pushNamed(context, '/');
           },
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.home),
         ),
         flexibleSpace: Container(
           decoration: BoxDecoration(

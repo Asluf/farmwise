@@ -13,6 +13,7 @@ class FarmerProfile extends StatefulWidget {
 }
 
 class _FarmerProfileState extends State<FarmerProfile> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +21,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
         title: Text('My Profile'),
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context, const farmerDashboard());
+            Navigator.pop(context, const FarmerDashboard());
           },
           icon: const Icon(Icons.arrow_back),
         ),

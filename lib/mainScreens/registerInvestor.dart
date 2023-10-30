@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 //import 'package:image_picker/image_picker.dart';
 
 import 'package:flutter/material.dart';
@@ -9,13 +11,88 @@ class registerInvestor extends StatefulWidget {
 }
 
 class _FormScreenState extends State<registerInvestor> {
+  void sendInvestor() async {
+    try {
+      final Map<String, String> headers = {
+        'Content-Type': 'application/json', // Set the content type
+      };
+      final Map<String, dynamic> data = {
+        "investor_name": name,
+        "nic": nic,
+        "address": address,
+        "mobile": mobile,
+        "email": email,
+        "province": "Eastern",
+        "district": "Trinco",
+        "city": "kinniya",
+        "password": originalPassword,
+        "profile_pic": ""
+      };
+
+      final response = await http.post(
+        Uri.parse('http://localhost:5000/api/registerInvestor'),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        // Request was successful
+        print('Investor registerred successfully');
+        print(response.body);
+        // call to alert fn
+        _showRegistrationConfirm();
+      } else {
+        // Request failed
+        print('Failed to send POST request');
+      }
+    } catch (er) {
+      print(er);
+    }
+  }
+
+  void _showRegistrationConfirm() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          alignment: Alignment.topCenter,
+          icon: Icon(Icons.logout),
+          buttonPadding: EdgeInsets.fromLTRB(0, 0, 30, 30),
+          // title: Text('Confirm Logout'),
+          content: Text('Registration successfull'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/login', (route) => false);
+              },
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStatePropertyAll(Color.fromARGB(255, 5, 46, 2)),
+                elevation: MaterialStatePropertyAll(4),
+                shape: MaterialStatePropertyAll(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+              ),
+              child: Text("Login"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String? name;
+  String? nic;
   String? address;
-  String? email;
-  String? password;
   int? mobile;
+  String? email;
+  String? originalPassword;
+  String? repassword;
 
   Widget _buildNameField() {
     return TextFormField(
@@ -65,7 +142,7 @@ class _FormScreenState extends State<registerInvestor> {
         ),
       ),
       onSaved: (text) {
-        name = text;
+        nic = text;
       },
     );
   }
@@ -91,6 +168,33 @@ class _FormScreenState extends State<registerInvestor> {
         address = text;
       },
     );
+  }
+
+  Widget _buildMobileNumberField() {
+    return TextFormField(
+        maxLength: 10,
+        keyboardType: TextInputType.number,
+        validator: (text) {
+          if (text!.isEmpty) {
+            return "Please enter a mobile Number";
+          }
+          return null;
+        },
+        decoration: const InputDecoration(
+          labelText: 'Mobile Number',
+          hintText: 'Enter a mobile number',
+          prefixIcon: Icon(
+            Icons.phone,
+            color: Colors.grey,
+          ),
+        ),
+        onSaved: (value) {
+          if (value != null && int.tryParse(value) != null) {
+            mobile = int.parse(value);
+          } else {
+            // Handle invalid input
+          }
+        });
   }
 
   Widget _buildEmailField() {
@@ -135,7 +239,10 @@ class _FormScreenState extends State<registerInvestor> {
         ),
       ),
       onSaved: (value) {
-        password = value;
+        originalPassword = value;
+      },
+      onChanged: (value) {
+        originalPassword = value;
       },
     );
   }
@@ -147,7 +254,7 @@ class _FormScreenState extends State<registerInvestor> {
       validator: (text) {
         if (text!.isEmpty) {
           return "Please enter a password";
-        }else if (text != password) {
+        } else if (text != originalPassword) {
           return "Password is not matching";
         }
         return null;
@@ -161,36 +268,9 @@ class _FormScreenState extends State<registerInvestor> {
         ),
       ),
       onSaved: (value) {
-        password = value;
+        repassword = value;
       },
     );
-  }
-
-  Widget _buildMobileNumberField() {
-    return TextFormField(
-        maxLength: 10,
-        keyboardType: TextInputType.number,
-        validator: (text) {
-          if (text!.isEmpty) {
-            return "Please enter a mobile Number";
-          }
-          return null;
-        },
-        decoration: const InputDecoration(
-          labelText: 'Mobile Number',
-          hintText: 'Enter a mobile number',
-          prefixIcon: Icon(
-            Icons.phone,
-            color: Colors.grey,
-          ),
-        ),
-        onSaved: (value) {
-          if (value != null && int.tryParse(value) != null) {
-            mobile = int.parse(value);
-          } else {
-            // Handle invalid input
-          }
-        });
   }
 
   @override
@@ -302,6 +382,7 @@ class _FormScreenState extends State<registerInvestor> {
                             if (_formKey.currentState!.validate()) {
                               print('valid form');
                               _formKey.currentState!.save();
+                              sendInvestor();
                             } else {
                               print('not valid form');
                               return;

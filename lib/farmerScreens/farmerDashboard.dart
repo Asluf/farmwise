@@ -158,10 +158,7 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
               onPressed: () {
                 // Handle logout action here
                 // Im just redirect to homepage
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FarmerDashboard()),
-                );
+                Navigator.pushNamed(context, '/');
               },
               style: ButtonStyle(
                 backgroundColor:

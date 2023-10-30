@@ -66,7 +66,8 @@ class _FormScreenState extends State<registerFarmer> {
           actions: [
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/login');
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/login', (route) => false);
               },
               style: ButtonStyle(
                 backgroundColor:

@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:quickalert/quickalert.dart';
 //import 'package:image_picker/image_picker.dart';
 
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class _FormScreenState extends State<registerInvestor> {
       };
 
       final response = await http.post(
-        Uri.parse('http://localhost:5000/api/registerInvestor'),
+        Uri.parse('http://localhost:5005/api/registerInvestor'),
         headers: headers,
         body: jsonEncode(data),
       );
@@ -44,6 +45,7 @@ class _FormScreenState extends State<registerInvestor> {
       } else {
         // Request failed
         print('Failed to send POST request');
+        _showRegistrationError();
       }
     } catch (er) {
       print(er);
@@ -51,36 +53,27 @@ class _FormScreenState extends State<registerInvestor> {
   }
 
   void _showRegistrationConfirm() {
-    showDialog(
+    QuickAlert.show(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          alignment: Alignment.topCenter,
-          icon: Icon(Icons.logout),
-          buttonPadding: EdgeInsets.fromLTRB(0, 0, 30, 30),
-          // title: Text('Confirm Logout'),
-          content: Text('Registration successfull'),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/login', (route) => false);
-              },
-              style: ButtonStyle(
-                backgroundColor:
-                    MaterialStatePropertyAll(Color.fromARGB(255, 5, 46, 2)),
-                elevation: MaterialStatePropertyAll(4),
-                shape: MaterialStatePropertyAll(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-              ),
-              child: Text("Login"),
-            ),
-          ],
-        );
+      type: QuickAlertType.success,
+      title: "Registration",
+      text: 'Successfull!',
+      confirmBtnText: 'Continue',
+      confirmBtnColor: Color.fromARGB(255, 101, 145, 103),
+      onConfirmBtnTap: () async {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
       },
+    );
+  }
+
+  void _showRegistrationError() {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: "Oops!",
+      text: 'Sorry, something went wrong',
+      confirmBtnText: 'Try again',
+      confirmBtnColor: Color.fromARGB(255, 67, 78, 68),
     );
   }
 

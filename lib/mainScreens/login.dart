@@ -5,6 +5,7 @@ import 'package:farmwise/mainScreens/homePage.dart';
 import 'package:farmwise/mainScreens/registerSelection.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:quickalert/quickalert.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -34,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
       final Map<String, dynamic> data = {"email": email, "password": password};
 
       final response = await http.post(
-        Uri.parse('http://localhost:5000/api/login'),
+        Uri.parse('http://localhost:5005/api/login'),
         headers: headers,
         body: jsonEncode(data),
       );
@@ -51,18 +52,28 @@ class _LoginPageState extends State<LoginPage> {
 
         saveToken(token);
         if (role == "farmer") {
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/farmerDash', (route) => false);
+          _showLoginConfirm();
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/farmerDash', (route) => false);
+          });
         } else if (role == "investor") {
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/investorDash', (route) => false);
+          _showLoginConfirm();
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/investorDash', (route) => false);
+          });
         } else if (role == "buyer") {
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/buyerDash', (route) => false);
+          _showLoginConfirm();
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/buyerDash', (route) => false);
+          });
         }
       } else {
         // Request failed
         print('Failed to send POST request');
+        _showLoginError();
       }
     } catch (er) {
       print(er);
@@ -70,35 +81,22 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _showLoginConfirm() {
-    showDialog(
+    QuickAlert.show(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          alignment: Alignment.topCenter,
-          icon: Icon(Icons.logout),
-          buttonPadding: EdgeInsets.fromLTRB(0, 0, 30, 30),
-          // title: Text('Confirm Logout'),
-          content: Text('Login successfull'),
-          actions: [
-            // ElevatedButton(
-            //   onPressed: () {
-            //     Navigator.pushNamed(context, '/login');
-            //   },
-            //   style: ButtonStyle(
-            //     backgroundColor:
-            //         MaterialStatePropertyAll(Color.fromARGB(255, 5, 46, 2)),
-            //     elevation: MaterialStatePropertyAll(4),
-            //     shape: MaterialStatePropertyAll(
-            //       RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(25),
-            //       ),
-            //     ),
-            //   ),
-            //   child: Text("Login"),
-            // ),
-          ],
-        );
-      },
+      type: QuickAlertType.success,
+      title: "Login",
+      text: 'Successfull!',
+    );
+  }
+
+  void _showLoginError() {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: "Oops!",
+      text: 'Incorrect username or password',
+      confirmBtnText: 'Try again',
+      confirmBtnColor: Color.fromARGB(255, 67, 78, 68),
     );
   }
 

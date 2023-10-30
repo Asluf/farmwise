@@ -13,7 +13,7 @@ class _TestState extends State<Test> {
   void testing() async {
     try {
       var response =
-          await http.get(Uri.parse('http://localhost:5000/getCrops'));
+          await http.get(Uri.parse('http://localhost:5005/getCrops'));
       var jsonresponse = jsonDecode(response.body);
       print(jsonresponse);
     } catch (er) {

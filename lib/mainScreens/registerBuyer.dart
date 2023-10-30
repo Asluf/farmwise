@@ -1,4 +1,7 @@
 import 'dart:ui';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:quickalert/quickalert.dart';
 //import 'package:image_picker/image_picker.dart';
 
 import 'package:flutter/material.dart';
@@ -9,12 +12,78 @@ class registerBuyer extends StatefulWidget {
 }
 
 class _FormScreenState extends State<registerBuyer> {
+  void sendBuyer() async {
+    try {
+      final Map<String, String> headers = {
+        'Content-Type': 'application/json', // Set the content type
+      };
+      final Map<String, dynamic> data = {
+        "buyer_name": name,
+        "nic": nic,
+        "address": address,
+        "mobile_number": mobile,
+        "email": email,
+        "province": "Eastern",
+        "district": "Trinco",
+        "city": "kinniya",
+        "password": originalPassword,
+        "profile_pic": ""
+      };
+      // print(jsonEncode(data));
+      final response = await http.post(
+        Uri.parse('http://localhost:5005/api/registerBuyer'),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        // Request was successful
+        print('Investor registerred successfully');
+        // call to alert fn
+        _showRegistrationConfirm();
+      } else {
+        // Request failed
+        print('Failed to send POST request ${response.body}');
+        _showRegistrationError();
+      }
+    } catch (er) {
+      print(er);
+    }
+  }
+
+  void _showRegistrationConfirm() {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.success,
+      title: "Registration",
+      text: 'Successfull!',
+      confirmBtnText: 'Continue',
+      confirmBtnColor: Color.fromARGB(255, 101, 145, 103),
+      onConfirmBtnTap: () async {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      },
+    );
+  }
+
+  void _showRegistrationError() {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: "Oops!",
+      text: 'Sorry, something went wrong',
+      confirmBtnText: 'Try again',
+      confirmBtnColor: Color.fromARGB(255, 67, 78, 68),
+    );
+  }
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String? name;
+  String? nic;
   String? address;
   String? email;
-  String? password;
+  String? originalPassword;
+  String? repassword;
   int? mobile;
 
   Widget _buildNameField() {
@@ -65,7 +134,7 @@ class _FormScreenState extends State<registerBuyer> {
         ),
       ),
       onSaved: (text) {
-        name = text;
+        nic = text;
       },
     );
   }
@@ -135,7 +204,10 @@ class _FormScreenState extends State<registerBuyer> {
         ),
       ),
       onSaved: (value) {
-        password = value;
+        originalPassword = value;
+      },
+      onChanged: (value) {
+        originalPassword = value;
       },
     );
   }
@@ -147,7 +219,7 @@ class _FormScreenState extends State<registerBuyer> {
       validator: (text) {
         if (text!.isEmpty) {
           return "Please enter a password";
-        }else if (text != password) {
+        } else if (text != originalPassword) {
           return "Password is not matching";
         }
         return null;
@@ -161,7 +233,7 @@ class _FormScreenState extends State<registerBuyer> {
         ),
       ),
       onSaved: (value) {
-        password = value;
+        repassword = value;
       },
     );
   }
@@ -302,6 +374,7 @@ class _FormScreenState extends State<registerBuyer> {
                             if (_formKey.currentState!.validate()) {
                               print('valid form');
                               _formKey.currentState!.save();
+                              sendBuyer();
                             } else {
                               print('not valid form');
                               return;

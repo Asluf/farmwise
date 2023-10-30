@@ -6,7 +6,6 @@ module.exports = function(app) {
     app.post("/registerFarmer", AuthController.registerFarmer);
     app.post("/registerInvestor", AuthController.registerInvestor);
     app.post("/registerBuyer", AuthController.registerBuyer);
-    // app.post("/registerf", AuthController.registerFarmer);
     app.post("/login", AuthController.loginUser);
     app.get("/user", Auth, AuthController.getUserDetails);
 };

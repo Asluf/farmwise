@@ -40,6 +40,8 @@ dependencies:
   web_socket_channel: ^2.4.0
   http: ^1.1.0
   shared_preferences: ^2.2.2
+  quickalert: ^1.0.2
+  
   
   
 

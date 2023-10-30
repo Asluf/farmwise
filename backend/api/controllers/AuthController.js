@@ -98,7 +98,7 @@ exports.registerBuyer = (req, res) => {
         .catch((err) => {
           return res.status(422).json({
             success: false,
-            message: "Please enter unique nic & mobile no & email!",
+            message: "Please enter unique nic & mobile no & email1!",
             data: err,
           });
         });
@@ -106,7 +106,7 @@ exports.registerBuyer = (req, res) => {
     .catch((err) => {
       return res.status(422).json({
         success: false,
-        message: "Please enter unique nic & mobile no & email!",
+        message: "Please enter unique nic & mobile no & email2!",
         data: err,
       });
     });

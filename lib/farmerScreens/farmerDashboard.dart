@@ -156,9 +156,8 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
           actions: [
             ElevatedButton(
               onPressed: () {
-                // Handle logout action here
-                // Im just redirect to homepage
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/logout', (route) => false);
               },
               style: ButtonStyle(
                 backgroundColor:

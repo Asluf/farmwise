@@ -1,11 +1,10 @@
 import 'dart:ui';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:farmwise/mainScreens/homePage.dart';
 import 'package:farmwise/mainScreens/registerSelection.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:quickalert/quickalert.dart';
+import '../services/auth_services.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,17 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // Get the token from shared preferences
-  Future<String> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('authToken') ??
-        ''; // Return an empty string if the token is not found
-  }
-
-  Future<void> saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('authToken', token);
-  }
+  final AuthService _authService = AuthService();
 
   void loginUser() async {
     try {
@@ -41,16 +30,14 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (response.statusCode == 200) {
-        // Request was successful
         print('Login successfull');
         print(response.body);
-        // call to alert fn
-        // _showLoginConfirm();
         final Map<String, dynamic> responseBody = json.decode(response.body);
         final String token = responseBody['data']['token'];
         final String role = responseBody['data']['role'];
-
-        saveToken(token);
+        // saving the token
+        await _authService.saveToken(token);
+        await _authService.saveRole(role);
         if (role == "farmer") {
           _showLoginConfirm();
           Future.delayed(const Duration(seconds: 2), () {

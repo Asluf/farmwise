@@ -178,10 +178,8 @@ class _MyWidgetState extends State<buyerDashboard> {
               onPressed: () {
                 // Handle logout action here
                 // Im just redirect to homepage
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Homepage()),
-                );
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/logout', (route) => false);
               },
               style: ButtonStyle(
                 backgroundColor:

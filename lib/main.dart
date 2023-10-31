@@ -1,79 +1,84 @@
 import 'dart:html';
-import 'package:farmwise/farmerScreens/createProposal.dart';
+import 'package:farmwise/farmerScreens/subscriptionPage.dart';
 import 'package:farmwise/mainScreens/login.dart';
 import 'package:farmwise/mainScreens/registerSelection.dart';
-import 'package:farmwise/test.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:farmwise/buyerScreens/buyerDashboard.dart';
-import 'package:farmwise/buyerScreens/buyerOrder.dart';
-import 'package:farmwise/buyerScreens/buyerProfile.dart';
-import 'package:farmwise/buyerScreens/buyerProfileEdit.dart';
-import 'package:farmwise/farmerScreens/FarmerProfile.dart';
-import 'package:farmwise/farmerScreens/FarmerProfileEdit.dart';
 import 'package:farmwise/farmerScreens/farmerDashboard.dart';
-import 'package:farmwise/farmerScreens/subscriptionPage.dart';
 import 'package:farmwise/investorScreens/dashboardInvestor.dart';
-import 'package:farmwise/investorScreens/widgets/fullScreenImage.dart';
-
-//import 'package:farmwise/farmerScreens/FarmerProfile.dart';
-
 import 'package:farmwise/mainScreens/homePage.dart';
-//import 'package:farmwise/mainScreens/info.dart';
-//import 'package:farmwise/mainScreens/more.dart';
-//import 'package:farmwise/mainScreens/login.dart';
-//import 'package:farmwise/mainScreens/registerBuyer.dart';
-//import 'package:farmwise/mainScreens/registerFarmer.dart';
-//import 'package:farmwise/mainScreens/registerInvestor.dart';
-//import 'package:farmwise/mainScreens/registerSelection.dart';
-
+import 'package:farmwise/services/logout.dart';
 import 'package:flutter/material.dart';
-//import 'mainScreens/registerFarmer.dart';
+import '../services/auth_services.dart';
 
-void main() {
+void main() async {
+  final AuthService _authService = AuthService();
+  String token = await _authService.getToken();
+  String role = await _authService.getRole();
   runApp(
     DevicePreview(
-      builder: (context) => MyApp(), // Wrap your app
+      builder: (context) => MyApp(token: token, role: role), // Wrap your app
     ),
   );
 }
 
 // RGB value for green: 0xRRGGBB
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  final String token;
+  final String role;
+
+  const MyApp({required this.token, required this.role});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    print(widget.token);
+    print(widget.role);
     final Color customGreenColor = Colors.green.shade700;
     //final Color accentColor = Color.fromRGBO(255, 165, 0, 1.0);
+
+    String? initialIdentifier;
+    if (widget.token == 'none' && widget.role == 'none') {
+      initialIdentifier = '/';
+    } else if (widget.token != 'none' && widget.role == 'farmer') {
+      initialIdentifier = '/farmerDash';
+    } else if (widget.token != 'none' && widget.role == 'investor') {
+      initialIdentifier = '/investorDash';
+    } else if (widget.token != 'none' && widget.role == 'buyer') {
+      initialIdentifier = '/buyerDash';
+    } else {
+      initialIdentifier = '/';
+    }
+
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
-        theme: ThemeData(
-          brightness: Brightness.light,
-          primaryColor: customGreenColor,
-          //primaryColor: Color.fromRGBO(0, 128, 0, 1.0),
-          //accentColor: accentColor,
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            selectedItemColor: Color.fromARGB(
-                255, 5, 46, 2), // Set the selected item color to green
-          ),
+      debugShowCheckedModeBanner: false,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primaryColor: customGreenColor,
+        //primaryColor: Color.fromRGBO(0, 128, 0, 1.0),
+        //accentColor: accentColor,
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          selectedItemColor: Color.fromARGB(
+              255, 5, 46, 2), // Set the selected item color to green
         ),
-        // home: const Homepage(),
-        // home:  const FarmerDashboard(),
-        // home: const buyerDashboard(),
-        // home: const FullScreenImage(imagePath: 'assets/bg.png'),
-        // home: const DashboardInvestor(),
-        //home: const DashboardInvestor(),
-        // home: const Test(),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const Homepage(),
-          '/login': (context) => const LoginPage(),
-          '/register': (context) => const registerSelection(),
-          '/farmerDash': (context) => const FarmerDashboard(),
-          "/investorDash": (context) => const DashboardInvestor(),
-          '/buyerDash': (context) => const buyerDashboard()
-        });
+      ),
+      initialRoute: initialIdentifier,
+      routes: {
+        '/': (context) => const Homepage(),
+        '/login': (context) => const LoginPage(),
+        '/register': (context) => const registerSelection(),
+        '/farmerDash': (context) => const FarmerDashboard(),
+        "/investorDash": (context) => const DashboardInvestor(),
+        '/buyerDash': (context) => const buyerDashboard(),
+        '/logout': (context) => const Logout()
+      },
+    );
   }
 }

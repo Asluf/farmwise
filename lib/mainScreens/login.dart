@@ -149,13 +149,13 @@ class _LoginPageState extends State<LoginPage> {
     double hei = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: Text('Login',style: TextStyle(color: const Color.fromARGB(255, 192, 226, 190),),),
         leading: IconButton(
           onPressed: () {
             // Navigator.pop(context, Placeholder());
             Navigator.pushNamed(context, '/');
           },
-          icon: const Icon(Icons.home),
+          icon: const Icon(Icons.home,color: const Color.fromARGB(255, 192, 226, 190),),
         ),
         flexibleSpace: Container(
           decoration: BoxDecoration(

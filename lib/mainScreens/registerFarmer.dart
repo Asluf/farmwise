@@ -323,7 +323,7 @@ class _FormScreenState extends State<registerFarmer> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Register as a Farmer'),
+          title: const Text('Register as a Farmer',style: TextStyle(color: Color.fromARGB(255, 192, 226, 190)),),
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context, Placeholder());

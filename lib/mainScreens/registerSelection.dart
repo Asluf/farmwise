@@ -18,12 +18,16 @@ class _MyWidgetState extends State<registerSelection> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Select to Register"),
+          title: const Text(
+            "Select to Register",
+            style: TextStyle(color: Color.fromARGB(255, 192, 226, 190)),
+          ),
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context, Placeholder());
               },
-              icon: const Icon(Icons.arrow_back)),
+              icon: const Icon(Icons.arrow_back,
+                  color: Color.fromARGB(255, 192, 226, 190))),
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(

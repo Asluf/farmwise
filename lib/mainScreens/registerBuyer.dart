@@ -269,12 +269,12 @@ class _FormScreenState extends State<registerBuyer> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Register as a Buyer'),
+          title: const Text('Register as a Buyer',style: TextStyle(color: Color.fromARGB(255, 192, 226, 190),),),
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context, Placeholder());
             },
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back,color: Color.fromARGB(255, 192, 226, 190)),
           ),
           flexibleSpace: Container(
             decoration: const BoxDecoration(

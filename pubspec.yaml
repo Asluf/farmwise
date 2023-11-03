@@ -41,7 +41,8 @@ dependencies:
   http: ^1.1.0
   shared_preferences: ^2.2.2
   quickalert: ^1.0.2
-  
+  image_picker: ^1.0.4  
+  video_player: ^2.8.1
   
   
 

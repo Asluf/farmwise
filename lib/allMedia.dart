@@ -73,7 +73,11 @@ class _TestState extends State<Test> {
       await _controller!.setVolume(0.0);
     }
     if (context.mounted) {
-      if (isMultiImage) {
+      if (isVideo) {
+        final XFile? file = await _picker.pickVideo(
+            source: source, maxDuration: const Duration(seconds: 10));
+        await _playVideo(file);
+      } else if (isMultiImage) {
         await _displayPickImageDialog(context,
             (double? maxWidth, double? maxHeight, int? quality) async {
           try {
@@ -328,6 +332,95 @@ class _TestState extends State<Test> {
               child: const Icon(Icons.photo),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: FloatingActionButton(
+              onPressed: () {
+                isVideo = false;
+                _onImageButtonPressed(
+                  ImageSource.gallery,
+                  context: context,
+                  isMultiImage: true,
+                  isMedia: true,
+                );
+              },
+              heroTag: 'multipleMedia',
+              tooltip: 'Pick Multiple Media from gallery',
+              child: const Icon(Icons.photo_library),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: FloatingActionButton(
+              onPressed: () {
+                isVideo = false;
+                _onImageButtonPressed(
+                  ImageSource.gallery,
+                  context: context,
+                  isMedia: true,
+                );
+              },
+              heroTag: 'media',
+              tooltip: 'Pick Single Media from gallery',
+              child: const Icon(Icons.photo_library),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: FloatingActionButton(
+              onPressed: () {
+                isVideo = false;
+                _onImageButtonPressed(
+                  ImageSource.gallery,
+                  context: context,
+                  isMultiImage: true,
+                );
+              },
+              heroTag: 'image1',
+              tooltip: 'Pick Multiple Image from gallery',
+              child: const Icon(Icons.photo_library),
+            ),
+          ),
+          if (_picker.supportsImageSource(ImageSource.camera))
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: FloatingActionButton(
+                onPressed: () {
+                  isVideo = false;
+                  _onImageButtonPressed(ImageSource.camera, context: context);
+                },
+                heroTag: 'image2',
+                tooltip: 'Take a Photo',
+                child: const Icon(Icons.camera_alt),
+              ),
+            ),
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: FloatingActionButton(
+              backgroundColor: Colors.red,
+              onPressed: () {
+                isVideo = true;
+                _onImageButtonPressed(ImageSource.gallery, context: context);
+              },
+              heroTag: 'video0',
+              tooltip: 'Pick Video from gallery',
+              child: const Icon(Icons.video_library),
+            ),
+          ),
+          if (_picker.supportsImageSource(ImageSource.camera))
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: FloatingActionButton(
+                backgroundColor: Colors.red,
+                onPressed: () {
+                  isVideo = true;
+                  _onImageButtonPressed(ImageSource.camera, context: context);
+                },
+                heroTag: 'video1',
+                tooltip: 'Take a Video',
+                child: const Icon(Icons.videocam),
+              ),
+            ),
         ],
       ),
     );

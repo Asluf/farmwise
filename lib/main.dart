@@ -1,5 +1,3 @@
-import 'dart:html';
-import 'package:farmwise/farmerScreens/subscriptionPage.dart';
 import 'package:farmwise/mainScreens/login.dart';
 import 'package:farmwise/mainScreens/registerSelection.dart';
 import 'package:device_preview/device_preview.dart';
@@ -8,10 +6,12 @@ import 'package:farmwise/farmerScreens/farmerDashboard.dart';
 import 'package:farmwise/investorScreens/dashboardInvestor.dart';
 import 'package:farmwise/mainScreens/homePage.dart';
 import 'package:farmwise/services/logout.dart';
+import 'package:farmwise/test.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_services.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final AuthService _authService = AuthService();
   String token = await _authService.getToken();
   String role = await _authService.getRole();
@@ -20,6 +20,7 @@ void main() async {
       builder: (context) => MyApp(token: token, role: role), // Wrap your app
     ),
   );
+  // runApp(MyApp(token: token, role: role));
 }
 
 // RGB value for green: 0xRRGGBB
@@ -69,6 +70,7 @@ class _MyAppState extends State<MyApp> {
               255, 5, 46, 2), // Set the selected item color to green
         ),
       ),
+      // initialRoute: '/test',
       initialRoute: initialIdentifier,
       routes: {
         '/': (context) => const Homepage(),
@@ -77,7 +79,8 @@ class _MyAppState extends State<MyApp> {
         '/farmerDash': (context) => const FarmerDashboard(),
         "/investorDash": (context) => const DashboardInvestor(),
         '/buyerDash': (context) => const buyerDashboard(),
-        '/logout': (context) => const Logout()
+        '/logout': (context) => const Logout(),
+        '/test': (context) => Test(),
       },
     );
   }

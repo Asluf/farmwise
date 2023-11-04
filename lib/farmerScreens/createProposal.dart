@@ -1,10 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:farmwise/farmerScreens/farmerDashboard.dart';
 import 'package:flutter/material.dart';
-
-
-
 
 class CreateProposal extends StatefulWidget {
   CreateProposal({Key? key}) : super(key: key);

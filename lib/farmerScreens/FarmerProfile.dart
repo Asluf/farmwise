@@ -2,6 +2,8 @@ import 'package:farmwise/farmerScreens/FarmerProfileEdit.dart';
 import 'package:farmwise/farmerScreens/farmerDashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -13,7 +15,22 @@ class FarmerProfile extends StatefulWidget {
 }
 
 class _FarmerProfileState extends State<FarmerProfile> {
-  
+  // Select Dp from gallery
+  Future<void> _openGallery() async {
+    final imagePicker = ImagePicker();
+    final pickedImage =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      // Use the picked image for profile editing or display.
+      // You can save the image to your app's storage or use it directly.
+      File imageFile = File(pickedImage.path);
+      // Now, you can do something with the image, like displaying it or uploading it.
+    } else {
+      // User canceled image picking.
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +92,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                       child: IconButton(
                         icon: Icon(Icons.edit),
                         color: Colors.white,
-                        onPressed: () {},
+                        onPressed: _openGallery,
                       ),
                     ),
                   )

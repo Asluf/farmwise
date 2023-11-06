@@ -1,3 +1,5 @@
+import 'package:farmwise/farmerScreens/verificationForgot.dart';
+import 'package:farmwise/mainScreens/forgotPassword.dart';
 import 'package:farmwise/mainScreens/login.dart';
 import 'package:farmwise/mainScreens/registerSelection.dart';
 import 'package:device_preview/device_preview.dart';
@@ -71,8 +73,7 @@ class _MyAppState extends State<MyApp> {
               255, 5, 46, 2), // Set the selected item color to green
         ),
       ),
-      //initialRoute: '/test',
-
+      // initialRoute: '/farmerDash',
       initialRoute: initialIdentifier,
       routes: {
         '/': (context) => const Homepage(),
@@ -83,6 +84,8 @@ class _MyAppState extends State<MyApp> {
         '/buyerDash': (context) => const buyerDashboard(),
         '/logout': (context) => const Logout(),
         '/test': (context) => Test(),
+        '/forgot': (context) => ForgotPassword(),
+        '/verification':(context) => VerificationForgot(),
       },
     );
   }

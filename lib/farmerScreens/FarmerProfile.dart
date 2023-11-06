@@ -17,38 +17,38 @@ class FarmerProfile extends StatefulWidget {
 
 class _FarmerProfileState extends State<FarmerProfile> {
   Map<String, dynamic> profileInfo = {};
+
   final AuthService _authService = AuthService();
   String email = '';
   String token = '';
 
   Future<void> fetchData() async {
     email = await _authService.getEmail();
-    email = await _authService.getToken();
+    token = await _authService.getToken();
+
     try {
       final Map<String, String> headers = {
+        'authorization': 'Bearer $token',
         'x-access-token': token,
-        'Authorization': 'Bearer ${token}',
-        'Content-Type': 'application/json', // Set the content type
-        
-
+        'Content-Type': 'application/json',
       };
       final Map<String, dynamic> data = {"email": email};
+
       final response = await http.post(
         Uri.parse('http://localhost:5005/api/getFarmer'),
         headers: headers,
         body: jsonEncode(data),
       );
 
-      // if (response.statusCode == 200) {
-      //   // Process the data retrieved from the server
-      //   setState(() {
-      //     profileInfo = json.decode(response.body);
-      //   });
-      //   print(response.body);
-      // } else {
-      //   // Handle any errors
-      //   print('Failed to fetch data ${response.statusCode}');
-      // }
+      if (response.statusCode == 200) {
+        // Process the data retrieved from the server
+        setState(() {
+          profileInfo = json.decode(response.body);
+        });
+      } else {
+        // Handle any errors
+        print('Failed to fetch data ${response.body}');
+      }
       print(jsonDecode(response.body));
     } catch (er) {
       print(er);
@@ -106,21 +106,46 @@ class _FarmerProfileState extends State<FarmerProfile> {
                         image: DecorationImage(
                             fit: BoxFit.cover,
                             image: NetworkImage(
-                                'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAPFBMVEXk5ueutLepsLPo6uursbXJzc/p6+zj5ea2u76orrKvtbi0ubzZ3N3O0dPAxcfg4uPMz9HU19i8wcPDx8qKXtGiAAAFTElEQVR4nO2d3XqzIAyAhUD916L3f6+f1m7tVvtNINFg8x5tZ32fQAIoMcsEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQTghAJD1jWtnXJPP/54IgNzZQulSmxvTH6oYXX4WS+ivhTbqBa1r26cvCdCu6i0YXbdZ0o4A1rzV+5IcE3YE+z58T45lqo7g1Aa/JY5tgoqQF3qb382x7lNzBLcxft+O17QUYfQI4IIeklKsPSN4i6LKj/7Zm8n99RbHJpEw9gEBXNBpKIYLJqKYRwjOikf//r+J8ZsVuacbqCMNleI9TqGLGqMzhnVdBOdd6F/RlrFijiCoVMk320CBIahUxTWI0KKEcJqKbMdpdJb5QvdHq6wCI5qhKlgGMS/RBHkubWDAE+QZxB4xhCyDiDkLZxgGEVdQldzSKbTIhmZkFkSEPcVvmBn2SMuZB9od7fQDsMiDdKJjFUSCQarM5WirZ3C2TT/htYnyPcPfgrFHWz0BI74gr6J/IZiGUxAZGQLqmvQLTrtE/Go4YxhVRIpEw+sww1IIcqr5NKmUUzLF3d4/qPkYIp2T/obPuemlojFUR4t9Q2Vojhb7BmgElWHzLPH8hucfpefPNFTVgs9h1AdU/Pin96vwWbWdf+X9Absn3OdO34aMdsDnP8WgKYisTqI6CkNGqZQo1XA6Ef6AU32SJzOcBukHPF07/xNSgmHKa5BOhtezv6mA/rYJpwXNAnbRZ1XuF3BzDcO3vpA3+ny2909gbqE4hhD3LIPhLLyBNhPZvbZ3B+3tPYa18A7auSlXQayKwTPNLKDcuOB0xPYKDPFTkWsevQPRZ1J8Hji9I1KQ34r7hZhrwNwOZ97QxNx0drwn4QI0wQk1DcEsfKCWKdxVvxPSNUIp/knmAXT+nT+Ko3+0H96rcNb3m1fx7MBTJdeBJ7uFcWsc0wvgAsC4pROW0l2inbAmIBv/7GZmuhQH6API2rr8T0e6yuZJ+80A9LZeG62T3tik31XwxtwZcizKuTHkMjB1WdZde4Kmic/A5ZI3rr1ae21d08PlVHYfAaxw9G9CYRbJ+8ZdbTcMRV1XM3VdF0M32vtoTdZ0+u29s0OttJ5bz64UwinjaFMVY9vkqc3KKSxN21Xl+0L4Q3Vuv1tYl0pqnX6ms4XetFz7gdZVAgUEoJntfOUe4ZwsHd9FzqQ3Vv6xe41l0XJcqcKl6TZvlv7ClAW3BsqQW4X7ypApB8dmTgK4IX5wvqIVj33HtD2qSG4BqznxdIefL27Y4sahi0MdIdvUsDva8agGGbCtITmCY31MHD2O0uIdh/0rJDQ1VX5Zdxz3rR2QDbv6qXl9vudzqQtGm1Jv9LDXOsfvvB7VcZ8PDKD0mQ1VHPYQ9O+Yj4hR1IUD8rBnn3ho2m8oQMxbCFiKlL2ioSW5heeJqegED52CzxCtcGD3Kv8Wms9EYLyUhwaFIhSMBClevWEmiK/Iaogu4H7sg6ppQhQG8RUqivuTGOAJOg6FfgW0q0M0PQMRMEgXaeNf3SYDZ8PIMI0+wHgr/MgN7wYwpiLjCCqM6ydUDZLQiB6nDdNC8SDyig3jPPpFXGcC9O8BUBDVmgBY59E7Md/35Loe/UVEECEJwYggJjELZ4J71SaQSBeC02n4Da29CayJNA28SAhd2CQyC1Xw6pSmGSINQVuMhAZp4DClan9MgmkDDNmezqwS8sgtlXK/EPBhoaSmYVC/F7IO1jQEdHOlabpKh3+jzLQSTUiq4X2I+Ip/zU8rlaqAvkS21ElR+gqu3zbjjL+hIAiCIAiCIAiCIAiCsCf/AKrfVhSbvA+DAAAAAElFTkSuQmCC'))),
+                                'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHkAAAB5CAMAAAAqJH57AAAARVBMVEXb29tjY2Pe3t5eXl7h4eFbW1tXV1d1dXVmZmbk5OTMzMzU1NRycnKvr6+RkZHCwsKFhYVsbGyLi4u4uLimpqZ8fHybm5uAPwHBAAADmUlEQVRoge2aCXLkIAxFQQJs4329/1EHO8kkaXfbyPn01FT6X+CVhCSEkFIvvfTSS79MRGYTPRurfL00w9AstVfmeWDjm95Zy6usy5aSnmM5qcaxzvW7cm1d54snsI3XrG/Ebm6L1GBqd9yNbTuf+LzL/B54ZfOiUrrczHdN3mSrNp3ZNNpHNm8uT2d20T/mbmZnPgmaitYdk4PZIz7IydTVGTjILWi0GXt7zl09PmAdTk0cNxQ1LJq6WPBqdYNDm8Hqg3TaoSdUYlPtBNxVHkRWjwvXffGACXAzCQ75HQ0yupKCNS+Qk/YRBeRWPcLdVIudHUoZAKzMIg0wGLm5QIZ4+wqZu/+cfOGcuUFkVWiBxGQ7QS4Nf4FcY66rCzWshZBJHmJcIsCKLpRPCDigMym4ArWBNAqNxiTVKnPS4d8KlFRKbrQdYT2gySThzTOKuz6bJdXEYrJ5A1MxxBvNA+w1S17bJb7vtR42sqGOdRUf3jk72GNWWrhRF4ZSwnQGZpX4skK9bmgWgitYhAn7IVxaUSksnpi3zSrTiYwGlm1hE+hw1VPJ3M3AqVghmhnkmC7sjSy4MLTOcGBlJhbcGLBeSL2PtSPZtgM6O6B1Fdl1oyef5MvTceubHNTiFU1lnLN7/HidogoZrtX+VNxYDNj9faqMIbsUQ/0Yd/Oc4uMq5qWRxNlrUp+bnObjiM5jLM3fjTodN9s61V/ZSWKlyOUP0WHnXSXjruF95G/kvbwj3/8E/rAZfVlEk5FdkIyM+r24Tz6KMGS3KyTjOvw92R+RcX9ze7B5uGewnXNTJFktIePr5vglnXfLWOKvyZIt83Hrm+t1qQZtNkX2ntqiszr6dxKeWyb2aYWP8NghN4MXDR7v7ewEvixDgMWiLbZ8myX6HYubAG4iwTSuQ4bY8fV4o7zEGU3qYD1rB+YBNWcOFTsTTCu2FbkWsLAVuIM7Kdh7tqsm9bNtUCo27gVZ1/xgJ5LMODuhuV8Nn9trbKKx50v2/mXbuZUHG6kxu7DPccvmeZSxjaoDN7/q6O92x7OJyilyBS6K7bIxKslCGjVWtBB2Lled222ozq6l0Qm7r81BPaeiXBjn5u+yPD1a9ibTdlZarSRiXvydwmZCFv0seyNkddfesE05VTY1d9WaZF8CnRQyi87YX5LM1M/jbgrsLdaoc5BqJWJ3wexifq7Bb2JdKvlSJQY9i3+XYVLRvzIJyP9Iv5H8B9BYLFfSyOwbAAAAAElFTkSuQmCC'))),
                   ),
                 ],
               ),
             ),
             SizedBox(height: 20),
-            itemProfile("Farmer Name", "Silva", CupertinoIcons.person),
+            itemProfile(
+                "Farmer Name",
+                (profileInfo != null && profileInfo['data'] != null)
+                    ? profileInfo['data']['farmer_name'] ?? ''
+                    : '',
+                CupertinoIcons.person),
             SizedBox(height: 15),
-            itemProfile("Farm Name", "Silva Farm", CupertinoIcons.person),
+            itemProfile(
+                "Farm Name",
+                (profileInfo != null && profileInfo['data'] != null)
+                    ? profileInfo['data']['farm_name'] ?? ''
+                    : '',
+                CupertinoIcons.person),
             SizedBox(height: 15),
-            itemProfile("Address", "28/C, First lane", CupertinoIcons.location),
+            itemProfile(
+                "Address",
+                (profileInfo != null && profileInfo['data'] != null)
+                    ? profileInfo['data']['farmer_address'] ?? ''
+                    : '',
+                CupertinoIcons.location),
             SizedBox(height: 15),
-            itemProfile("E-mail", "Silva@gmail.com", CupertinoIcons.mail),
+            itemProfile(
+                "E-mail",
+                (profileInfo != null && profileInfo['data'] != null)
+                    ? profileInfo['data']['email'] ?? ''
+                    : '',
+                CupertinoIcons.mail),
             SizedBox(height: 15),
-            itemProfile("Phone", "0712525689", CupertinoIcons.phone),
+            itemProfile(
+                "Phone",
+                (profileInfo != null && profileInfo['data'] != null)
+                    ? profileInfo['data']['mobile_number'] ?? ''
+                    : '',
+                CupertinoIcons.phone),
             SizedBox(height: 20),
             Container(
               width: 150,
@@ -134,7 +159,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                   ),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                      return FarmerProfileEdit();
+                      return FarmerProfileEdit(profileInfo: profileInfo);
                     }));
                   },
                   style: ButtonStyle(

@@ -20,7 +20,8 @@ void main() async {
   String email = await _authService.getEmail();
   runApp(
     DevicePreview(
-      builder: (context) => MyApp(token: token, role: role,email:email), // Wrap your app
+      builder: (context) =>
+          MyApp(token: token, role: role, email: email), // Wrap your app
     ),
   );
   // runApp(MyApp(token: token, role: role));
@@ -88,7 +89,7 @@ class _MyAppState extends State<MyApp> {
         '/logout': (context) => const Logout(),
         '/test': (context) => Test(),
         '/forgot': (context) => ForgotPassword(),
-        '/verification':(context) => VerificationForgot(),
+        '/verification': (context) => VerificationForgot(),
       },
     );
   }

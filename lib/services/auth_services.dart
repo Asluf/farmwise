@@ -21,6 +21,7 @@ class AuthService {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('authRole') ?? '';
   }
+
   Future<void> saveEmail(String email) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('authEmail', email);

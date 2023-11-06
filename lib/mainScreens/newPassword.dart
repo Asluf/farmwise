@@ -1,30 +1,30 @@
-import 'package:farmwise/mainScreens/newPassword.dart';
+import 'package:farmwise/farmerScreens/verificationForgot.dart';
 import 'package:flutter/material.dart';
 
-class VerificationForgot extends StatefulWidget {
-  const VerificationForgot({Key? key}) : super(key: key);
+class NewPassword extends StatefulWidget {
+  const NewPassword({Key? key}) : super(key: key);
 
   @override
-  State<VerificationForgot> createState() => _VerificationForgotState();
+  State<NewPassword> createState() => _NewPasswordState();
 }
 
-class _VerificationForgotState extends State<VerificationForgot> {
-  final TextEditingController _verificationCodeController =
+class _NewPasswordState extends State<NewPassword> {
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  void _sendResetLink() {
-    // Perform sending reset link functionality here
-    String verificationCode = _verificationCodeController.text;
-    // You can add your logic to handle the verification code entered
-    print('Verification code entered: $verificationCode');
-    // Add logic to validate the verification code or perform further actions
+  void _resetPassword() {
+    String newPassword = _passwordController.text;
+    String confirmNewPassword = _confirmPasswordController.text;
 
-    // Navigate to the NewPassword screen after sending the reset link
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => NewPassword(),
-      ),
-    );
+    if (newPassword == confirmNewPassword) {
+      print('New password set: $newPassword');
+
+      // Navigate to the Verification screen after resetting the password
+    } else {
+      // Passwords don't match, handle this case as needed
+      print('Passwords do not match');
+    }
   }
 
   @override
@@ -42,7 +42,7 @@ class _VerificationForgotState extends State<VerificationForgot> {
             ),
           ),
         ),
-        title: const Text("Verification"),
+        title: const Text("New Password"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -51,43 +51,49 @@ class _VerificationForgotState extends State<VerificationForgot> {
           child: Column(
             children: <Widget>[
               Text(
-                'Enter Verification Code',
+                'Enter New Password',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 10), // Small space after text
               TextField(
-                controller: _verificationCodeController,
+                controller: _passwordController,
+                obscureText: true,
                 decoration: InputDecoration(
-                  labelText: 'Enter verification code',
+                  labelText: 'Enter your new password',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
-                keyboardType: TextInputType.number,
               ),
-              SizedBox(height: 10),
-              TextButton(
-                onPressed: () {
-                  // Add logic to navigate back to the sign-in screen
-                  print('Navigate back to Sign In');
-                },
-                child: const Text(
-                  'If you didn\'t receive a code. Resend',
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 5, 46, 2),
+              SizedBox(height: 10), // Small space after the password field
+              Text(
+                'Confirm Password',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10), // Small space after text
+              TextField(
+                controller: _confirmPasswordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Confirm your new password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(
+                  height:
+                      10), // Small space after the password confirmation field
               ElevatedButton(
-                onPressed: _sendResetLink,
+                onPressed: _resetPassword,
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(Color.fromARGB(255, 5, 46, 2)),
                   elevation: MaterialStateProperty.all(4),
                   minimumSize: MaterialStateProperty.all(Size(wid - 120, 60)),
                   padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(horizontal: 70)),
+                    EdgeInsets.symmetric(horizontal: 70),
+                  ),
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
@@ -109,6 +115,6 @@ class _VerificationForgotState extends State<VerificationForgot> {
 
 void main() {
   runApp(MaterialApp(
-    home: VerificationForgot(),
+    home: NewPassword(),
   ));
 }

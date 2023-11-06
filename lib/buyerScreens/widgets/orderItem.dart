@@ -78,8 +78,10 @@ class OrderItem extends StatelessWidget {
                             );
                           });
                     },
-                    icon: Icon(Icons.arrow_downward),
-                    label: Text("View all")),
+                    icon: Icon(Icons.arrow_downward,
+                        color: Colors.green.shade600),
+                    label: Text("View all",
+                        style: TextStyle(color: Colors.green.shade600))),
               )
           ],
         ),

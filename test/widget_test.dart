@@ -9,11 +9,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:farmwise/main.dart';
+import '../lib//services/auth_services.dart';
 
-void main() {
+void main() async {
+  final AuthService _authService = AuthService();
+  String token = await _authService.getToken();
+  String role = await _authService.getRole();
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(MyApp(token: token, role: role));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

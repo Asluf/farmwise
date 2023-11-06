@@ -43,7 +43,6 @@ class _MyAppState extends State<MyApp> {
     print(widget.token);
     print(widget.role);
     final Color customGreenColor = Colors.green.shade700;
-    //final Color accentColor = Color.fromRGBO(255, 165, 0, 1.0);
 
     String? initialIdentifier;
     if (widget.token == 'none' && widget.role == 'none') {
@@ -63,10 +62,12 @@ class _MyAppState extends State<MyApp> {
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       theme: ThemeData(
+        hintColor: Color.fromARGB(
+            255, 76, 72, 76), // Set the accent color for buttons, etc.
+
         brightness: Brightness.light,
         primaryColor: customGreenColor,
-        //primaryColor: Color.fromRGBO(0, 128, 0, 1.0),
-        //accentColor: accentColor,
+
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedItemColor: Color.fromARGB(
               255, 5, 46, 2), // Set the selected item color to green

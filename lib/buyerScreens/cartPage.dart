@@ -55,11 +55,19 @@ class _MyWidgetState extends State<cartPage> {
           ],
         ),
         SizedBox(height: 20),
-
         FilledButton.icon(
-            onPressed: () {},
-            icon: Icon(Icons.arrow_right),
-            label: Text("Proceed to checkout"))
+          onPressed: () {},
+          icon: Container(
+            color: Colors.green.shade600, // Set the color for the icon
+            child: Icon(Icons.arrow_right,
+                color: Colors.white), // Set the icon color
+          ),
+          label: Text("Proceed to checkout"),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Theme.of(context)
+                .primaryColor), // Set the background color to the theme's primary color
+          ),
+        )
         //checkout button
       ],
     ));

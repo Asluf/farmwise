@@ -48,7 +48,7 @@ class orderDetailsPage extends StatelessWidget {
                 activeStep == steps.length - 1 ? activeStep + 1 : activeStep,
             stepRadius: 10,
             activeStepTextColor: Colors.black87,
-            finishedStepTextColor: Theme.of(context).colorScheme.primary,
+            finishedStepTextColor: Colors.green.shade600,
             lineStyle: LineStyle(
                 defaultLineColor: Colors.grey.shade300,
                 lineLength:
@@ -97,20 +97,17 @@ class orderDetailsPage extends StatelessWidget {
                           label: Text(
                             steps[activeStep].name,
                             style: TextStyle(
-                                color: Colors.green.shade500,
+                                color: const Color.fromARGB(255, 243, 248, 244),
                                 fontWeight: FontWeight.bold),
                           ),
                           shape: StadiumBorder(),
                           side: BorderSide.none,
-                          backgroundColor: Theme.of(context)
-                              .colorScheme
-                              .primaryContainer
-                              .withOpacity(0.4),
+                          backgroundColor: Colors.green.shade800,
                           labelPadding: EdgeInsets.zero,
                           avatar: Icon(
                             Icons.fire_truck,
                             size: 15,
-                            color: Colors.green.shade600,
+                            color: const Color.fromARGB(255, 243, 248, 244),
                           ),
                           padding:
                               EdgeInsets.symmetric(horizontal: 10, vertical: 0),

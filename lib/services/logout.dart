@@ -20,6 +20,6 @@ class _LogoutState extends State<Logout> {
   @override
   Widget build(BuildContext context) {
     hello();
-    return const Placeholder();
+    return const Scaffold();
   }
 }

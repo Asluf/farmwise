@@ -4,6 +4,8 @@ import 'package:farmwise/buyerScreens/buyerProfile.dart';
 import 'package:farmwise/buyerScreens/cartPage.dart';
 import 'package:farmwise/mainScreens/homePage.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class buyerDashboard extends StatefulWidget {
   const buyerDashboard({super.key});
@@ -164,60 +166,16 @@ class _MyWidgetState extends State<buyerDashboard> {
   }
 
   void _showLogoutConfirmationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          alignment: Alignment.topCenter,
-          icon: Icon(Icons.logout),
-          buttonPadding: EdgeInsets.fromLTRB(0, 0, 30, 30),
-          // title: Text('Confirm Logout'),
-          content: Text('Are you sure you want to logout or cancel?'),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                // Handle logout action here
-                // Im just redirect to homepage
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/logout', (route) => false);
-              },
-              style: ButtonStyle(
-                backgroundColor:
-                    MaterialStatePropertyAll(Color.fromARGB(255, 5, 46, 2)),
-                elevation: MaterialStatePropertyAll(4),
-                shape: MaterialStatePropertyAll(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-              ),
-              child: Icon(
-                Icons.check,
-                color: Colors.white,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              style: ButtonStyle(
-                backgroundColor:
-                    MaterialStatePropertyAll(Color.fromARGB(255, 177, 24, 3)),
-                elevation: MaterialStatePropertyAll(4),
-                shape: MaterialStatePropertyAll(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-              ),
-              child: Icon(
-                Icons.close,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        );
-      },
-    );
+    QuickAlert.show(
+        context: context,
+        type: QuickAlertType.confirm,
+        text: 'Do you want to logout',
+        confirmBtnText: 'Yes',
+        cancelBtnText: 'No',
+        confirmBtnColor: Color.fromARGB(255, 67, 78, 68),
+        onConfirmBtnTap: () async {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/logout', (route) => false);
+        });
   }
 }

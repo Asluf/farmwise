@@ -120,24 +120,21 @@ class _TestState extends State<Test> {
           }
         });
       } else {
-        await _displayPickImageDialog(context,
-            (double? maxWidth, double? maxHeight, int? quality) async {
-          try {
-            final XFile? pickedFile = await _picker.pickImage(
-              source: source,
-              maxWidth: maxWidth,
-              maxHeight: maxHeight,
-              imageQuality: quality,
-            );
-            setState(() {
-              _setImageFileListFromFile(pickedFile);
-            });
-          } catch (e) {
-            setState(() {
-              _pickImageError = e;
-            });
-          }
-        });
+        // await _displayPickImageDialog(context,
+        //     (double? maxWidth, double? maxHeight, int? quality) async {
+        try {
+          final XFile? pickedFile = await _picker.pickImage(
+            source: source,
+          );
+          setState(() {
+            _setImageFileListFromFile(pickedFile);
+          });
+        } catch (e) {
+          setState(() {
+            _pickImageError = e;
+          });
+        }
+        // });
       }
     }
   }

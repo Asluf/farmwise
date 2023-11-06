@@ -147,15 +147,24 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     double wid = MediaQuery.of(context).size.width;
     double hei = MediaQuery.of(context).size.height;
+    var grey;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login',style: TextStyle(color: const Color.fromARGB(255, 192, 226, 190),),),
+        title: Text(
+          'Login',
+          style: TextStyle(
+            color: const Color.fromARGB(255, 192, 226, 190),
+          ),
+        ),
         leading: IconButton(
           onPressed: () {
             // Navigator.pop(context, Placeholder());
             Navigator.pushNamed(context, '/');
           },
-          icon: const Icon(Icons.home,color: const Color.fromARGB(255, 192, 226, 190),),
+          icon: const Icon(
+            Icons.home,
+            color: const Color.fromARGB(255, 192, 226, 190),
+          ),
         ),
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -262,13 +271,25 @@ class _LoginPageState extends State<LoginPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            "Forgot Password ?",
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 16),
-                          ),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/forgot', (route) => false);
+                              },
+                              child: Text(
+                                "Forgot Password ?",
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 16),
+                              ))
+                          // Text(
+                          //   "Forgot Password ?",
+                          //   style: TextStyle(
+                          //       color: Colors.grey,
+                          //       fontWeight: FontWeight.w300,
+                          //       fontSize: 16),
+                          // ),
                         ],
                       ),
 

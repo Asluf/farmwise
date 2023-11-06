@@ -71,8 +71,9 @@ class _MyAppState extends State<MyApp> {
               255, 5, 46, 2), // Set the selected item color to green
         ),
       ),
-      initialRoute: '/buyerDash',
-      // initialRoute: initialIdentifier,
+      //initialRoute: '/test',
+
+      initialRoute: initialIdentifier,
       routes: {
         '/': (context) => const Homepage(),
         '/login': (context) => const LoginPage(),

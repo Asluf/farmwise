@@ -17,9 +17,10 @@ void main() async {
   final AuthService _authService = AuthService();
   String token = await _authService.getToken();
   String role = await _authService.getRole();
+  String email = await _authService.getEmail();
   runApp(
     DevicePreview(
-      builder: (context) => MyApp(token: token, role: role), // Wrap your app
+      builder: (context) => MyApp(token: token, role: role,email:email), // Wrap your app
     ),
   );
   // runApp(MyApp(token: token, role: role));
@@ -30,8 +31,9 @@ void main() async {
 class MyApp extends StatefulWidget {
   final String token;
   final String role;
+  final String email;
 
-  const MyApp({required this.token, required this.role});
+  const MyApp({required this.token, required this.role, required this.email});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -42,6 +44,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     print(widget.token);
     print(widget.role);
+    print(widget.email);
     final Color customGreenColor = Colors.green.shade700;
 
     String? initialIdentifier;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 class FarmerProfileEdit extends StatefulWidget {
   @override
   _FarmerProfileEditState createState() => _FarmerProfileEditState();
@@ -12,6 +13,20 @@ class _FarmerProfileEditState extends State<FarmerProfileEdit> {
   String? address;
   String? email;
   String? mobile;
+  Future<void> _openGallery() async {
+    final imagePicker = ImagePicker();
+    final pickedImage =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      // Use the picked image for profile editing or display.
+      // You can save the image to your app's storage or use it directly.
+      File imageFile = File(pickedImage.path);
+      // Now, you can do something with the image, like displaying it or uploading it.
+    } else {
+      // User canceled image picking.
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +35,7 @@ class _FarmerProfileEditState extends State<FarmerProfileEdit> {
           title: Text('My Profile'),
           leading: IconButton(
             onPressed: () {
-              
+              Navigator.of(context).pop();
             },
             icon: const Icon(Icons.arrow_back),
           ),
@@ -79,9 +94,7 @@ class _FarmerProfileEditState extends State<FarmerProfileEdit> {
                         child: IconButton(
                           icon: Icon(Icons.add_a_photo),
                           color: Colors.white,
-                          onPressed: () {
-                            // Implement the logic to change the profile picture here.
-                          },
+                          onPressed: _openGallery,
                         ),
                       ),
                     ),

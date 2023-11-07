@@ -15,7 +15,11 @@ class FarmerDashboard extends StatefulWidget {
 }
 
 class _FarmerDashboardState extends State<FarmerDashboard> {
-  final pages = [const myInvestment(), const proposal(), const myIncome()];
+  final pages = [
+    const myInvestment(), 
+    const proposal(), 
+    const myIncome()
+  ];
   int currentIndex = 0;
 
   @override

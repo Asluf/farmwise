@@ -8,7 +8,7 @@ List<product> productList = [
       price: 220.00,
       unit: "1 kg",
       rating: 3.86,
-      quantity: 0),
+      quantity: 1),
   product(
       name: 'Rice seeds',
       description: "Sample",
@@ -16,7 +16,7 @@ List<product> productList = [
       price: 280.00,
       unit: "1 kg",
       rating: 3.35,
-      quantity: 0),
+      quantity: 1),
   product(
       name: 'Onion',
       description: "Sample",
@@ -24,7 +24,7 @@ List<product> productList = [
       price: 200.00,
       unit: "1 kg",
       rating: 3.35,
-      quantity: 0),
+      quantity: 1),
   product(
       name: 'Garlic',
       description: "Sample",
@@ -32,5 +32,5 @@ List<product> productList = [
       price: 195.00,
       unit: "1 kg",
       rating: 3.35,
-      quantity: 0),
+      quantity: 1),
 ];

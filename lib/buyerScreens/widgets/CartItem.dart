@@ -14,11 +14,10 @@ class CartItem extends StatefulWidget {
 }
 
 class _CartItemState extends State<CartItem> {
-  int quantity = 0;
-
   @override
   Widget build(BuildContext context) {
-    // quantity = widget.cartItem.quantity;
+    final product cartItem = widget.cartItem;
+
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
@@ -81,7 +80,7 @@ class _CartItemState extends State<CartItem> {
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: AssetImage(widget.cartItem.image),
+                          image: AssetImage(cartItem.image),
                         )),
                   ),
                   //other information
@@ -90,14 +89,14 @@ class _CartItemState extends State<CartItem> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.cartItem.name,
+                          cartItem.name,
                           style: TextStyle(fontSize: 18),
                         ),
                         SizedBox(
                           height: 2,
                         ),
                         Text(
-                          widget.cartItem.description,
+                          cartItem.description,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 15),
@@ -107,7 +106,7 @@ class _CartItemState extends State<CartItem> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Rs.${widget.cartItem.price}.00",
+                              "Rs.${cartItem.price}.00",
                               style: const TextStyle(
                                   color: Color.fromARGB(255, 99, 162, 96)),
                             ),
@@ -117,11 +116,14 @@ class _CartItemState extends State<CartItem> {
                                 onPressed: (index) {
                                   if (index == 0) {
                                     setState(() {
-                                      CartData.cartList[index].quantity--;
+                                      widget.cartItem.quantity =
+                                          widget.cartItem.quantity != 1
+                                              ? widget.cartItem.quantity - 1
+                                              : 1;
                                     });
                                   } else if (index == 2) {
                                     setState(() {
-                                      CartData.cartList[index].quantity++;
+                                      widget.cartItem.quantity++;
                                     });
                                   }
                                 },
@@ -131,7 +133,7 @@ class _CartItemState extends State<CartItem> {
                                     Icons.remove,
                                     size: 20,
                                   ),
-                                  Text('${widget.cartItem.quantity}'),
+                                  Text('${cartItem.quantity}'),
                                   Icon(
                                     Icons.add,
                                     size: 20,
@@ -155,22 +157,4 @@ class _CartItemState extends State<CartItem> {
           )),
     );
   }
-
-  // void incr(context) {
-  //   setState(() {
-  //     //if (quantity == 1) {
-  //     quantity++;
-  //     //}
-  //   });
-  // }
-
-  // void decr(context) {
-  //   setState(() {
-  //     if (quantity == 0) {
-  //       quantity = 0;
-  //     } else {
-  //       quantity--;
-  //     }
-  //   });
-  // }
 }

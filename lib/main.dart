@@ -68,38 +68,37 @@ class _MyAppState extends State<MyApp> {
     }
 
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
-        theme: ThemeData(
-          hintColor: Color.fromARGB(
-              255, 76, 72, 76), // Set the accent color for buttons, etc.
+      debugShowCheckedModeBanner: false,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
+      theme: ThemeData(
+        hintColor: Color.fromARGB(
+            255, 76, 72, 76), // Set the accent color for buttons, etc.
 
-          brightness: Brightness.light,
-          primaryColor: customGreenColor,
+        brightness: Brightness.light,
+        primaryColor: customGreenColor,
 
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            selectedItemColor: Color.fromARGB(
-                255, 5, 46, 2), // Set the selected item color to green
-          ),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          selectedItemColor: Color.fromARGB(
+              255, 5, 46, 2), // Set the selected item color to green
         ),
-
-        //initialRoute: '/ForgotPassword()',
-        initialRoute: initialIdentifier,
-        routes: {
-          '/': (context) => const Homepage(),
-          '/login': (context) => const LoginPage(),
-          '/register': (context) => const registerSelection(),
-          '/farmerDash': (context) => const FarmerDashboard(),
-          "/investorDash": (context) => const DashboardInvestor(),
-          '/buyerDash': (context) => const buyerDashboard(),
-          '/logout': (context) => const Logout(),
-          '/test': (context) => Test(),
-          '/forgot': (context) => ForgotPassword(),
-          '/verification': (context) => VerificationForgot(),
-          '/newPassword': (context) => NewPassword(),
-        });
       ),
+
+      //initialRoute: '/ForgotPassword()',
+      initialRoute: initialIdentifier,
+      routes: {
+        '/': (context) => const Homepage(),
+        '/login': (context) => const LoginPage(),
+        '/register': (context) => const registerSelection(),
+        '/farmerDash': (context) => const FarmerDashboard(),
+        "/investorDash": (context) => const DashboardInvestor(),
+        '/buyerDash': (context) => const buyerDashboard(),
+        '/logout': (context) => const Logout(),
+        '/test': (context) => Test(),
+        '/forgot': (context) => ForgotPassword(),
+        '/verification': (context) => VerificationForgot(),
+        '/newPassword': (context) => NewPassword(),
+      },
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:farmwise/farmerScreens/myIncome.dart';
 import 'package:farmwise/farmerScreens/verificationForgot.dart';
 import 'package:farmwise/mainScreens/forgotPassword.dart';
 import 'package:farmwise/mainScreens/login.dart';
@@ -88,6 +89,10 @@ class _MyAppState extends State<MyApp> {
         '/logout': (context) => const Logout(),
         '/test': (context) => Test(),
       },
+
+      
+      
+      
     );
   }
 }

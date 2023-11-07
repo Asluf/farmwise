@@ -14,13 +14,32 @@ class cartPage extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<cartPage> {
+  double totalPrice = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Calculate the initial totalPrice
+    calculateTotalPrice();
+  }
+
+  void calculateTotalPrice() {
+    if (CartData.cartList.isNotEmpty) {
+      totalPrice = CartData.cartList
+          .map((e) => e.price * e.quantity)
+          .reduce((total, price) => total + price);
+    } else {
+      totalPrice = 0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final totalPrice = CartData.cartList.isEmpty
-        ? 0
-        : CartData.cartList
-            .map((e) => e.price * e.quantity)
-            .reduce((total, price) => total + price);
+    // final totalPrice = CartData.cartList.isEmpty
+    //     ? 0
+    //     : CartData.cartList
+    //         .map((e) => e.price * e.quantity)
+    //         .reduce((total, price) => total + price);
 
     return Scaffold(
         body: ListView(

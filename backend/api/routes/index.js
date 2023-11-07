@@ -7,7 +7,7 @@ router.get('/', function(req, res){
 
 require('./AuthRoutes')(router);
 // require('./BuyerRoutes')(router);
-// require('./FarmerRoutes')(router);
+require('./FarmerRoutes')(router);
 // require('./InvestorRoutes')(router);
 
 module.exports.router = router;

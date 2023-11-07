@@ -15,9 +15,10 @@ void main() async {
   final AuthService _authService = AuthService();
   String token = await _authService.getToken();
   String role = await _authService.getRole();
+  String email = await _authService.getEmail();
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp(token: token, role: role));
+    await tester.pumpWidget(MyApp(token: token, role: role,email:email));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

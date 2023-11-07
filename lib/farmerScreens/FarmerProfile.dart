@@ -2,8 +2,9 @@ import 'package:farmwise/farmerScreens/FarmerProfileEdit.dart';
 import 'package:farmwise/farmerScreens/farmerDashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import '../services/auth_services.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -15,20 +16,49 @@ class FarmerProfile extends StatefulWidget {
 }
 
 class _FarmerProfileState extends State<FarmerProfile> {
-  // Select Dp from gallery
-  Future<void> _openGallery() async {
-    final imagePicker = ImagePicker();
-    final pickedImage =
-        await imagePicker.pickImage(source: ImageSource.gallery);
+  Map<String, dynamic> profileInfo = {};
 
-    if (pickedImage != null) {
-      // Use the picked image for profile editing or display.
-      // You can save the image to your app's storage or use it directly.
-      File imageFile = File(pickedImage.path);
-      // Now, you can do something with the image, like displaying it or uploading it.
-    } else {
-      // User canceled image picking.
+  final AuthService _authService = AuthService();
+  String email = '';
+  String token = '';
+
+  Future<void> fetchData() async {
+    email = await _authService.getEmail();
+    token = await _authService.getToken();
+
+    try {
+      final Map<String, String> headers = {
+        'authorization': 'Bearer $token',
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      };
+      final Map<String, dynamic> data = {"email": email};
+
+      final response = await http.post(
+        Uri.parse('http://localhost:5005/api/getFarmer'),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        // Process the data retrieved from the server
+        setState(() {
+          profileInfo = json.decode(response.body);
+        });
+      } else {
+        // Handle any errors
+        print('Failed to fetch data ${response.body}');
+      }
+      print(jsonDecode(response.body));
+    } catch (er) {
+      print(er);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData(); // Fetch data when the profile page loads
   }
 
   @override
@@ -65,7 +95,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                     width: 130,
                     height: 130,
                     decoration: BoxDecoration(
-                        border: Border.all(width: 4, color: Colors.white),
+                        border: Border.all(width: 2, color: Colors.white),
                         boxShadow: [
                           BoxShadow(
                               spreadRadius: 2,
@@ -76,39 +106,46 @@ class _FarmerProfileState extends State<FarmerProfile> {
                         image: DecorationImage(
                             fit: BoxFit.cover,
                             image: NetworkImage(
-                                'https://png.pngtree.com/png-vector/20191110/ourmid/pngtree-avatar-icon-profile-icon-member-login-vector-isolated-png-image_1978396.jpg'))),
+                                'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHkAAAB5CAMAAAAqJH57AAAARVBMVEXb29tjY2Pe3t5eXl7h4eFbW1tXV1d1dXVmZmbk5OTMzMzU1NRycnKvr6+RkZHCwsKFhYVsbGyLi4u4uLimpqZ8fHybm5uAPwHBAAADmUlEQVRoge2aCXLkIAxFQQJs4329/1EHO8kkaXfbyPn01FT6X+CVhCSEkFIvvfTSS79MRGYTPRurfL00w9AstVfmeWDjm95Zy6usy5aSnmM5qcaxzvW7cm1d54snsI3XrG/Ebm6L1GBqd9yNbTuf+LzL/B54ZfOiUrrczHdN3mSrNp3ZNNpHNm8uT2d20T/mbmZnPgmaitYdk4PZIz7IydTVGTjILWi0GXt7zl09PmAdTk0cNxQ1LJq6WPBqdYNDm8Hqg3TaoSdUYlPtBNxVHkRWjwvXffGACXAzCQ75HQ0yupKCNS+Qk/YRBeRWPcLdVIudHUoZAKzMIg0wGLm5QIZ4+wqZu/+cfOGcuUFkVWiBxGQ7QS4Nf4FcY66rCzWshZBJHmJcIsCKLpRPCDigMym4ArWBNAqNxiTVKnPS4d8KlFRKbrQdYT2gySThzTOKuz6bJdXEYrJ5A1MxxBvNA+w1S17bJb7vtR42sqGOdRUf3jk72GNWWrhRF4ZSwnQGZpX4skK9bmgWgitYhAn7IVxaUSksnpi3zSrTiYwGlm1hE+hw1VPJ3M3AqVghmhnkmC7sjSy4MLTOcGBlJhbcGLBeSL2PtSPZtgM6O6B1Fdl1oyef5MvTceubHNTiFU1lnLN7/HidogoZrtX+VNxYDNj9faqMIbsUQ/0Yd/Oc4uMq5qWRxNlrUp+bnObjiM5jLM3fjTodN9s61V/ZSWKlyOUP0WHnXSXjruF95G/kvbwj3/8E/rAZfVlEk5FdkIyM+r24Tz6KMGS3KyTjOvw92R+RcX9ze7B5uGewnXNTJFktIePr5vglnXfLWOKvyZIt83Hrm+t1qQZtNkX2ntqiszr6dxKeWyb2aYWP8NghN4MXDR7v7ewEvixDgMWiLbZ8myX6HYubAG4iwTSuQ4bY8fV4o7zEGU3qYD1rB+YBNWcOFTsTTCu2FbkWsLAVuIM7Kdh7tqsm9bNtUCo27gVZ1/xgJ5LMODuhuV8Nn9trbKKx50v2/mXbuZUHG6kxu7DPccvmeZSxjaoDN7/q6O92x7OJyilyBS6K7bIxKslCGjVWtBB2Lled222ozq6l0Qm7r81BPaeiXBjn5u+yPD1a9ibTdlZarSRiXvydwmZCFv0seyNkddfesE05VTY1d9WaZF8CnRQyi87YX5LM1M/jbgrsLdaoc5BqJWJ3wexifq7Bb2JdKvlSJQY9i3+XYVLRvzIJyP9Iv5H8B9BYLFfSyOwbAAAAAElFTkSuQmCC'))),
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(width: 1, color: Colors.white),
-                        color: Colors.green.shade400,
-                      ),
-                      child: IconButton(
-                        icon: Icon(Icons.edit),
-                        color: Colors.white,
-                        onPressed: _openGallery,
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),
             SizedBox(height: 20),
-            itemProfile("Full Name", "Silva", CupertinoIcons.person),
+            itemProfile(
+                "Farmer Name",
+                (profileInfo != null && profileInfo['data'] != null)
+                    ? profileInfo['data']['farmer_name'] ?? ''
+                    : '',
+                CupertinoIcons.person),
             SizedBox(height: 15),
-            itemProfile("Farm_Name", "Silva Farm", CupertinoIcons.person),
+            itemProfile(
+                "Farm Name",
+                (profileInfo != null && profileInfo['data'] != null)
+                    ? profileInfo['data']['farm_name'] ?? ''
+                    : '',
+                CupertinoIcons.person),
             SizedBox(height: 15),
-            itemProfile("Address", "28/C, First lane", CupertinoIcons.location),
+            itemProfile(
+                "Address",
+                (profileInfo != null && profileInfo['data'] != null)
+                    ? profileInfo['data']['farmer_address'] ?? ''
+                    : '',
+                CupertinoIcons.location),
             SizedBox(height: 15),
-            itemProfile("E-mail", "Silva@gmail.com", CupertinoIcons.mail),
+            itemProfile(
+                "E-mail",
+                (profileInfo != null && profileInfo['data'] != null)
+                    ? profileInfo['data']['email'] ?? ''
+                    : '',
+                CupertinoIcons.mail),
             SizedBox(height: 15),
-            itemProfile("Phone", "0712525689", CupertinoIcons.phone),
+            itemProfile(
+                "Phone",
+                (profileInfo != null && profileInfo['data'] != null)
+                    ? profileInfo['data']['mobile_number'] ?? ''
+                    : '',
+                CupertinoIcons.phone),
             SizedBox(height: 20),
             Container(
               width: 150,
@@ -122,7 +159,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                   ),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                      return FarmerProfileEdit();
+                      return FarmerProfileEdit(profileInfo: profileInfo);
                     }));
                   },
                   style: ButtonStyle(

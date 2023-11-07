@@ -35,9 +35,11 @@ class _LoginPageState extends State<LoginPage> {
         final Map<String, dynamic> responseBody = json.decode(response.body);
         final String token = responseBody['data']['token'];
         final String role = responseBody['data']['role'];
+        final String email = responseBody['data']['email'];
         // saving the token
         await _authService.saveToken(token);
         await _authService.saveRole(role);
+        await _authService.saveEmail(email);
         if (role == "farmer") {
           _showLoginConfirm();
           Future.delayed(const Duration(seconds: 2), () {

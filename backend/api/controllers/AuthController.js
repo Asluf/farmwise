@@ -137,7 +137,8 @@ exports.loginUser = (req, res) => {
                   message: `Successfully Logged In`,
                   data: {
                     token: token,
-                    role: user.role
+                    role: user.role,
+                    email:user.email
                   },
                 });
               }

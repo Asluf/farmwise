@@ -14,6 +14,7 @@ class _LogoutState extends State<Logout> {
   void hello() async {
     await _authService.saveToken('none');
     await _authService.saveRole('none');
+    await _authService.saveEmail('none');
     Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
   }
 

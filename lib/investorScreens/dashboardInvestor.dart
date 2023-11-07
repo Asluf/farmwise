@@ -2,11 +2,12 @@ import 'package:farmwise/investorScreens/incomeInvestor.dart';
 import 'package:farmwise/investorScreens/investmentInvestor.dart';
 import 'package:farmwise/investorScreens/notificationInvestor.dart';
 import 'package:farmwise/investorScreens/profileInvestor.dart';
-import 'package:farmwise/mainScreens/homePage.dart';
+import 'package:farmwise/investorScreens/incomeInvestor.dart';
 import 'package:flutter/material.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'proposalInvestor.dart';
+
 
 class DashboardInvestor extends StatefulWidget {
   const DashboardInvestor({super.key});
@@ -19,7 +20,8 @@ class _MyWidgetState extends State<DashboardInvestor> {
   final pages = [
     const ProposalInvestor(),
     const InvestmentInvestor(),
-    const IncomeInvestor()
+    const incomeInvestor(),
+    
   ];
   int currentIndex = 0;
 
@@ -108,9 +110,14 @@ class _MyWidgetState extends State<DashboardInvestor> {
         bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentIndex,
             onTap: (index) {
-              setState(() {
+              if (index == 2) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => incomeInvestor()),
+                );
+              } else{
+                setState(() {
                 currentIndex = index;
-              });
+                });
+              }             
             },
             type: BottomNavigationBarType.fixed,
             items: const [

@@ -1,3 +1,4 @@
+import 'package:farmwise/farmerScreens/myIncome.dart';
 import 'package:farmwise/farmerScreens/verificationForgot.dart';
 import 'package:farmwise/mainScreens/forgotPassword.dart';
 import 'package:farmwise/mainScreens/login.dart';
@@ -7,6 +8,7 @@ import 'package:farmwise/buyerScreens/buyerDashboard.dart';
 import 'package:farmwise/farmerScreens/farmerDashboard.dart';
 import 'package:farmwise/investorScreens/dashboardInvestor.dart';
 import 'package:farmwise/mainScreens/homePage.dart';
+import 'package:farmwise/mainScreens/splashScreen.dart';
 import 'package:farmwise/services/logout.dart';
 import 'package:farmwise/test.dart';
 import 'package:flutter/material.dart';
@@ -77,8 +79,10 @@ class _MyAppState extends State<MyApp> {
               255, 5, 46, 2), // Set the selected item color to green
         ),
       ),
-      // initialRoute: '/farmerDash',
-      initialRoute: initialIdentifier,
+
+      // home: SplashScreen(),
+      initialRoute: '/buyerDash',
+      // initialRoute: initialIdentifier,
       routes: {
         '/': (context) => const Homepage(),
         '/login': (context) => const LoginPage(),
@@ -90,7 +94,12 @@ class _MyAppState extends State<MyApp> {
         '/test': (context) => Test(),
         '/forgot': (context) => ForgotPassword(),
         '/verification': (context) => VerificationForgot(),
+
       },
+
+      
+      
+      
     );
   }
 }

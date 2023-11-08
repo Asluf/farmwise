@@ -1,8 +1,8 @@
-const { Farmer } = require("../models/FarmerModel");
+const { Buyer } = require("../models/BuyerModel");
 const { User } = require("../models/UserModel");
 
-exports.getFarmer = (req, res) => {
-  Farmer.findOne({ email: req.body.email })
+exports.getBuyer = (req, res) => {
+  Buyer.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
         return res
@@ -11,7 +11,7 @@ exports.getFarmer = (req, res) => {
       } else {
         return res.status(200).json({
           success: true,
-          message: `Farmer found`,
+          message: `Buyer found`,
           data: user,
         });
       }

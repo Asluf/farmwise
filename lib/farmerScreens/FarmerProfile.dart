@@ -49,7 +49,6 @@ class _FarmerProfileState extends State<FarmerProfile> {
         // Handle any errors
         print('Failed to fetch data ${response.body}');
       }
-      print(jsonDecode(response.body));
     } catch (er) {
       print(er);
     }

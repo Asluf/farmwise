@@ -3,21 +3,35 @@ import 'package:farmwise/investorScreens/profileInvestor.dart';
 import 'package:flutter/material.dart';
 
 class ProfileEditInvestor extends StatefulWidget {
-  const ProfileEditInvestor({super.key});
+  final Map<String, dynamic> profileInfo;
+  const ProfileEditInvestor({required this.profileInfo});
 
   @override
   State<ProfileEditInvestor> createState() => _MyWidgetState();
 }
 
 class _MyWidgetState extends State<ProfileEditInvestor> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _mobileController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> profileInfo = widget.profileInfo;
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    TextEditingController _nameController = TextEditingController(
+        text: (profileInfo['data'] != null)
+            ? profileInfo['data']['investor_name'] ?? ''
+            : '');
+    TextEditingController _addressController = TextEditingController(
+        text: (profileInfo['data'] != null)
+            ? profileInfo['data']['address'] ?? ''
+            : '');
+    TextEditingController _emailController = TextEditingController(
+        text: (profileInfo['data'] != null)
+            ? profileInfo['data']['email'] ?? ''
+            : '');
+    TextEditingController _mobileController = TextEditingController(
+        text: (profileInfo['data'] != null)
+            ? profileInfo['data']['mobile'] ?? ''
+            : '');
+
     return WillPopScope(
       onWillPop: () async {
         _showExitConfirmationDialog(context);
@@ -142,7 +156,7 @@ class _MyWidgetState extends State<ProfileEditInvestor> {
                       ),
                     ),
                     validator: (value) {
-                      if (value!.isEmpty) {
+                      if (value == null || value.isEmpty) {
                         return 'Please enter your name';
                       }
                       return null;
@@ -162,7 +176,7 @@ class _MyWidgetState extends State<ProfileEditInvestor> {
                       ),
                     ),
                     validator: (value) {
-                      if (value!.isEmpty) {
+                      if (value == null || value.isEmpty) {
                         return 'Please enter your address';
                       }
                       return null;
@@ -173,6 +187,7 @@ class _MyWidgetState extends State<ProfileEditInvestor> {
                   padding: const EdgeInsets.all(10.0),
                   child: TextFormField(
                     controller: _emailController,
+                    readOnly: true,
                     decoration: InputDecoration(
                       labelText: 'Email',
                       prefixIcon: Icon(
@@ -181,7 +196,7 @@ class _MyWidgetState extends State<ProfileEditInvestor> {
                       ),
                     ),
                     validator: (value) {
-                      if (value!.isEmpty) {
+                      if (value == null || value.isEmpty) {
                         return 'Please enter your email';
                       }
                       // You can add more complex email validation here.
@@ -201,7 +216,7 @@ class _MyWidgetState extends State<ProfileEditInvestor> {
                       ),
                     ),
                     validator: (value) {
-                      if (value!.isEmpty) {
+                      if (value == null || value.isEmpty) {
                         return 'Please enter your mobile number';
                       }
                       // You can add more complex email validation here.

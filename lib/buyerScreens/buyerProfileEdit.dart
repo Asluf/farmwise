@@ -3,21 +3,34 @@ import 'package:farmwise/farmerScreens/FarmerProfile.dart';
 import 'package:flutter/material.dart';
 
 class buyerProfileEdit extends StatefulWidget {
-  const buyerProfileEdit({super.key});
+  final Map<String, dynamic> profileInfo;
+  const buyerProfileEdit({required this.profileInfo});
 
   @override
   State<buyerProfileEdit> createState() => _MyWidgetState();
 }
 
 class _MyWidgetState extends State<buyerProfileEdit> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _mobileController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> profileInfo = widget.profileInfo;
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    TextEditingController _nameController = TextEditingController(
+        text: (profileInfo['data'] != null)
+            ? profileInfo['data']['buyer_name'] ?? ''
+            : '');
+    TextEditingController _addressController = TextEditingController(
+        text: (profileInfo['data'] != null)
+            ? profileInfo['data']['address'] ?? ''
+            : '');
+    TextEditingController _emailController = TextEditingController(
+        text: (profileInfo['data'] != null)
+            ? profileInfo['data']['email'] ?? ''
+            : '');
+    TextEditingController _mobileController = TextEditingController(
+        text: (profileInfo['data'] != null)
+            ? profileInfo['data']['mobile_number'] ?? ''
+            : '');
     return WillPopScope(
       onWillPop: () async {
         _showExitConfirmationDialog(context);
@@ -173,6 +186,7 @@ class _MyWidgetState extends State<buyerProfileEdit> {
                   padding: const EdgeInsets.all(10.0),
                   child: TextFormField(
                     controller: _emailController,
+                    readOnly: true,
                     decoration: InputDecoration(
                       labelText: 'Email',
                       prefixIcon: Icon(

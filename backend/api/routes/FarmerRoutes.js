@@ -1,12 +1,10 @@
-module.exports = function(app) {
-    const { Auth } = require("../middleware/auth");
+module.exports = function (app) {
+  const { Auth } = require("../middleware/auth");
 
-    const FarmerController = require("../controllers/FarmerController");
+  const FarmerController = require("../controllers/FarmerController");
 
-    
-    // app.post("/login", AuthController.loginUser);
-    app.post("/getFarmer", Auth, FarmerController.getFarmer);
-    app.get('/getFarmer',(req,res)=>{
-        res.send("Hii");
-    });
+  app.post("/getFarmer", Auth, FarmerController.getFarmer);
+  app.get("/getFarmer", (req, res) => {
+    res.send("Hii");
+  });
 };

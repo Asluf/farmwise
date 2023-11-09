@@ -269,12 +269,18 @@ class _FormScreenState extends State<registerBuyer> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Register as a Buyer',style: TextStyle(color: Color.fromARGB(255, 192, 226, 190),),),
+          title: const Text(
+            'Register as a Buyer',
+            style: TextStyle(
+              color: Color.fromARGB(255, 192, 226, 190),
+            ),
+          ),
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context, Placeholder());
             },
-            icon: const Icon(Icons.arrow_back,color: Color.fromARGB(255, 192, 226, 190)),
+            icon: const Icon(Icons.arrow_back,
+                color: Color.fromARGB(255, 192, 226, 190)),
           ),
           flexibleSpace: Container(
             decoration: const BoxDecoration(
@@ -289,13 +295,13 @@ class _FormScreenState extends State<registerBuyer> {
           child: SingleChildScrollView(
               child: Stack(
             children: [
-              Image.asset("assets/bg.png"),
-              BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: Container(
-                    //color: Colors.black.withOpacity(0.1),
-                    ),
-              ),
+              // Image.asset("assets/bg.png"),
+              // BackdropFilter(
+              //   filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              //   child: Container(
+              //       //color: Colors.black.withOpacity(0.1),
+              //       ),
+              // ),
               // Title(
               //   color: Colors.black,
               //   child: const Text("Personal Information"),

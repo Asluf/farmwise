@@ -45,6 +45,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
         setState(() {
           profileInfo = json.decode(response.body);
         });
+        print(profileInfo['dpDetails']['profile_pic']);
       } else {
         // Handle any errors
         print('Failed to fetch data ${response.body}');
@@ -104,8 +105,11 @@ class _FarmerProfileState extends State<FarmerProfile> {
                       shape: BoxShape.circle,
                       image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: NetworkImage(
-                            'http://localhost:5005/uploads/profilepic/farmer/dp.png'),
+                        image: NetworkImage((profileInfo != null &&
+                                profileInfo['dpDetails'] != null)
+                            ? 'http://localhost:5005/uploads/profilepic/${profileInfo['dpDetails']['profile_pic']}' ??
+                                'http://localhost:5005/uploads/profilepic/images.jpeg'
+                            : 'http://localhost:5005/uploads/profilepic/images.jpeg'),
                       ),
                     ),
                   ),

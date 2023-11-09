@@ -9,10 +9,19 @@ exports.getFarmer = (req, res) => {
           .status(404)
           .json({ success: false, message: "User email not found!" });
       } else {
-        return res.status(200).json({
-          success: true,
-          message: `Farmer found`,
-          data: user,
+        User.findOne({ email: req.body.email },'profile_pic').then((loginDetails) => {
+          if (!loginDetails) {
+            return res
+              .status(404)
+              .json({ success: false, message: "User email not found!" });
+          } else {
+            return res.status(200).json({
+              success: true,
+              message: `Farmer found`,
+              data: user,
+              dpDetails: loginDetails
+            });
+          }
         });
       }
     })
@@ -24,4 +33,3 @@ exports.getFarmer = (req, res) => {
       });
     });
 };
-

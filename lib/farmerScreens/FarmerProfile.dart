@@ -45,6 +45,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
         setState(() {
           profileInfo = json.decode(response.body);
         });
+        print(profileInfo['dpDetails']['profile_pic']);
       } else {
         // Handle any errors
         print('Failed to fetch data ${response.body}');
@@ -94,18 +95,23 @@ class _FarmerProfileState extends State<FarmerProfile> {
                     width: 130,
                     height: 130,
                     decoration: BoxDecoration(
-                        border: Border.all(width: 2, color: Colors.white),
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 2,
-                              blurRadius: 10,
-                              color: Colors.black.withOpacity(0.1))
-                        ],
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                                'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHkAAAB5CAMAAAAqJH57AAAARVBMVEXb29tjY2Pe3t5eXl7h4eFbW1tXV1d1dXVmZmbk5OTMzMzU1NRycnKvr6+RkZHCwsKFhYVsbGyLi4u4uLimpqZ8fHybm5uAPwHBAAADmUlEQVRoge2aCXLkIAxFQQJs4329/1EHO8kkaXfbyPn01FT6X+CVhCSEkFIvvfTSS79MRGYTPRurfL00w9AstVfmeWDjm95Zy6usy5aSnmM5qcaxzvW7cm1d54snsI3XrG/Ebm6L1GBqd9yNbTuf+LzL/B54ZfOiUrrczHdN3mSrNp3ZNNpHNm8uT2d20T/mbmZnPgmaitYdk4PZIz7IydTVGTjILWi0GXt7zl09PmAdTk0cNxQ1LJq6WPBqdYNDm8Hqg3TaoSdUYlPtBNxVHkRWjwvXffGACXAzCQ75HQ0yupKCNS+Qk/YRBeRWPcLdVIudHUoZAKzMIg0wGLm5QIZ4+wqZu/+cfOGcuUFkVWiBxGQ7QS4Nf4FcY66rCzWshZBJHmJcIsCKLpRPCDigMym4ArWBNAqNxiTVKnPS4d8KlFRKbrQdYT2gySThzTOKuz6bJdXEYrJ5A1MxxBvNA+w1S17bJb7vtR42sqGOdRUf3jk72GNWWrhRF4ZSwnQGZpX4skK9bmgWgitYhAn7IVxaUSksnpi3zSrTiYwGlm1hE+hw1VPJ3M3AqVghmhnkmC7sjSy4MLTOcGBlJhbcGLBeSL2PtSPZtgM6O6B1Fdl1oyef5MvTceubHNTiFU1lnLN7/HidogoZrtX+VNxYDNj9faqMIbsUQ/0Yd/Oc4uMq5qWRxNlrUp+bnObjiM5jLM3fjTodN9s61V/ZSWKlyOUP0WHnXSXjruF95G/kvbwj3/8E/rAZfVlEk5FdkIyM+r24Tz6KMGS3KyTjOvw92R+RcX9ze7B5uGewnXNTJFktIePr5vglnXfLWOKvyZIt83Hrm+t1qQZtNkX2ntqiszr6dxKeWyb2aYWP8NghN4MXDR7v7ewEvixDgMWiLbZ8myX6HYubAG4iwTSuQ4bY8fV4o7zEGU3qYD1rB+YBNWcOFTsTTCu2FbkWsLAVuIM7Kdh7tqsm9bNtUCo27gVZ1/xgJ5LMODuhuV8Nn9trbKKx50v2/mXbuZUHG6kxu7DPccvmeZSxjaoDN7/q6O92x7OJyilyBS6K7bIxKslCGjVWtBB2Lled222ozq6l0Qm7r81BPaeiXBjn5u+yPD1a9ibTdlZarSRiXvydwmZCFv0seyNkddfesE05VTY1d9WaZF8CnRQyi87YX5LM1M/jbgrsLdaoc5BqJWJ3wexifq7Bb2JdKvlSJQY9i3+XYVLRvzIJyP9Iv5H8B9BYLFfSyOwbAAAAAElFTkSuQmCC'))),
+                      border: Border.all(width: 2, color: Colors.white),
+                      boxShadow: [
+                        BoxShadow(
+                            spreadRadius: 2,
+                            blurRadius: 10,
+                            color: Colors.black.withOpacity(0.1))
+                      ],
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: NetworkImage((profileInfo != null &&
+                                profileInfo['dpDetails'] != null)
+                            ? 'http://localhost:5005/uploads/profilepic/${profileInfo['dpDetails']['profile_pic']}' ??
+                                'http://localhost:5005/uploads/profilepic/images.jpeg'
+                            : 'http://localhost:5005/uploads/profilepic/images.jpeg'),
+                      ),
+                    ),
                   ),
                 ],
               ),

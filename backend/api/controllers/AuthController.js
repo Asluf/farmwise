@@ -2,6 +2,7 @@ const { Farmer } = require("../models/FarmerModel");
 const { User } = require("../models/UserModel");
 const { Investor } = require("../models/InvestorModel");
 const { Buyer } = require("../models/BuyerModel");
+
 //done
 exports.registerFarmer = (req, res) => {
   const user = new Farmer(req.body);
@@ -155,6 +156,20 @@ exports.loginUser = (req, res) => {
       });
     });
 };
+
+
+
+exports.uploadDpImage = (req, res,next) => {
+  // upload.single('image')(req, res, (err) => {
+  //   if (err) {
+  //     res.status(500).json({ error: 'Image upload failed' });
+  //   } else {
+  //     res.status(200).json({ message: 'Image uploaded successfully' });
+  //   }
+  // });
+  res.status(200).json({ message: `Image uploaded successfully${req.file.path}` });
+};
+
 
 exports.getUserDetails = (req, res) => {
   res.json({ status: true, message: "User Received!", data: req.user });

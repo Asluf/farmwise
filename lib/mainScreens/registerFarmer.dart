@@ -26,6 +26,10 @@ class _FormScreenState extends State<registerFarmer> {
         "farm_address": farmAddress,
         "mobile_number": mobile,
         "email": email,
+        "farmer_reg_id": farmerRegId,
+        "gs_division": gsDivision,
+        "gs_name": gsName,
+        "gs_mobile": gsMobile,
         "province": "Eastern",
         "district": "Trinco",
         "city": "kinniya",
@@ -91,6 +95,10 @@ class _FormScreenState extends State<registerFarmer> {
   String? originalPassword;
   String? repassword;
   int? mobile;
+  String? farmerRegId;
+  String? gsDivision;
+  String? gsName;
+  int? gsMobile;
 
   Widget _buildNameField() {
     return TextFormField(
@@ -216,6 +224,102 @@ class _FormScreenState extends State<registerFarmer> {
     );
   }
 
+  Widget _buildFarmerIdField() {
+    return TextFormField(
+      maxLength: 100,
+      validator: (text) {
+        if (text!.isEmpty) {
+          return "Farmer id cannot be empty";
+        }
+        return null;
+      },
+      decoration: const InputDecoration(
+        labelText: 'Farmer Registration Id',
+        hintText: 'Enter your Farmer Registration Id',
+        prefixIcon: Icon(
+          Icons.assignment_ind,
+          color: Colors.grey,
+        ),
+      ),
+      onSaved: (text) {
+        farmerRegId = text;
+      },
+    );
+  }
+
+  Widget _buildGsDivisionField() {
+    return TextFormField(
+      maxLength: 100,
+      validator: (text) {
+        if (text!.isEmpty) {
+          return "GS division number cannot be empty";
+        }
+        return null;
+      },
+      decoration: const InputDecoration(
+        labelText: 'GS Division Number',
+        hintText: 'Enter your GS division number',
+        prefixIcon: Icon(
+          Icons.confirmation_number,
+          color: Colors.grey,
+        ),
+      ),
+      onSaved: (text) {
+        gsDivision = text;
+      },
+    );
+  }
+
+  Widget _buildGsNameField() {
+    return TextFormField(
+      maxLength: 100,
+      validator: (text) {
+        if (text!.isEmpty) {
+          return "GS name number cannot be empty";
+        }
+        return null;
+      },
+      decoration: const InputDecoration(
+        labelText: 'GS Name',
+        hintText: 'Enter your Name of the GS',
+        prefixIcon: Icon(
+          Icons.person,
+          color: Colors.grey,
+        ),
+      ),
+      onSaved: (text) {
+        gsName = text;
+      },
+    );
+  }
+
+  Widget _buildGsMobileField() {
+    return TextFormField(
+      maxLength: 100,
+      validator: (text) {
+        if (text!.isEmpty) {
+          return "GS mobile number cannot be empty and should include numbers";
+        }
+        return null;
+      },
+      decoration: const InputDecoration(
+        labelText: 'GS Mobile Number',
+        hintText: 'Enter themobile number of the GS',
+        prefixIcon: Icon(
+          Icons.phone,
+          color: Colors.grey,
+        ),
+      ),
+      onSaved: (value) {
+        if (value != null && int.tryParse(value) != null) {
+          gsMobile = int.parse(value);
+        } else {
+          // Handle invalid input
+        }
+      },
+    );
+  }
+
   Widget _buildEmailField() {
     return TextFormField(
       maxLength: 20,
@@ -323,7 +427,10 @@ class _FormScreenState extends State<registerFarmer> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Register as a Farmer',style: TextStyle(color: Color.fromARGB(255, 192, 226, 190)),),
+          title: const Text(
+            'Register as a Farmer',
+            style: TextStyle(color: Color.fromARGB(255, 192, 226, 190)),
+          ),
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context, Placeholder());
@@ -343,13 +450,13 @@ class _FormScreenState extends State<registerFarmer> {
           child: SingleChildScrollView(
               child: Stack(
             children: [
-              Image.asset("assets/bg.png"),
-              BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: Container(
-                    //color: Colors.black.withOpacity(0.1),
-                    ),
-              ),
+              // Image.asset("assets/bg.png"),
+              // BackdropFilter(
+              //   filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              //   child: Container(
+              //     color: Colors.black.withOpacity(0.9),
+              //   ),
+              // ),
               Container(
                 margin: const EdgeInsets.all(24.0),
                 // decoration: BoxDecoration(
@@ -391,6 +498,22 @@ class _FormScreenState extends State<registerFarmer> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: _buildEmailField(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: _buildFarmerIdField(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: _buildGsDivisionField(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: _buildGsNameField(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: _buildGsMobileField(),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),

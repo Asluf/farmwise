@@ -46,6 +46,25 @@ var FarmerSchema = new Schema({
         required: [true, 'Email field is required!'],
         unique: true,
     },
+    farmer_reg_id: {
+        type: String,
+        required: [true, 'Farmer Registration Id is required!'],
+        unique: true,
+    },
+    gs_division: {
+        type: String,
+        required: [true, 'GS division field is required!'],
+    },
+    gs_name: {
+        type: String,
+        required: [true, 'GS Name field is required!'],
+      
+    },
+    gs_mobile: {
+        type: String,
+        required: [true, 'Gs mobile number field is required!'],
+        maxlength: 200,
+    },
     province: {
         type: String,
         required: [true, 'Province field is required!'],

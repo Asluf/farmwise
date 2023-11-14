@@ -1,3 +1,4 @@
+import 'package:farmwise/farmerScreens/createProposal.dart';
 import 'package:farmwise/farmerScreens/rejectCard.dart';
 import 'package:flutter/material.dart';
 import 'package:farmwise/farmerScreens/productCard.dart';
@@ -15,7 +16,11 @@ class _myInvestmentState extends State<proposal> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {}, // Action to be taken on press
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+            return CreateProposal();
+          }));
+        }, // Action to be taken on press
         child: Icon(Icons.add), // Icon to be displayed
         backgroundColor: const Color.fromARGB(
             255, 5, 46, 2), // Optional: specify the background color

@@ -22,6 +22,7 @@ const storage = multer.diskStorage({
             callback(null, false);
         }
     }
-});
+}
+);
 
 module.exports = upload;

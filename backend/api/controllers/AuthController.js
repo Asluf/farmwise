@@ -2,6 +2,7 @@ const { Farmer } = require("../models/FarmerModel");
 const { User } = require("../models/UserModel");
 const { Investor } = require("../models/InvestorModel");
 const { Buyer } = require("../models/BuyerModel");
+const { CLOSING } = require("ws");
 
 //done
 exports.registerFarmer = (req, res) => {
@@ -158,6 +159,11 @@ exports.loginUser = (req, res) => {
 };
 
 exports.uploadDpImage = (req, res, next) => {
+  const file = req.file;
+  if (!file) {
+    return res.status(400).json({ error: "No file uploaded." });
+  }
+  console.log(req.file);
   User.findOneAndUpdate(
     { email: req.body.email },
     { $set: { profile_pic: req.file.path } },

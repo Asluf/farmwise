@@ -3,6 +3,13 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import '../services/auth_services.dart';
+import 'package:image_picker_web/image_picker_web.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:http_parser/http_parser.dart';
+
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'dart:convert'; // For utf8.encode
 
 class FarmerProfileEdit extends StatefulWidget {
   final Map<String, dynamic> profileInfo;
@@ -28,47 +35,127 @@ class _FarmerProfileEditState extends State<FarmerProfileEdit> {
     final Map<String, dynamic> profileInfo = widget.profileInfo;
 
     Future<void> _openGallery() async {
-      final imagePicker = ImagePicker();
-      final pickedImage =
-          await imagePicker.pickImage(source: ImageSource.gallery);
       token = await _authService.getToken();
 
-      if (pickedImage != null) {
-        print("object");
-        final imageFile = File(pickedImage.path);
-        final imageBytes = await imageFile.readAsBytes();
-        print('hello');
-        final request = http.MultipartRequest(
-            'POST', Uri.parse('http://localhost:5005/api/uploadDp'));
+      try {
+        if (kIsWeb) {
+          // Perform web-specific file picking operations
+          // Image? imageBytes = await ImagePickerWeb.getImageAsWidget();
+          Uint8List? imageBytes = await ImagePickerWeb.getImageAsBytes();
 
-        // Add headers to the request
-        request.headers['authorization'] = 'Bearer $token';
-        request.headers['x-access-token'] = token;
+          if (imageBytes != null) {
+            var request = http.MultipartRequest(
+              'POST',
+              Uri.parse('http://localhost:5005/api/uploadDp'),
+            );
 
-        // Add the email address as a form field
-        request.fields['email'] = profileInfo['data']['email'];
+            // Attach the image file to the request
+            request.files.add(
+              http.MultipartFile.fromBytes(
+                'image',
+                imageBytes.toList(),
+                filename: 'image.png',
+              ),
+            );
+            request.headers['authorization'] = 'Bearer $token';
+            request.headers['x-access-token'] = token;
 
-        // Create a `http.MultipartFile` object from the image bytes
-        final multipartFile = http.MultipartFile.fromBytes(
-          'image',
-          imageBytes,
-          filename: imageFile.path.split('/').last,
-        );
+            // Add the email address as a form field
+            request.fields['email'] = profileInfo['data']['email'];
 
-        request.files.add(multipartFile);
+            // Send the request
+            try {
+              final response = await request.send();
 
-        final response = await request.send();
-
-        if (response.statusCode == 200) {
-          // Image uploaded successfully
-          print('Image uploaded successfully - $response');
+              if (response.statusCode == 200) {
+                // Successfully uploaded, parse the response if needed
+                String imagePath = await response.stream.bytesToString();
+                print('Image uploaded successfully. Image path: $imagePath');
+              } else {
+                // Handle error
+                print('Failed to upload image. Status code: ${response}');
+              }
+            } catch (error) {
+              print('Error uploading image: $error');
+            }
+          }
         } else {
-          // Handle the error, e.g., show an error message
-          print('Image upload failed - - $response');
+          final imagePicker = ImagePicker();
+          final pickedImage =
+              await imagePicker.pickImage(source: ImageSource.gallery);
+          if (pickedImage != null) {
+            print("object found");
+            final imageFile = File(pickedImage.path);
+            final imageBytes = await imageFile.readAsBytes();
+            // Rest of your code for non-web platforms
+            print('hello');
+            final request = http.MultipartRequest(
+                'POST', Uri.parse('http://localhost:5005/api/uploadDp'));
+
+            // Add headers to the request
+            request.headers['authorization'] = 'Bearer $token';
+            request.headers['x-access-token'] = token;
+
+            // Add the email address as a form field
+            request.fields['email'] = profileInfo['data']['email'];
+
+            // Create a `http.MultipartFile` object from the image bytes
+            final multipartFile = http.MultipartFile.fromBytes(
+              'image',
+              imageBytes,
+              filename: imageFile.path.split('/').last,
+            );
+
+            request.files.add(multipartFile);
+
+            final response = await request.send();
+
+            if (response.statusCode == 200) {
+              // Image uploaded successfully
+              print('Image uploaded successfully - $response');
+            } else {
+              // Handle the error, e.g., show an error message
+              print('Image upload failed - - $response');
+            }
+          } else {
+            // User canceled image picking.
+            print("nothing picked");
+          }
         }
-      } else {
-        // User canceled image picking.
+      } catch (e) {
+        print("Error reading file: $e");
       }
+
+      // final imageBytes = await imageFile.readAsBytes();
+      // print('hello');
+      // final request = http.MultipartRequest(
+      //     'POST', Uri.parse('http://localhost:5005/api/uploadDp'));
+
+      // // Add headers to the request
+      // request.headers['authorization'] = 'Bearer $token';
+      // request.headers['x-access-token'] = token;
+
+      // // Add the email address as a form field
+      // request.fields['email'] = profileInfo['data']['email'];
+
+      // // Create a `http.MultipartFile` object from the image bytes
+      // final multipartFile = http.MultipartFile.fromBytes(
+      //   'image',
+      //   imageBytes,
+      //   filename: imageFile.path.split('/').last,
+      // );
+
+      // request.files.add(multipartFile);
+
+      // final response = await request.send();
+
+      // if (response.statusCode == 200) {
+      //   // Image uploaded successfully
+      //   print('Image uploaded successfully - $response');
+      // } else {
+      //   // Handle the error, e.g., show an error message
+      //   print('Image upload failed - - $response');
+      // }
     }
 
     return Scaffold(

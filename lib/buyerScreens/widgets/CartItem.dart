@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:farmwise/buyerScreens/data/cartData.dart';
+//import 'package:farmwise/buyerScreens/data/cartData.dart';
 import 'package:farmwise/buyerScreens/models/product.dart';
 import 'package:flutter/material.dart';
 
@@ -112,39 +112,39 @@ class _CartItemState extends State<CartItem> {
                             ),
                             SizedBox(
                               height: 30,
-                              child: ToggleButtons(
-                                onPressed: (index) {
-                                  if (index == 0) {
-                                    setState(() {
-                                      widget.cartItem.quantity =
-                                          widget.cartItem.quantity != 1
-                                              ? widget.cartItem.quantity - 1
-                                              : 1;
-                                    });
-                                  } else if (index == 2) {
-                                    setState(() {
-                                      widget.cartItem.quantity++;
-                                    });
-                                  }
-                                },
-                                borderRadius: BorderRadius.circular(99),
-                                children: [
-                                  Icon(
-                                    Icons.remove,
-                                    size: 20,
-                                  ),
-                                  Text('${cartItem.quantity}'),
-                                  Icon(
-                                    Icons.add,
-                                    size: 20,
-                                  ),
-                                ],
-                                isSelected: [false, false, false],
-                                selectedColor:
-                                    const Color.fromARGB(255, 62, 123, 65),
-                                constraints:
-                                    BoxConstraints(minHeight: 30, minWidth: 30),
-                              ),
+                              // child: ToggleButtons(
+                              //   onPressed: (index) {
+                              //     if (index == 0) {
+                              //       setState(() {
+                              //         widget.cartItem.quantity =
+                              //             widget.cartItem.quantity != 1
+                              //                 ? widget.cartItem.quantity - 1
+                              //                 : 1;
+                              //       });
+                              //     } else if (index == 2) {
+                              //       setState(() {
+                              //         widget.cartItem.quantity++;
+                              //       });
+                              //     }
+                              //   },
+                              //   borderRadius: BorderRadius.circular(99),
+                              //   children: [
+                              //     Icon(
+                              //       Icons.remove,
+                              //       size: 20,
+                              //     ),
+                              //     Text('${cartItem.quantity}'),
+                              //     Icon(
+                              //       Icons.add,
+                              //       size: 20,
+                              //     ),
+                              //   ],
+                              //   isSelected: [false, false, false],
+                              //   selectedColor:
+                              //       const Color.fromARGB(255, 62, 123, 65),
+                              //   constraints:
+                              //       BoxConstraints(minHeight: 30, minWidth: 30),
+                              // ),
                             )
                           ],
                         )

@@ -13,8 +13,16 @@ class explorePage extends StatefulWidget {
 
 class _MyWidgetState extends State<explorePage> {
   List<product> cartList = [];
+  List<product> filteredList = [];
+  TextEditingController searchController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    // Set filteredList to all products when the page loads
+    filteredList = List.from(productList);
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(padding: EdgeInsets.all(16), children: [
@@ -25,6 +33,11 @@ class _MyWidgetState extends State<explorePage> {
           children: [
             Expanded(
               child: TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  // Update the filteredList when the search query changes
+                  filterProducts(value);
+                },
                 decoration: InputDecoration(
                   hintText: "Search here..",
                   isDense: true,
@@ -142,17 +155,34 @@ class _MyWidgetState extends State<explorePage> {
             mainAxisSpacing: 16,
             childAspectRatio: 0.85,
           ),
-          itemCount: productList.length,
+          itemCount: filteredList.length,
           itemBuilder: (BuildContext context, int index) {
             return productCard(
-                productList: productList[index],
+                productList: filteredList[index],
                 onAddToCart: () {
                   setState(() {
-                    productList[index].quantity++;
-                    CartData.cartList.add(productList[index]);
+                    filteredList[index].quantity++;
+                    CartData.cartList.add(filteredList[index]);
                   });
                 });
           })
     ]));
+  }
+
+  void filterProducts(String query) {
+    setState(() {
+      //this is used to rebuild the query
+      if (query.isEmpty) {
+        filteredList = List.from(
+            productList); //when the filtered query is empty all the product list will be showed
+      } else {
+//f the query is not empty, the function filters the productList based on the lowercase version of the product names.
+// It uses the where method to create a new list containing only the products whose names contain the search query (case-insensitive). This filtered list is then assigned to filteredList.
+        filteredList = productList
+            .where((product) =>
+                product.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
   }
 }

@@ -139,7 +139,7 @@ exports.loginUser = (req, res) => {
                   data: {
                     token: token,
                     role: user.role,
-                    email:user.email
+                    email: user.email,
                   },
                 });
               }
@@ -157,19 +157,33 @@ exports.loginUser = (req, res) => {
     });
 };
 
-
-
-exports.uploadDpImage = (req, res,next) => {
-  // upload.single('image')(req, res, (err) => {
-  //   if (err) {
-  //     res.status(500).json({ error: 'Image upload failed' });
-  //   } else {
-  //     res.status(200).json({ message: 'Image uploaded successfully' });
-  //   }
-  // });
-  res.status(200).json({ message: `Image uploaded successfully${req.file.path}` });
+exports.uploadDpImage = (req, res, next) => {
+  User.findOneAndUpdate(
+    { email: req.body.email },
+    { $set: { profile_pic: req.file.path } },
+    { new: true, useFindAndModify: false }
+  )
+    .then((user) => {
+      if (!user) {
+        return res
+          .status(404)
+          .json({ success: false, message: "User email not found!" });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: `Image uploaded successfully${req.file.path}`,
+          data: user,
+        });
+      }
+    })
+    .catch((err) => {
+      return res.status(200).json({
+        success: true,
+        message: "Something went wrong! Please try again.",
+        data: err,
+      });
+    });
 };
-
 
 exports.getUserDetails = (req, res) => {
   res.json({ status: true, message: "User Received!", data: req.user });

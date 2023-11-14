@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
   const upload = multer({ 
     storage:storage,
     fileFilter: function(req,file,callback){
-        if(file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg"|| file.mimetype == "image/heic"){
+        if(file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg"|| file.mimetype == "image/heic" ||file.mimetype == "image/PNG" || file.mimetype == "image/JPG" || file.mimetype == "image/JPEG"|| file.mimetype == "image/HEIC"){
             callback(null,true);
         }else{
             console.log('File formats should be jpg, jpeg, png');

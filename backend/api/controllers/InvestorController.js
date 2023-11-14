@@ -9,12 +9,52 @@ exports.getInvestor = (req, res) => {
           .status(404)
           .json({ success: false, message: "User email not found!" });
       } else {
-        return res.status(200).json({
-          success: true,
-          message: `Investor found`,
-          data: user,
-        });
+        User.findOne({ email: req.body.email }, "profile_pic").then(
+          (loginDetails) => {
+            if (!loginDetails) {
+              return res
+                .status(404)
+                .json({ success: false, message: "User email not found!" });
+            } else {
+              return res.status(200).json({
+                success: true,
+                message: `Investor found`,
+                data: user,
+                dpDetails: loginDetails,
+              });
+            }
+          }
+        );
       }
+    })
+    .catch((err) => {
+      return res.status(200).json({
+        success: true,
+        message: "Something went wrong",
+        data: err,
+      });
+    });
+};
+
+exports.editInvestor = (req, res) => {
+
+  const updateData = {
+    investor_name: req.body.investor_name,
+    address: req.body.address,
+    mobile: req.body.mobile_number
+  };
+
+  Investor.findOneAndUpdate(
+    { email: req.body.email },
+    { $set: updateData },
+    { new: true, useFindAndModify: false }
+  )
+    .then((user) => {
+      return res.status(200).json({
+        success: true,
+        message: `Investor Profile edited.`,
+        data: user,
+      });
     })
     .catch((err) => {
       return res.status(200).json({

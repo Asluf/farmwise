@@ -4,5 +4,6 @@ module.exports = function(app) {
     const InvestorController = require("../controllers/InvestorController");
     
     app.post("/getInvestor", Auth, InvestorController.getInvestor);
+    app.post("/editInvestor", Auth, InvestorController.editInvestor);
     
 };

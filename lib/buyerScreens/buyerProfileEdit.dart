@@ -1,6 +1,14 @@
-import 'package:farmwise/buyerScreens/buyerProfile.dart';
-import 'package:farmwise/farmerScreens/FarmerProfile.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import '../services/auth_services.dart';
+import 'package:image_picker_web/image_picker_web.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:quickalert/quickalert.dart';
+
+import 'dart:typed_data';
+import 'dart:convert';
 
 class buyerProfileEdit extends StatefulWidget {
   final Map<String, dynamic> profileInfo;
@@ -11,6 +19,68 @@ class buyerProfileEdit extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<buyerProfileEdit> {
+  String? name;
+  String? address;
+  String? email;
+  String? mobile;
+
+  final AuthService _authService = AuthService();
+  String token = '';
+
+  void editBuyer() async {
+    token = await _authService.getToken();
+    try {
+      final Map<String, String> headers = {
+        'authorization': 'Bearer $token',
+        'x-access-token': token,
+        'Content-Type': 'application/json'
+      };
+      final Map<String, dynamic> data = {
+        "buyer_name": name,
+        "address": address,
+        "mobile_number": mobile,
+        "email": email
+      };
+
+      final response = await http.post(
+        Uri.parse('http://localhost:5005/api/editBuyer'),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+      //saving the response
+      if (response.statusCode == 200) {
+        // Request was successful
+        print('Profile edited successfully');
+        print(response.body);
+
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Profile edit successful!')));
+
+        Future.delayed(const Duration(seconds: 2), () {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/buyerDash', (route) => false);
+        });
+      } else {
+        // Request failed
+        print('Failed to send POST request');
+        _showEditError();
+      }
+    } catch (er) {
+      print(er);
+    }
+  }
+
+  void _showEditError() {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: "Oops!",
+      text: 'Profile edit failed. Please try again later.',
+      confirmBtnText: 'Try again',
+      confirmBtnColor: Color.fromARGB(255, 67, 78, 68),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> profileInfo = widget.profileInfo;
@@ -31,6 +101,105 @@ class _MyWidgetState extends State<buyerProfileEdit> {
         text: (profileInfo['data'] != null)
             ? profileInfo['data']['mobile_number'] ?? ''
             : '');
+
+    Future<void> _openGallery() async {
+      token = await _authService.getToken();
+
+      try {
+        if (kIsWeb) {
+          Uint8List? imageBytes = await ImagePickerWeb.getImageAsBytes();
+
+          if (imageBytes != null) {
+            var request = http.MultipartRequest(
+              'POST',
+              Uri.parse('http://localhost:5005/api/uploadDp'),
+            );
+
+            // Attach the image file to the request
+            request.files.add(
+              http.MultipartFile.fromBytes(
+                'image',
+                imageBytes.toList(),
+                filename: 'image.png',
+              ),
+            );
+
+            request.headers['authorization'] = 'Bearer $token';
+            request.headers['x-access-token'] = token;
+
+            // Add the email address as a form field
+            request.fields['email'] = profileInfo['data']['email'];
+
+            // Send the request
+            try {
+              final response = await request.send();
+
+              if (response.statusCode == 200) {
+                // Successfully uploaded, parse the response if needed
+                String imagePath = await response.stream.bytesToString();
+                print('Image uploaded successfully. Image path: $imagePath');
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Profile photo updated!')));
+
+                Future.delayed(const Duration(seconds: 2), () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/buyerDash', (route) => false);
+                });
+              } else {
+                // Handle error
+                print('Failed to upload image. Status code: ${response}');
+              }
+            } catch (error) {
+              print('Error uploading image: $error');
+            }
+          }
+        } else {
+          final imagePicker = ImagePicker();
+          final pickedImage =
+              await imagePicker.pickImage(source: ImageSource.gallery);
+          if (pickedImage != null) {
+            final imageFile = File(pickedImage.path);
+            final imageBytes = await imageFile.readAsBytes();
+            // Rest of your code for non-web platforms
+
+            final request = http.MultipartRequest(
+                'POST', Uri.parse('http://localhost:5005/api/uploadDp'));
+
+            // Add headers to the request
+            request.headers['authorization'] = 'Bearer $token';
+            request.headers['x-access-token'] = token;
+
+            // Add the email address as a form field
+            request.fields['email'] = profileInfo['data']['email'];
+
+            // Create a `http.MultipartFile` object from the image bytes
+            final multipartFile = http.MultipartFile.fromBytes(
+              'image',
+              imageBytes,
+              filename: imageFile.path.split('/').last,
+            );
+
+            request.files.add(multipartFile);
+
+            final response = await request.send();
+
+            if (response.statusCode == 200) {
+              // Image uploaded successfully
+              print('Image uploaded successfully - $response');
+            } else {
+              // Handle the error, e.g., show an error message
+              print('Image upload failed - - $response');
+            }
+          } else {
+            // User canceled image picking.
+            print("nothing picked");
+          }
+        }
+      } catch (e) {
+        print("Error reading file: $e");
+      }
+    }
+
     return WillPopScope(
       onWillPop: () async {
         _showExitConfirmationDialog(context);
@@ -111,9 +280,13 @@ class _MyWidgetState extends State<buyerProfileEdit> {
                           shape: BoxShape.circle,
                           image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: NetworkImage(
-                              'https://png.pngtree.com/png-vector/20191110/ourmid/pngtree-avatar-icon-profile-icon-member-login-vector-isolated-png-image_1978396.jpg',
-                            ),
+                            image: NetworkImage((profileInfo != null &&
+                                    profileInfo['dpDetails'] != null &&
+                                    profileInfo['dpDetails']['profile_pic'] !=
+                                        '')
+                                ? 'http://localhost:5005/${profileInfo['dpDetails']['profile_pic']}' ??
+                                    'http://localhost:5005/uploads/profilepic/a.png'
+                                : 'http://localhost:5005/uploads/profilepic/a.png'),
                           ),
                         ),
                       ),
@@ -131,9 +304,7 @@ class _MyWidgetState extends State<buyerProfileEdit> {
                           child: IconButton(
                             icon: Icon(Icons.add_a_photo),
                             color: Colors.white,
-                            onPressed: () {
-                              // Implement the logic to change the profile picture here.
-                            },
+                            onPressed: _openGallery,
                           ),
                         ),
                       ),
@@ -160,6 +331,9 @@ class _MyWidgetState extends State<buyerProfileEdit> {
                       }
                       return null;
                     },
+                    onSaved: (value) {
+                      name = value;
+                    },
                   ),
                 ),
 
@@ -179,6 +353,9 @@ class _MyWidgetState extends State<buyerProfileEdit> {
                         return 'Please enter your address';
                       }
                       return null;
+                    },
+                    onSaved: (value) {
+                      address = value;
                     },
                   ),
                 ),
@@ -201,6 +378,9 @@ class _MyWidgetState extends State<buyerProfileEdit> {
                       // You can add more complex email validation here.
                       return null;
                     },
+                    onSaved: (value) {
+                      email = value;
+                    },
                   ),
                 ),
                 Padding(
@@ -221,6 +401,9 @@ class _MyWidgetState extends State<buyerProfileEdit> {
                       // You can add more complex email validation here.
                       return null;
                     },
+                    onSaved: (value) {
+                      mobile = value;
+                    },
                   ),
                 ),
 
@@ -240,6 +423,7 @@ class _MyWidgetState extends State<buyerProfileEdit> {
                         if (_formKey.currentState!.validate()) {
                           print('valid form');
                           _formKey.currentState!.save();
+                          editBuyer();
                         } else {
                           print('not valid form');
                           return;

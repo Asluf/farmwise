@@ -5,11 +5,10 @@ import 'package:http/http.dart' as http;
 import '../services/auth_services.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:http_parser/http_parser.dart';
+import 'package:quickalert/quickalert.dart';
 
 import 'dart:typed_data';
-import 'dart:ui' as ui;
-import 'dart:convert'; // For utf8.encode
+import 'dart:convert';
 
 class FarmerProfileEdit extends StatefulWidget {
   final Map<String, dynamic> profileInfo;
@@ -22,13 +21,69 @@ class FarmerProfileEdit extends StatefulWidget {
 class _FarmerProfileEditState extends State<FarmerProfileEdit> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String? name;
-  String? address;
+  String? farmer_name;
+  String? farm_name;
+  String? farmer_address;
   String? email;
   String? mobile;
 
   final AuthService _authService = AuthService();
   String token = '';
+
+  void editFarmer() async {
+    token = await _authService.getToken();
+    try {
+      final Map<String, String> headers = {
+        'authorization': 'Bearer $token',
+        'x-access-token': token,
+        'Content-Type': 'application/json'
+      };
+      final Map<String, dynamic> data = {
+        "farmer_name": farmer_name,
+        "farm_name": farm_name,
+        "farmer_address": farmer_address,
+        "mobile_number": mobile,
+        "email": email
+      };
+
+      final response = await http.post(
+        Uri.parse('http://localhost:5005/api/editFarmer'),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+      //saving the response
+      if (response.statusCode == 200) {
+        // Request was successful
+        print('Profile edited successfully');
+        print(response.body);
+
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Profile edit successful!')));
+
+        Future.delayed(const Duration(seconds: 2), () {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/farmerDash', (route) => false);
+        });
+      } else {
+        // Request failed
+        print('Failed to send POST request');
+        _showEditError();
+      }
+    } catch (er) {
+      print(er);
+    }
+  }
+
+  void _showEditError() {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: "Oops!",
+      text: 'Profile edit failed. Please try again later.',
+      confirmBtnText: 'Try again',
+      confirmBtnColor: Color.fromARGB(255, 67, 78, 68),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +112,7 @@ class _FarmerProfileEditState extends State<FarmerProfileEdit> {
                 filename: 'image.png',
               ),
             );
+
             request.headers['authorization'] = 'Bearer $token';
             request.headers['x-access-token'] = token;
 
@@ -71,6 +127,13 @@ class _FarmerProfileEditState extends State<FarmerProfileEdit> {
                 // Successfully uploaded, parse the response if needed
                 String imagePath = await response.stream.bytesToString();
                 print('Image uploaded successfully. Image path: $imagePath');
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Profile photo updated!')));
+
+                Future.delayed(const Duration(seconds: 2), () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/farmerDash', (route) => false);
+                });
               } else {
                 // Handle error
                 print('Failed to upload image. Status code: ${response}');
@@ -84,11 +147,10 @@ class _FarmerProfileEditState extends State<FarmerProfileEdit> {
           final pickedImage =
               await imagePicker.pickImage(source: ImageSource.gallery);
           if (pickedImage != null) {
-            print("object found");
             final imageFile = File(pickedImage.path);
             final imageBytes = await imageFile.readAsBytes();
             // Rest of your code for non-web platforms
-            print('hello');
+
             final request = http.MultipartRequest(
                 'POST', Uri.parse('http://localhost:5005/api/uploadDp'));
 
@@ -203,10 +265,11 @@ class _FarmerProfileEditState extends State<FarmerProfileEdit> {
                         image: DecorationImage(
                           fit: BoxFit.fill,
                           image: NetworkImage((profileInfo != null &&
-                                  profileInfo['dpDetails'] != null)
+                                  profileInfo['dpDetails'] != null &&
+                                  profileInfo['dpDetails']['profile_pic'] != '')
                               ? 'http://localhost:5005/${profileInfo['dpDetails']['profile_pic']}' ??
-                                  'http://localhost:5005/uploads/profilepic/dp.png'
-                              : 'http://localhost:5005/uploads/profilepic/dp.png'),
+                                  'http://localhost:5005/uploads/profilepic/a.png'
+                              : 'http://localhost:5005/uploads/profilepic/a.png'),
                         ),
                       ),
                     ),
@@ -250,7 +313,7 @@ class _FarmerProfileEditState extends State<FarmerProfileEdit> {
                   return null;
                 },
                 onSaved: (value) {
-                  name = value;
+                  farmer_name = value;
                 },
               ),
 
@@ -271,7 +334,7 @@ class _FarmerProfileEditState extends State<FarmerProfileEdit> {
                   return null;
                 },
                 onSaved: (value) {
-                  name = value;
+                  farm_name = value;
                 },
               ),
 
@@ -293,7 +356,7 @@ class _FarmerProfileEditState extends State<FarmerProfileEdit> {
                   return null;
                 },
                 onSaved: (value) {
-                  address = value;
+                  farmer_address = value;
                 },
               ),
 
@@ -349,6 +412,7 @@ class _FarmerProfileEditState extends State<FarmerProfileEdit> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
+                    editFarmer();
                   }
                 },
                 style: ElevatedButton.styleFrom(

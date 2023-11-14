@@ -4,5 +4,6 @@ module.exports = function(app) {
     const BuyerController = require("../controllers/BuyerController");
     
     app.post("/getBuyer", Auth, BuyerController.getBuyer);
+    app.post("/editBuyer", Auth, BuyerController.editBuyer);
     
 };

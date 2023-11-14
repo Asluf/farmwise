@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../services/auth_services.dart';
 
 class FarmerProfileEdit extends StatefulWidget {
   final Map<String, dynamic> profileInfo;
@@ -20,33 +20,51 @@ class _FarmerProfileEditState extends State<FarmerProfileEdit> {
   String? email;
   String? mobile;
 
+  final AuthService _authService = AuthService();
+  String token = '';
+
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> profileInfo = widget.profileInfo;
+
     Future<void> _openGallery() async {
       final imagePicker = ImagePicker();
       final pickedImage =
           await imagePicker.pickImage(source: ImageSource.gallery);
+      token = await _authService.getToken();
 
       if (pickedImage != null) {
-        File imageFile = File(pickedImage.path);
+        print("object");
+        final imageFile = File(pickedImage.path);
+        final imageBytes = await imageFile.readAsBytes();
+        print('hello');
+        final request = http.MultipartRequest(
+            'POST', Uri.parse('http://localhost:5005/api/uploadDp'));
 
-        var request = http.MultipartRequest(
-            'POST', Uri.parse('http://localhost:5005/api/'));
+        // Add headers to the request
+        request.headers['authorization'] = 'Bearer $token';
+        request.headers['x-access-token'] = token;
+
         // Add the email address as a form field
         request.fields['email'] = profileInfo['data']['email'];
-        request.files.add(http.MultipartFile(
-            'image', imageFile.readAsBytes().asStream(), imageFile.lengthSync(),
-            filename: imageFile.path.split("/").last));
 
-        var response = await request.send();
+        // Create a `http.MultipartFile` object from the image bytes
+        final multipartFile = http.MultipartFile.fromBytes(
+          'image',
+          imageBytes,
+          filename: imageFile.path.split('/').last,
+        );
+
+        request.files.add(multipartFile);
+
+        final response = await request.send();
 
         if (response.statusCode == 200) {
           // Image uploaded successfully
-          print('Image uploaded successfully');
+          print('Image uploaded successfully - $response');
         } else {
           // Handle the error, e.g., show an error message
-          print('Image upload failed');
+          print('Image upload failed - - $response');
         }
       } else {
         // User canceled image picking.
@@ -99,7 +117,7 @@ class _FarmerProfileEditState extends State<FarmerProfileEdit> {
                           fit: BoxFit.fill,
                           image: NetworkImage((profileInfo != null &&
                                   profileInfo['dpDetails'] != null)
-                              ? 'http://localhost:5005/uploads/profilepic/${profileInfo['dpDetails']['profile_pic']}' ??
+                              ? 'http://localhost:5005/${profileInfo['dpDetails']['profile_pic']}' ??
                                   'http://localhost:5005/uploads/profilepic/dp.png'
                               : 'http://localhost:5005/uploads/profilepic/dp.png'),
                         ),

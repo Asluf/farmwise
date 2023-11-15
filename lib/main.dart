@@ -30,7 +30,7 @@ void main() async {
           MyApp(token: token, role: role, email: email), // Wrap your app
     ),
   );
-  // runApp(MyApp(token: token, role: role));
+  // runApp(MyApp(token: token, role: role, email: email));
 }
 
 // RGB value for green: 0xRRGGBB

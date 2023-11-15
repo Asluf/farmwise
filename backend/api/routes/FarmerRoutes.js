@@ -4,7 +4,5 @@ module.exports = function (app) {
   const FarmerController = require("../controllers/FarmerController");
 
   app.post("/getFarmer", Auth, FarmerController.getFarmer);
-  app.get("/getFarmer", (req, res) => {
-    res.send("Hii");
-  });
+  app.post("/editFarmer", Auth, FarmerController.editFarmer);
 };

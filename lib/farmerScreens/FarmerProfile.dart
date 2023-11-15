@@ -105,10 +105,11 @@ class _FarmerProfileState extends State<FarmerProfile> {
                       image: DecorationImage(
                         fit: BoxFit.fill,
                         image: NetworkImage((profileInfo != null &&
-                                profileInfo['dpDetails'] != null)
+                                profileInfo['dpDetails'] != null &&
+                                profileInfo['dpDetails']['profile_pic'] != '')
                             ? 'http://localhost:5005/${profileInfo['dpDetails']['profile_pic']}' ??
-                                'http://localhost:5005/uploads/profilepic/images.jpeg'
-                            : 'http://localhost:5005/uploads/profilepic/images.jpeg'),
+                                'http://localhost:5005/uploads/profilepic/a.png'
+                            : 'http://localhost:5005/uploads/profilepic/a.png'),
                       ),
                     ),
                   ),

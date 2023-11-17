@@ -36,8 +36,6 @@ var BuyerSchema = new Schema({
         maxlength: 20,
         unique: true
     },
-    
-    
     province: {
         type: String,
         required: [true, 'Province field is required!'],

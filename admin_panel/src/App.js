@@ -1,12 +1,15 @@
-import Footer from "./components/Footer";
-import RoutesNav from "./components/RoutesNav";
+import React from "react";
+import Navbar from "./components/Navbar";
+//import Footer from "./components/Footer";
+//import Sidebar from "./components/Sidebar";
+//import ReactDOM from 'react-dom';
+//import RoutesNav from "./components/RoutesNav";
 
 function App() {
   return (
     <div>
-      <RoutesNav/>
-      <Footer/>
-      
+      <Navbar/>
+     
     </div>
   );
 }

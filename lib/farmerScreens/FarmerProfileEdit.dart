@@ -6,7 +6,6 @@ import '../services/auth_services.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:quickalert/quickalert.dart';
-
 import 'dart:typed_data';
 import 'dart:convert';
 

@@ -1,4 +1,4 @@
-import 'package:farmwise/buyerScreens/models/product.dart';
+
 import 'package:flutter/material.dart';
 
 class produtProposal extends StatefulWidget {
@@ -12,25 +12,61 @@ class _productProposalState extends State<produtProposal> {
   final _formKey = GlobalKey<FormState>(); 
   String? product_name;
   String? product_description;
+  String? quantity;
   String? unit_price;
+  String selectedDateText = "Produced Date"; 
+  DateTime selectedDate = DateTime.now();
+  void _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+        selectedDateText = "${picked.month}/${picked.day}/${picked.year}";
+      });
+    }
+  }
+  String selectedDateText2 = "Expire Date";
+  DateTime selectedDate2 = DateTime.now();
+  void _selectDate2(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate2,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != selectedDate2) {
+      setState(() {
+        selectedDate2 = picked;
+        selectedDateText2 = "${picked.month}/${picked.day}/${picked.year}";
+      });
+    }
+  }
 
-  late TextEditingController cropNameController;
+  late TextEditingController productNameController;
+  late TextEditingController productDescrController;
+  late TextEditingController productQtyController;
   late TextEditingController unitPriceController;
-  late TextEditingController descriptionController;
 
   @override
   void initState() {
     super.initState();
-    cropNameController = TextEditingController();
+    productNameController = TextEditingController();
+    productDescrController = TextEditingController();
+    productQtyController = TextEditingController();
     unitPriceController = TextEditingController();
-    descriptionController = TextEditingController();
   }
 
   @override
   void dispose() {
-    cropNameController.dispose();
+    productNameController.dispose();
+    productDescrController.dispose();
+    productQtyController.dispose();
     unitPriceController.dispose();
-    descriptionController.dispose();
     super.dispose();
   }
 
@@ -64,14 +100,14 @@ class _productProposalState extends State<produtProposal> {
             children: <Widget>[
               
               TextFormField(
-                controller: cropNameController,
+                controller: productNameController,
                 decoration: InputDecoration(
-                  labelText: 'Crop Name',
+                  labelText: 'Product Name',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the crop name';
+                    return 'Please enter the product name';
                   }
                   return null;
                 },
@@ -82,7 +118,7 @@ class _productProposalState extends State<produtProposal> {
 
               SizedBox(height: 16.0),
               TextFormField(
-                controller: descriptionController,
+                controller: productDescrController,
                 decoration: InputDecoration(
                   labelText: 'Product Description',
                   border: OutlineInputBorder(),
@@ -99,15 +135,61 @@ class _productProposalState extends State<produtProposal> {
               ),
 
               SizedBox(height: 16.0),
+              SizedBox(
+                height: 50.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5.0),
+                    color: Colors.white70,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Text("Upload the image of the land"),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.camera_alt),
+                        onPressed: () {},
+                      ),
+                      
+                    ],
+                  ),
+                 
+                ),
+                
+              ),
+
+              SizedBox(height: 16.0),
               TextFormField(
-                controller: unitPriceController,
+                controller: productQtyController,
                 decoration: InputDecoration(
-                  labelText: 'Unit price (Rs)',
+                  labelText: 'Quantity (Kg)',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the product name';
+                    return 'Please enter the quantity of the product ';
+                  }
+                  return null;
+                },
+                onSaved: (value){
+                  quantity = value;
+                },
+              ),
+
+              SizedBox(height: 16.0),
+              TextFormField(
+                controller: unitPriceController,
+                decoration: InputDecoration(
+                  labelText: 'Unit Price (Rs)',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the unit price';
                   }
                   return null;
                 },
@@ -116,14 +198,77 @@ class _productProposalState extends State<produtProposal> {
                 },
               ),
 
+              Padding(
+                padding: EdgeInsets.all(10),
+              ),
+              SizedBox(
+                height: 50,
+                child: Container(
+
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5.0),
+                    color: Colors.white70,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Text(selectedDateText),
+                      ),
+                      GestureDetector(
+                        onTap: () => _selectDate(context),
+                        child: Icon(
+                          Icons.today,
+                          size: 30,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.all(10),
+              ),
+              SizedBox(
+                height: 50,
+                child: Container(
+
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5.0),
+                    color: Colors.white70,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Text(selectedDateText2),
+                      ),
+                      GestureDetector(
+                        onTap: () => _selectDate2(context),
+                        child: Icon(
+                          Icons.today,
+                          size: 30,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+
               SizedBox(height: 24.0),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    String cropName = cropNameController.text;
-                    String description = descriptionController.text;
+                    String productName = productNameController.text;
+                    String productDescr = productDescrController.text;
+                    String productQty = productQtyController.text;
                     String unitPrice = unitPriceController.text;
-                    print('Crop Name: $cropName, Unit Price: $unitPrice, Product Description: $description');
+                    print('Crop Name: $productName, Product Description: $productDescr, Quantity: $productQty, Unit Price: $unitPrice');
                   }
                 },
                 style: ElevatedButton.styleFrom(

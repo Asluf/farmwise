@@ -9,5 +9,5 @@ module.exports = function(app) {
     app.post("/registerBuyer", AuthController.registerBuyer);
     app.post("/login", AuthController.loginUser);
     app.get("/user", Auth, AuthController.getUserDetails);
-    app.post("/uploadDp",Auth, upload.single('image'), AuthController.uploadDpImage);
+    app.post("/uploadDp",Auth, upload.uploadDp.single('image'), AuthController.uploadDpImage);
 };

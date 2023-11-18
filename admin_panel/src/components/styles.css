@@ -1,0 +1,58 @@
+/* styles.css */
+
+/* Navbar Brand */
+.navbar-brand {
+    font-weight: bold;
+  }
+  
+  /* Navbar Links */
+  .navbar-nav .nav-link {
+    font-weight: bold;
+  }
+  
+  /* Navbar Dropdown */
+  .navbar-nav .nav-link.dropdown-toggle {
+    font-weight: bold;
+  }
+  
+  /* Navbar Toggle Button */
+  .navbar-toggler-icon {
+    font-weight: bold;
+  }
+  
+  /* Search Button */
+  .btn-secondary {
+    font-weight: bold;
+  }
+  /* styles.css */
+
+/* styles.css */
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden; /* Prevent horizontal scrollbar */
+  }
+  
+  .wrapper {
+    display: flex;
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    padding: 20px;
+    transition: 0.5s; /* Add a smooth transition for better aesthetics */
+  }
+  
+  /* Media query for responsiveness */
+  @media screen and (max-width: 600px) {
+    .wrapper {
+      margin-left: 0; /* Adjust margin for small screens when sidebar is hidden */
+    }
+  
+    .main-content {
+      margin-left: 0; /* Adjust margin for small screens when sidebar is hidden */
+    }
+  }
+  
+  

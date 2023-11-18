@@ -1,3 +1,5 @@
+import 'package:farmwise/farmerScreens/createProposal.dart';
+import 'package:farmwise/farmerScreens/productProposal.dart';
 import 'package:farmwise/farmerScreens/myIncome.dart';
 import 'package:farmwise/farmerScreens/verificationForgot.dart';
 import 'package:farmwise/mainScreens/forgotPassword.dart';
@@ -85,6 +87,7 @@ class _MyAppState extends State<MyApp> {
       ),
 
       // initialRoute: '/test',
+      
       initialRoute: initialIdentifier,
       routes: {
         '/': (context) => const Homepage(),
@@ -99,6 +102,8 @@ class _MyAppState extends State<MyApp> {
         '/verification': (context) => VerificationForgot(),
         '/newPassword': (context) => NewPassword(),
       },
+
+      
     );
   }
 }

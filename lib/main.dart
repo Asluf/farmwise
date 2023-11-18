@@ -99,6 +99,7 @@ class _MyAppState extends State<MyApp> {
         '/verification': (context) => VerificationForgot(),
         '/newPassword': (context) => NewPassword(),
       },
+
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -7,7 +8,6 @@ import 'package:image_picker_web/image_picker_web.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:quickalert/quickalert.dart';
 import 'dart:typed_data';
-
 
 class CreateProposal extends StatefulWidget {
   @override
@@ -257,7 +257,6 @@ class _FormScreenState extends State<CreateProposal> {
                 padding: EdgeInsets.all(10),
               ),
               TextFormField(
-
                 initialValue: totalInvestment,
                 decoration: InputDecoration(
                   labelText: 'Total investment:',

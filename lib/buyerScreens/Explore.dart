@@ -16,11 +16,48 @@ class _MyWidgetState extends State<explorePage> {
   List<product> filteredList = [];
   TextEditingController searchController = TextEditingController();
 
+  final sortTypes = ['Grains', 'Vegetables', 'Fruits'];
+  String? sortType; // Remove the initial value
+
   @override
   void initState() {
     super.initState();
     // Set filteredList to all products when the page loads
     filteredList = List.from(productList);
+  }
+
+  void sortProductsByName() {
+    setState(() {
+      productList.sort((a, b) => a.name.compareTo(b.name));
+    });
+  }
+
+  void onDropDownChanged2(String? value) {
+    if (value != null) {
+      setState(() {
+        this.sortType = value;
+        if (value == 'Sort by') {
+          sortProductsByName();
+        }
+      });
+    }
+  }
+
+  void filterProducts(String query) {
+    setState(() {
+      //this is used to rebuild the query
+      if (query.isEmpty) {
+        filteredList = List.from(
+            productList); //when the filtered query is empty all the product list will be showed
+      } else {
+        //f the query is not empty, the function filters the productList based on the lowercase version of the product names.
+        // It uses the where method to create a new list containing only the products whose names contain the search query (case-insensitive). This filtered list is then assigned to filteredList.
+        filteredList = productList
+            .where((product) =>
+                product.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
   }
 
   Widget build(BuildContext context) {
@@ -121,6 +158,7 @@ class _MyWidgetState extends State<explorePage> {
           ),
         ),
       ),
+
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -132,14 +170,34 @@ class _MyWidgetState extends State<explorePage> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              "See all",
-              style: TextStyle(
-                color: Colors.green.shade700,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
+          Container(
+            //crop
+            decoration: BoxDecoration(
+              border:
+                  Border.all(color: Colors.transparent), // Remove the border
+              borderRadius: BorderRadius.circular(5.0),
+              color: Colors.white70,
+            ),
+            child: DropdownButton<String?>(
+              items: sortTypes.map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.0,
+                    ),
+                    child: Text(value),
+                  ),
+                );
+              }).toList(),
+              value: sortType,
+              onChanged: onDropDownChanged2,
+              underline: Container(),
+              hint: Text(
+                "Sort by",
+                style: TextStyle(
+                  color: Colors.green.shade700,
+                ), // Set the hint text here
               ),
             ),
           )
@@ -167,22 +225,5 @@ class _MyWidgetState extends State<explorePage> {
                 });
           })
     ]));
-  }
-
-  void filterProducts(String query) {
-    setState(() {
-      //this is used to rebuild the query
-      if (query.isEmpty) {
-        filteredList = List.from(
-            productList); //when the filtered query is empty all the product list will be showed
-      } else {
-//f the query is not empty, the function filters the productList based on the lowercase version of the product names.
-// It uses the where method to create a new list containing only the products whose names contain the search query (case-insensitive). This filtered list is then assigned to filteredList.
-        filteredList = productList
-            .where((product) =>
-                product.name.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      }
-    });
   }
 }

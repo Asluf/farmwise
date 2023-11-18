@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import '../services/auth_services.dart';
+import 'package:image_picker_web/image_picker_web.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:quickalert/quickalert.dart';
+import 'dart:typed_data';
+
 class CreateProposal extends StatefulWidget {
   @override
   _FormScreenState createState() => _FormScreenState();
@@ -99,7 +108,7 @@ class _FormScreenState extends State<CreateProposal> {
               SizedBox(
                 height: 50,
                 child: Container(
-//date
+
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(5.0),
@@ -123,6 +132,7 @@ class _FormScreenState extends State<CreateProposal> {
                   ),
                 ),
               ),
+
               Padding(
                 padding: EdgeInsets.all(10),
               ),
@@ -144,6 +154,7 @@ class _FormScreenState extends State<CreateProposal> {
               Padding(
                 padding: EdgeInsets.all(10),
               ),
+
               TextFormField(
                 initialValue: province,
                 decoration: InputDecoration(
@@ -212,6 +223,7 @@ class _FormScreenState extends State<CreateProposal> {
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 12.0),
+
                         child: Text("Upload the image of the land"),
                       ),
                       IconButton(
@@ -222,6 +234,7 @@ class _FormScreenState extends State<CreateProposal> {
                   ),
                 ),
               ),
+
               Padding(
                 padding: EdgeInsets.all(10),
               ),
@@ -264,6 +277,7 @@ class _FormScreenState extends State<CreateProposal> {
                 height: 45, // Set the desired width
                 child: ElevatedButton(
                   onPressed: () {
+
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                     }

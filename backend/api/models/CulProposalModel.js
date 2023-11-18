@@ -28,29 +28,9 @@ var CulProposalSchema = new Schema({
         maxlength: 200,
     },
     start_date: {
-        type: String,
+        type: Date,
         required: [true, 'Start date field is required!'],
-        maxlength: 20,
-    },
-    address: {
-        type: String,
-        required: [true, 'Address field is required!'],
-        maxlength: 20,
-    },
-    province: {
-        type: String,
-        required: [true, 'Province field is required!'],
-        maxlength: 200
-    },
-    district: {
-        type: String,
-        required: [true, 'District field is required!'],
-        maxlength: 200
-    },
-    city: {
-        type: String,
-        required: [true, 'City field is required!'],
-        maxlength: 200
+        maxlength: 50,
     },
     acres: {
         type: String,

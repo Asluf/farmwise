@@ -85,9 +85,6 @@ class _MyAppState extends State<MyApp> {
               255, 5, 46, 2), // Set the selected item color to green
         ),
       ),
-
-      // initialRoute: '/test',
-      
       initialRoute: initialIdentifier,
       routes: {
         '/': (context) => const Homepage(),
@@ -102,8 +99,6 @@ class _MyAppState extends State<MyApp> {
         '/verification': (context) => VerificationForgot(),
         '/newPassword': (context) => NewPassword(),
       },
-
-      
     );
   }
 }

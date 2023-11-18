@@ -1,5 +1,7 @@
 const { Farmer } = require("../models/FarmerModel");
 const { User } = require("../models/UserModel");
+const { CulProposal } = require("../models/CulProposalModel");
+const { ProProposal } = require("../models/ProProposalModel");
 
 exports.getFarmer = (req, res) => {
   Farmer.findOne({ email: req.body.email })
@@ -65,4 +67,95 @@ exports.editFarmer = (req, res) => {
         data: err,
       });
     });
+};
+
+// for concetanate the object for upload the proposa
+function mergeRequestBody(reqBody, additionalProps) {
+  return { ...reqBody, ...additionalProps };
+}
+exports.createCultivationProposal = (req, res) => {
+  const file = req.file;
+  if (!file) {
+    return res.status(400).json({ error: "No file uploaded." });
+  }
+  const total_amount = parseFloat(req.body.total_amount);
+  const of_farmer = parseFloat(req.body.investment_of_farmer);
+  const of_investor = total_amount - of_farmer;
+  var roi_farmer = 0;
+  var roi_investor = 0;
+
+  if(of_farmer< (total_amount/2)){
+    roi_farmer = (of_farmer/total_amount*100)+15;
+    roi_investor = 100-roi_farmer;
+  }else{
+    roi_farmer = of_farmer/total_amount*100;
+    roi_investor = of_investor/total_amount*100;
+  }
+
+
+  const tempObj = {
+    land_img_path : file.path,
+    investment_of_investor: of_investor.toString(),
+    roi_farmer: roi_farmer.toString(),
+    roi_investor: roi_investor.toString()
+  };
+  const resultObj = mergeRequestBody(req.body, tempObj);
+  const prop = new CulProposal(resultObj); 
+
+  prop
+    .save()
+    .then(() => {
+      return res.status(200).json({
+        success: true,
+        message: "Successfully posted the proposal!",
+      });
+    })
+    .catch((err) => {
+      return res.status(422).json({
+        success: false,
+        message: "Something went wrong!",
+        data: err,
+      });
+    });
+
+  
+
+};
+
+
+exports.createProductProposal = (req, res) => {
+  const file = req.file;
+  if (!file) {
+    return res.status(400).json({ error: "No file uploaded." });
+  }
+  const quantity = parseFloat(req.body.quantity);
+  const unit_price = parseFloat(req.body.unit_price);
+  const total_price = quantity * unit_price;
+
+
+  const tempObj2 = {
+    product_img_path : file.path,
+    total_price: total_price.toString()
+  };
+  const resultObj = mergeRequestBody(req.body, tempObj2);
+  const prod = new ProProposal(resultObj); 
+
+  prod
+    .save()
+    .then(() => {
+      return res.status(200).json({
+        success: true,
+        message: "Successfully posted the proposal!",
+      });
+    })
+    .catch((err) => {
+      return res.status(422).json({
+        success: false,
+        message: "Something went wrong!",
+        data: err,
+      });
+    });
+
+  
+
 };

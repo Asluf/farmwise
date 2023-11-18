@@ -1,6 +1,7 @@
 const { Farmer } = require("../models/FarmerModel");
 const { User } = require("../models/UserModel");
 const { CulProposal } = require("../models/CulProposalModel");
+const { ProProposal } = require("../models/ProProposalModel");
 
 exports.getFarmer = (req, res) => {
   Farmer.findOne({ email: req.body.email })
@@ -102,6 +103,44 @@ exports.createCultivationProposal = (req, res) => {
   const prop = new CulProposal(resultObj); 
 
   prop
+    .save()
+    .then(() => {
+      return res.status(200).json({
+        success: true,
+        message: "Successfully posted the proposal!",
+      });
+    })
+    .catch((err) => {
+      return res.status(422).json({
+        success: false,
+        message: "Something went wrong!",
+        data: err,
+      });
+    });
+
+  
+
+};
+
+
+exports.createProductProposal = (req, res) => {
+  const file = req.file;
+  if (!file) {
+    return res.status(400).json({ error: "No file uploaded." });
+  }
+  const quantity = parseFloat(req.body.quantity);
+  const unit_price = parseFloat(req.body.unit_price);
+  const total_price = quantity * unit_price;
+
+
+  const tempObj2 = {
+    product_img_path : file.path,
+    total_price: total_price.toString()
+  };
+  const resultObj = mergeRequestBody(req.body, tempObj2);
+  const prod = new ProProposal(resultObj); 
+
+  prod
     .save()
     .then(() => {
       return res.status(200).json({

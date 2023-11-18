@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 require("dotenv").config();
-const jwt = require('jsonwebtoken');
 
 const SALT = 10;
 
@@ -117,5 +116,5 @@ var CulProposalSchema = new Schema({
 });
 
 
-const CulProposal = mongoose.model('proposals', CulProposalSchema);
+const CulProposal = mongoose.model('cultivation_proposals', CulProposalSchema);
 module.exports = { CulProposal }

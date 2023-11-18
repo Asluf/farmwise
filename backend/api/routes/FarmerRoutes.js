@@ -7,6 +7,7 @@ module.exports = function (app) {
   app.post("/getFarmer", Auth, FarmerController.getFarmer);
   app.post("/editFarmer", Auth, FarmerController.editFarmer);
   app.post("/createCultivationProposal", Auth,  upload.uploadCulPropoal.single('image') ,FarmerController.createCultivationProposal);
+  app.post("/createProductProposal", Auth,  upload.uploadProPropoal.single('image') ,FarmerController.createProductProposal);
 
 
 

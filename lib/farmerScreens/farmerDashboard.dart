@@ -2,7 +2,7 @@ import 'package:farmwise/farmerScreens/FarmerProfile.dart';
 import 'package:farmwise/farmerScreens/myInvestment.dart';
 import 'package:farmwise/farmerScreens/myIncome.dart';
 import 'package:farmwise/farmerScreens/notificationFarmer.dart';
-import 'package:farmwise/farmerScreens/proposal.dart';
+import 'package:farmwise/farmerScreens/productProposal.dart';
 import 'package:flutter/material.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
@@ -16,8 +16,8 @@ class FarmerDashboard extends StatefulWidget {
 
 class _FarmerDashboardState extends State<FarmerDashboard> {
   final pages = [
-    const myInvestment(), 
-    const proposal(), 
+    const myInvestment(),
+    const ProductProposal(),
     const myIncome()
   ];
   int currentIndex = 0;
@@ -137,7 +137,7 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
               color: Color.fromARGB(255, 107, 156, 104),
             ),
             activeIcon: Icon(Icons.shopping_cart),
-            label: 'Proposal',
+            label: 'Products',
           ),
           BottomNavigationBarItem(
             icon: Icon(

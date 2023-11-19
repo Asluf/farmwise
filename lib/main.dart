@@ -1,5 +1,5 @@
 import 'package:farmwise/farmerScreens/createProposal.dart';
-import 'package:farmwise/farmerScreens/productProposal.dart';
+import 'package:farmwise/farmerScreens/createProductProposal.dart';
 import 'package:farmwise/farmerScreens/myIncome.dart';
 import 'package:farmwise/farmerScreens/verificationForgot.dart';
 import 'package:farmwise/mainScreens/forgotPassword.dart';
@@ -16,7 +16,6 @@ import 'package:farmwise/services/logout.dart';
 import 'package:farmwise/test.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_services.dart';
-// ignore: duplicate_import
 import 'package:farmwise/farmerScreens/verificationForgot.dart';
 
 void main() async {
@@ -99,7 +98,6 @@ class _MyAppState extends State<MyApp> {
         '/verification': (context) => VerificationForgot(),
         '/newPassword': (context) => NewPassword(),
       },
-
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:farmwise/farmerScreens/createProposal.dart';
 import 'package:farmwise/farmerScreens/widgets/ongoingCard.dart';
 import 'package:farmwise/farmerScreens/widgets/pendingCard.dart';
+import 'package:farmwise/farmerScreens/widgets/completedCard.dart';
+import 'package:farmwise/farmerScreens/widgets/rejectCard.dart';
 import 'package:flutter/material.dart';
 import 'package:farmwise/farmerScreens/data/productList.dart';
 import '../services/auth_services.dart';
@@ -59,8 +61,6 @@ class _MyWidgetState extends State<myInvestment> {
             fetchedProposals.add(proposal);
           });
         }
-
-        print(fetchedProposals[0].farmerDetails.farm_address);
       } else {
         // Handle any errors
         print('Failed to fetch data ${response.body}');
@@ -85,7 +85,7 @@ class _MyWidgetState extends State<myInvestment> {
         backgroundColor: const Color.fromARGB(
             255, 5, 46, 2), // Optional: specify the background color
         foregroundColor: Colors.white, // Optional: specify the icon color
-        tooltip: 'Add', // Optional: tooltip text on hover
+        tooltip: 'Add Proposal', // Optional: tooltip text on hover
       ),
       body: FutureBuilder<String>(
         future: futureData,
@@ -257,6 +257,56 @@ class _MyWidgetState extends State<myInvestment> {
                 },
               )
             : Text("No any pending proposal"),
+        Container(
+          margin: const EdgeInsets.fromLTRB(0, 15, 0, 20),
+          child: const Text(
+            "Completed",
+            style: TextStyle(
+              color: Colors.green,
+              fontSize: 23,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.85,
+          ),
+          itemCount: productList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return completedCard(productList: productList[index]);
+          },
+        ),
+        Container(
+          margin: const EdgeInsets.fromLTRB(0, 15, 0, 20),
+          child: const Text(
+            "Rejected",
+            style: TextStyle(
+              color: Colors.green,
+              fontSize: 23,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.85,
+          ),
+          itemCount: productList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return rejectCard(productList: productList[index]);
+          },
+        )
       ],
     );
   }

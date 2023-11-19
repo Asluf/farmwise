@@ -2,8 +2,8 @@ import 'package:farmwise/farmerScreens/models/product.dart';
 import 'package:farmwise/farmerScreens/reviewPages/reviewCompleted.dart';
 import 'package:flutter/material.dart';
 
-class productCard extends StatelessWidget {
-  const productCard({super.key, required this.productList});
+class completedCard extends StatelessWidget {
+  const completedCard({super.key, required this.productList});
 
   final product productList;
 

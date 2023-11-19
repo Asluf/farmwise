@@ -16,42 +16,46 @@ class _MyWidgetState extends State<explorePage> {
   List<product> filteredList = [];
   TextEditingController searchController = TextEditingController();
 
-  final sortTypes = ['Grains', 'Vegetables', 'Fruits'];
-  String? sortType; // Remove the initial value
+  final sortOptions = [
+    'Sort by',
+    'Product Name',
+    'Grains',
+    'Vegetables',
+    'Fruits'
+  ];
+  String? selectedSortOption; // Remove the initial value
 
   @override
   void initState() {
     super.initState();
     // Set filteredList to all products when the page loads
     filteredList = List.from(productList);
+    selectedSortOption = sortOptions[0]; // Default to 'Sort by'
   }
 
   void sortProductsByName() {
     setState(() {
-      productList.sort((a, b) => a.name.compareTo(b.name));
+      filteredList.sort((a, b) => a.name.compareTo(b.name));
     });
   }
 
-  void onDropDownChanged2(String? value) {
+  void onDropDownChanged(String? value) {
     if (value != null) {
       setState(() {
-        this.sortType = value;
-        if (value == 'Sort by') {
+        selectedSortOption = value;
+        if (value == 'Product Name') {
           sortProductsByName();
         }
+        // Add other sorting options if needed
       });
     }
   }
 
   void filterProducts(String query) {
     setState(() {
-      //this is used to rebuild the query
       if (query.isEmpty) {
-        filteredList = List.from(
-            productList); //when the filtered query is empty all the product list will be showed
+        filteredList = List.from(productList);
       } else {
-        //f the query is not empty, the function filters the productList based on the lowercase version of the product names.
-        // It uses the where method to create a new list containing only the products whose names contain the search query (case-insensitive). This filtered list is then assigned to filteredList.
         filteredList = productList
             .where((product) =>
                 product.name.toLowerCase().contains(query.toLowerCase()))
@@ -61,6 +65,16 @@ class _MyWidgetState extends State<explorePage> {
   }
 
   Widget build(BuildContext context) {
+// Group filteredList by the first letter of the product name
+    Map<String, List<product>> groupedProducts = {};
+    for (var product in filteredList) {
+      String firstLetter = product.name[0].toUpperCase();
+      if (!groupedProducts.containsKey(firstLetter)) {
+        groupedProducts[firstLetter] = [];
+      }
+      groupedProducts[firstLetter]!.add(product);
+    }
+
     return Scaffold(
         body: ListView(padding: EdgeInsets.all(16), children: [
       //filter
@@ -173,13 +187,12 @@ class _MyWidgetState extends State<explorePage> {
           Container(
             //crop
             decoration: BoxDecoration(
-              border:
-                  Border.all(color: Colors.transparent), // Remove the border
+              border: Border.all(color: Colors.transparent),
               borderRadius: BorderRadius.circular(5.0),
               color: Colors.white70,
             ),
             child: DropdownButton<String?>(
-              items: sortTypes.map((String value) {
+              items: sortOptions.map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Padding(
@@ -190,14 +203,14 @@ class _MyWidgetState extends State<explorePage> {
                   ),
                 );
               }).toList(),
-              value: sortType,
-              onChanged: onDropDownChanged2,
+              value: selectedSortOption,
+              onChanged: onDropDownChanged,
               underline: Container(),
               hint: Text(
                 "Sort by",
                 style: TextStyle(
                   color: Colors.green.shade700,
-                ), // Set the hint text here
+                ),
               ),
             ),
           )

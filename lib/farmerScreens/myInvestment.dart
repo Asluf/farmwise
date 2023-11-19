@@ -333,7 +333,7 @@ class _MyWidgetState extends State<myInvestment> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: 0.80,
+                  childAspectRatio: 0.76,
                 ),
                 itemCount: fetchedOngoingProposals.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -387,7 +387,7 @@ class _MyWidgetState extends State<myInvestment> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: 0.80,
+                  childAspectRatio: 0.76,
                 ),
                 itemCount: fetchedPendingProposals.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -441,7 +441,7 @@ class _MyWidgetState extends State<myInvestment> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: 0.80,
+                  childAspectRatio: 0.76,
                 ),
                 itemCount: fetchedApprovedProposals.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -495,7 +495,7 @@ class _MyWidgetState extends State<myInvestment> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: 0.80,
+                  childAspectRatio: 0.76,
                 ),
                 itemCount: fetchedCompletedProposals.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -549,7 +549,7 @@ class _MyWidgetState extends State<myInvestment> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: 0.80,
+                  childAspectRatio: 0.76,
                 ),
                 itemCount: fetchedRejectedProposals.length,
                 itemBuilder: (BuildContext context, int index) {

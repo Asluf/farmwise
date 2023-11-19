@@ -1,10 +1,9 @@
-import 'package:farmwise/buyerScreens/models/product.dart';
+import 'package:farmwise/farmerScreens/models/product.dart';
+import 'package:farmwise/farmerScreens/reviewPages/reviewRejected.dart';
 import 'package:flutter/material.dart';
-import 'package:farmwise/farmerScreens/reviewPanding.dart';
 
-
-class pandingCard extends StatelessWidget {
-  const pandingCard({super.key, required this.productList});
+class rejectCard extends StatelessWidget {
+  const rejectCard({super.key, required this.productList});
 
   final product productList;
 
@@ -12,10 +11,13 @@ class pandingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => {
-        Navigator.push(context, MaterialPageRoute (builder:
-        // ignore: non_constant_identifier_names
-        ( Context)=> const reviewPanding(),),
-        
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder:
+                // ignore: non_constant_identifier_names
+                (Context) => const reviewRejected(),
+          ),
         )
       },
       child: Card(
@@ -72,13 +74,10 @@ class pandingCard extends StatelessWidget {
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                            text: "Cost :Rs.45000",
-                            
+                            text: "Cost :Rs.50000",
                             style: TextStyle(
                               fontSize: 15,
                             )),
-                        
-                            
                       ])),
                       SizedBox(
                           width: 30,

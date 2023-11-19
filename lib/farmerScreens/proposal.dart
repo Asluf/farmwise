@@ -1,8 +1,8 @@
 import 'package:farmwise/farmerScreens/createProposal.dart';
-import 'package:farmwise/farmerScreens/rejectCard.dart';
+import 'package:farmwise/farmerScreens/widgets/rejectCard.dart';
 import 'package:flutter/material.dart';
-import 'package:farmwise/farmerScreens/productCard.dart';
-import 'package:farmwise/farmerScreens/productList.dart';
+import 'package:farmwise/farmerScreens/widgets/completedCard.dart';
+import 'package:farmwise/farmerScreens/data/productList.dart';
 
 class proposal extends StatefulWidget {
   const proposal({super.key});

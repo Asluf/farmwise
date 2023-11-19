@@ -1,18 +1,20 @@
 import 'package:farmwise/farmerScreens/data/pendingProposalList.dart';
 import 'package:farmwise/farmerScreens/data/productList.dart';
+import 'package:farmwise/investorScreens/data/proposalList.dart';
 import 'package:flutter/material.dart';
 
-class reviewRejected extends StatefulWidget {
-  const reviewRejected({super.key, required this.proposalList});
+class reviewApproved extends StatefulWidget {
+  const reviewApproved({super.key, required this.proposalList});
 
   final ProposalDetails proposalList;
 
   @override
-  State<reviewRejected> createState() => _MyWidgetState();
+  State<reviewApproved> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<reviewRejected> {
+class _MyWidgetState extends State<reviewApproved> {
   late Future<String> futureData;
+
   @override
   void initState() {
     super.initState();
@@ -39,7 +41,7 @@ class _MyWidgetState extends State<reviewRejected> {
             ),
           ),
         ),
-        title: Text("Rejected Overview"),
+        title: Text("Approved Overview"),
       ),
       body: FutureBuilder<String>(
         future: futureData,
@@ -71,6 +73,7 @@ class _MyWidgetState extends State<reviewRejected> {
     String roiFarmerString = proposalList.roi_farmer;
     double roiFarmer = double.parse(roiFarmerString);
     double roundedRoiFarmer = double.parse(roiFarmer.toStringAsFixed(2));
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -152,6 +155,7 @@ class _MyWidgetState extends State<reviewRejected> {
                     ),
                   ],
                 ),
+                
                 const Divider(
                   color: Color.fromARGB(255, 5, 46, 2),
                 ),

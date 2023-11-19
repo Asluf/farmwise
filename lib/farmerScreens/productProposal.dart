@@ -88,6 +88,7 @@ class _myInvestmentState extends State<ProductProposal> {
                   productproposalList: fetchedPendingProducts[index]);
             },
           ),
+
           Container(
             margin: const EdgeInsets.fromLTRB(0, 15, 0, 20),
             child: const Text(
@@ -114,6 +115,7 @@ class _myInvestmentState extends State<ProductProposal> {
                   productproposalList: fetchedSoldProducts[index]);
             },
           )
+
         ],
       ),
     );

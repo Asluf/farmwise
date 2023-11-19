@@ -1,19 +1,19 @@
 import 'package:farmwise/farmerScreens/models/product.dart';
-import 'package:farmwise/farmerScreens/reviewPages/reviewCompleted.dart';
+import 'package:farmwise/farmerScreens/reviewPages/reviewApproved.dart';
 import 'package:flutter/material.dart';
 import 'package:farmwise/farmerScreens/reviewPages/reviewPending.dart';
 import 'package:farmwise/farmerScreens/data/pendingProposalList.dart';
 
-class completedCard extends StatefulWidget {
-  const completedCard({super.key, required this.proposalList});
+class approvedCard extends StatefulWidget {
+  const approvedCard({super.key, required this.proposalList});
 
   final ProposalDetails proposalList;
 
   @override
-  State<completedCard> createState() => _completedCardState();
+  State<approvedCard> createState() => _approvedCardState();
 }
 
-class _completedCardState extends State<completedCard> {
+class _approvedCardState extends State<approvedCard> {
   @override
   Widget build(BuildContext context) {
     final proposalList = widget.proposalList;
@@ -25,7 +25,7 @@ class _completedCardState extends State<completedCard> {
           MaterialPageRoute(
             builder:
                 // ignore: non_constant_identifier_names
-                (Context) => reviewCompleted(proposalList: proposalList),
+                (Context) => reviewApproved(proposalList: proposalList),
           ),
         )
       },

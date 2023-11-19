@@ -15,12 +15,18 @@ class ProfileInvestor extends StatefulWidget {
 
 class _MyWidgetState extends State<ProfileInvestor> {
   Map<String, dynamic> profileInfo = {};
-
   final AuthService _authService = AuthService();
   String email = '';
   String token = '';
+  late Future<String> futureData;
 
-  Future<void> fetchData() async {
+  @override
+  void initState() {
+    super.initState();
+    futureData = fetchData(); // Fetch data when the profile page loads
+  }
+
+  Future<String> fetchData() async {
     email = await _authService.getEmail();
     token = await _authService.getToken();
 
@@ -50,12 +56,8 @@ class _MyWidgetState extends State<ProfileInvestor> {
     } catch (er) {
       print(er);
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchData(); // Fetch data when the profile page loads
+    await Future.delayed(const Duration(seconds: 1));
+    return "done";
   }
 
   @override
@@ -78,7 +80,53 @@ class _MyWidgetState extends State<ProfileInvestor> {
           ),
         ),
       ),
-      body: Container(
+      body: FutureBuilder<String>(
+        future: futureData,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // If the Future is still running, display a loading spinner or an animation
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Colors.green.shade600), // Set your desired color
+              ),
+            );
+          } else if (snapshot.hasError) {
+            // If there's an error in the Future, display an error message
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // If the Future is complete and data is received, display the data
+            // return Text('Data: ${snapshot.data}');
+            return Profile(context);
+          }
+        },
+      ),
+    );
+  }
+
+  itemProfile(String title, String subtitle, IconData iconData) {
+    return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(0, 5),
+              color: Colors.green.shade300,
+              spreadRadius: 2,
+              blurRadius: 10,
+            )
+          ],
+        ),
+        child: ListTile(
+          title: Text(title),
+          subtitle: Text(subtitle),
+          leading: Icon(iconData),
+        ));
+  }
+
+  Widget Profile(BuildContext context) {
+    return Container(
         padding: EdgeInsets.only(left: 15, top: 20, right: 15),
         child: GestureDetector(
           onTap: () {
@@ -168,28 +216,7 @@ class _MyWidgetState extends State<ProfileInvestor> {
             )
           ]),
         ),
-      ),
-    );
-  }
+      );
 
-  itemProfile(String title, String subtitle, IconData iconData) {
-    return Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(0, 5),
-              color: Colors.green.shade300,
-              spreadRadius: 2,
-              blurRadius: 10,
-            )
-          ],
-        ),
-        child: ListTile(
-          title: Text(title),
-          subtitle: Text(subtitle),
-          leading: Icon(iconData),
-        ));
   }
 }

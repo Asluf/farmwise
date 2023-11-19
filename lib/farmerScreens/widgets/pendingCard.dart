@@ -22,9 +22,7 @@ class _pendingCardState extends State<pendingCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder:
-                // ignore: non_constant_identifier_names
-                (Context) => const reviewPending(),
+            builder: (Context) => reviewPending(proposalList: proposalList),
           ),
         )
       },
@@ -68,39 +66,35 @@ class _pendingCardState extends State<pendingCard> {
                       )),
                 )),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 8.0),
-                    child: Text(
-                      proposalList.crop_name,
-                      style: TextStyle(fontSize: 13),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            text: "Total :Rs.${proposalList.total_amount}",
-                            style: TextStyle(
-                              fontSize: 15,
-                            )),
-                      ])),
-                      SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: IconButton(
-                              padding: EdgeInsets.zero,
-                              onPressed: () {},
-                              icon: const Icon(null)))
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 4.0),
+                        child: Text(
+                          proposalList.crop_name,
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 2.0),
+                        child: Text(
+                          "Total :Rs.${proposalList.total_amount}",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 2.0),
+                        child: Text(
+                          "My :Rs.${proposalList.investment_of_farmer}",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
                     ],
-                  )
-                ],
-              ),
-            )
+                  ),
+                ))
           ],
         ),
       ),

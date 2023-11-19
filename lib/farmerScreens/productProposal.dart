@@ -42,20 +42,20 @@ class _myInvestmentState extends State<ProductProposal> {
               ),
             ),
           ),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 0.85,
-            ),
-            itemCount: productList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return completedCard(productList: productList[index]);
-            },
-          ),
+          // GridView.builder(
+          //   shrinkWrap: true,
+          //   physics: const NeverScrollableScrollPhysics(),
+          //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          //     crossAxisCount: 2,
+          //     crossAxisSpacing: 16,
+          //     mainAxisSpacing: 16,
+          //     childAspectRatio: 0.85,
+          //   ),
+          //   itemCount: productList.length,
+          //   itemBuilder: (BuildContext context, int index) {
+          //     return completedCard(productList: productList[index]);
+          //   },
+          // ),
           Container(
             margin: const EdgeInsets.fromLTRB(0, 15, 0, 20),
             child: const Text(
@@ -67,20 +67,20 @@ class _myInvestmentState extends State<ProductProposal> {
               ),
             ),
           ),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 0.85,
-            ),
-            itemCount: productList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return rejectCard(productList: productList[index]);
-            },
-          )
+          // GridView.builder(
+          //   shrinkWrap: true,
+          //   physics: const NeverScrollableScrollPhysics(),
+          //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          //     crossAxisCount: 2,
+          //     crossAxisSpacing: 16,
+          //     mainAxisSpacing: 16,
+          //     childAspectRatio: 0.85,
+          //   ),
+          //   itemCount: productList.length,
+          //   itemBuilder: (BuildContext context, int index) {
+          //     return rejectedCard(productList: productList[index]);
+          //   },
+          // )
         ],
       ),
     );

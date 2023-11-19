@@ -1,22 +1,29 @@
 import 'package:farmwise/farmerScreens/models/product.dart';
 import 'package:farmwise/farmerScreens/reviewPages/reviewRejected.dart';
 import 'package:flutter/material.dart';
+import 'package:farmwise/farmerScreens/reviewPages/reviewPending.dart';
+import 'package:farmwise/farmerScreens/data/pendingProposalList.dart';
 
-class rejectCard extends StatelessWidget {
-  const rejectCard({super.key, required this.productList});
+class rejectedCard extends StatefulWidget {
+  const rejectedCard({super.key, required this.proposalList});
 
-  final product productList;
+  final ProposalDetails proposalList;
 
   @override
+  State<rejectedCard> createState() => _rejectedCardState();
+}
+
+class _rejectedCardState extends State<rejectedCard> {
+  @override
   Widget build(BuildContext context) {
+    final proposalList = widget.proposalList;
+
     return GestureDetector(
       onTap: () => {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder:
-                // ignore: non_constant_identifier_names
-                (Context) => const reviewRejected(),
+            builder: (Context) => reviewRejected(proposalList: proposalList),
           ),
         )
       },
@@ -40,9 +47,11 @@ class rejectCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                  image: AssetImage(
-                    productList.image,
-                  ),
+                  image: NetworkImage((proposalList != '' &&
+                          proposalList.land_img_path != '')
+                      ? 'http://localhost:5005/${proposalList.land_img_path}' ??
+                          'http://localhost:5005/uploads/culproposal/default.png'
+                      : 'http://localhost:5005/uploads/culproposal/default.png'),
                   fit: BoxFit.cover,
                 )),
                 child: SizedBox(
@@ -58,39 +67,35 @@ class rejectCard extends StatelessWidget {
                       )),
                 )),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 8.0),
-                    child: Text(
-                      productList.name,
-                      style: TextStyle(fontSize: 13),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            text: "Cost :Rs.50000",
-                            style: TextStyle(
-                              fontSize: 15,
-                            )),
-                      ])),
-                      SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: IconButton(
-                              padding: EdgeInsets.zero,
-                              onPressed: () {},
-                              icon: const Icon(null)))
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 4.0),
+                        child: Text(
+                          proposalList.crop_name,
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 2.0),
+                        child: Text(
+                          "Total :Rs.${proposalList.total_amount}",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 2.0),
+                        child: Text(
+                          "My :Rs.${proposalList.investment_of_farmer}",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
                     ],
-                  )
-                ],
-              ),
-            )
+                  ),
+                ))
           ],
         ),
       ),

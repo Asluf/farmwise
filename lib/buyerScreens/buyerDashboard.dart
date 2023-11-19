@@ -22,6 +22,8 @@ class _MyWidgetState extends State<buyerDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
+          leading: null,
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(

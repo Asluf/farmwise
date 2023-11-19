@@ -16,13 +16,7 @@ class _MyWidgetState extends State<explorePage> {
   List<product> filteredList = [];
   TextEditingController searchController = TextEditingController();
 
-  final sortOptions = [
-    'Sort by',
-    'Product Name',
-    'Grains',
-    'Vegetables',
-    'Fruits'
-  ];
+  final sortOptions = ['Product Name (A-Z)', 'Product Name (Z-A)'];
   String? selectedSortOption; // Remove the initial value
 
   @override
@@ -30,7 +24,7 @@ class _MyWidgetState extends State<explorePage> {
     super.initState();
     // Set filteredList to all products when the page loads
     filteredList = List.from(productList);
-    selectedSortOption = sortOptions[0]; // Default to 'Sort by'
+    selectedSortOption = null; // No default sorting
   }
 
   void sortProductsByName() {
@@ -39,12 +33,20 @@ class _MyWidgetState extends State<explorePage> {
     });
   }
 
+  void sortProductsByNameDescending() {
+    setState(() {
+      filteredList.sort((a, b) => b.name.compareTo(a.name));
+    });
+  }
+
   void onDropDownChanged(String? value) {
     if (value != null) {
       setState(() {
         selectedSortOption = value;
-        if (value == 'Product Name') {
+        if (value == 'Product Name (A-Z)') {
           sortProductsByName();
+        } else if (value == 'Product Name (Z-A)') {
+          sortProductsByNameDescending();
         }
         // Add other sorting options if needed
       });
@@ -207,7 +209,7 @@ class _MyWidgetState extends State<explorePage> {
               onChanged: onDropDownChanged,
               underline: Container(),
               hint: Text(
-                "Sort by",
+                selectedSortOption ?? "Sort by",
                 style: TextStyle(
                   color: Colors.green.shade700,
                 ),

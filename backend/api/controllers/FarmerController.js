@@ -150,7 +150,7 @@ exports.createProductProposal = (req, res) => {
 };
 
 
-exports.getPendingCultivation = (req, res) => {
+exports.getCultivation = (req, res) => {
   CulProposal.aggregate([
     {
       $lookup: {
@@ -163,7 +163,8 @@ exports.getPendingCultivation = (req, res) => {
     { $unwind: "$farmerDetails" },
     {
       $match: {
-        proposal_status: "pending",
+        proposal_status: req.body.proposal_status,
+        cultivation_status: req.body.cultivation_status,
         "farmerDetails.email": req.body.email,
       },
     },

@@ -8,7 +8,6 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'proposalInvestor.dart';
 
-
 class DashboardInvestor extends StatefulWidget {
   const DashboardInvestor({super.key});
 
@@ -21,7 +20,6 @@ class _MyWidgetState extends State<DashboardInvestor> {
     const ProposalInvestor(),
     const InvestmentInvestor(),
     const incomeInvestor(),
-    
   ];
   int currentIndex = 0;
 
@@ -29,6 +27,8 @@ class _MyWidgetState extends State<DashboardInvestor> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
+          leading: null,
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -111,13 +111,15 @@ class _MyWidgetState extends State<DashboardInvestor> {
             currentIndex: currentIndex,
             onTap: (index) {
               if (index == 2) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => incomeInvestor()),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => incomeInvestor()),
                 );
-              } else{
+              } else {
                 setState(() {
-                currentIndex = index;
+                  currentIndex = index;
                 });
-              }             
+              }
             },
             type: BottomNavigationBarType.fixed,
             items: const [

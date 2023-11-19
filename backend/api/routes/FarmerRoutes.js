@@ -8,7 +8,9 @@ module.exports = function (app) {
   app.post("/editFarmer", Auth, FarmerController.editFarmer);
   app.post("/createCultivationProposal", Auth,  upload.uploadCulPropoal.single('image') ,FarmerController.createCultivationProposal);
   app.post("/createProductProposal", Auth,  upload.uploadProPropoal.single('image') ,FarmerController.createProductProposal);
+  app.post("/getPendingCultivation", Auth, FarmerController.getPendingCultivation);
 
+  // app.post("/testt", Auth, FarmerController.testt);
 
 
 };

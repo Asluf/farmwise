@@ -1,11 +1,9 @@
-import 'package:farmwise/buyerScreens/models/product.dart';
-import 'package:farmwise/farmerScreens/reviewRejected.dart';
+import 'package:farmwise/farmerScreens/models/product.dart';
+import 'package:farmwise/farmerScreens/reviewPages/reviewCompleted.dart';
 import 'package:flutter/material.dart';
 
-
-
-class rejectCard extends StatelessWidget {
-  const rejectCard({super.key, required this.productList});
+class productCard extends StatelessWidget {
+  const productCard({super.key, required this.productList});
 
   final product productList;
 
@@ -13,10 +11,13 @@ class rejectCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => {
-        Navigator.push(context, MaterialPageRoute (builder:
-        // ignore: non_constant_identifier_names
-        ( Context)=> const reviewRejected(),),
-        
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder:
+                // ignore: non_constant_identifier_names
+                (Context) => const reviewCompleted(),
+          ),
         )
       },
       child: Card(
@@ -73,13 +74,10 @@ class rejectCard extends StatelessWidget {
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                            text: "Cost :Rs.50000",
-                            
+                            text: "Cost :Rs.25000",
                             style: TextStyle(
                               fontSize: 15,
                             )),
-                        
-                            
                       ])),
                       SizedBox(
                           width: 30,

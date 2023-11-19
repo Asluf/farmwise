@@ -39,12 +39,11 @@ exports.getFarmer = (req, res) => {
 };
 
 exports.editFarmer = (req, res) => {
-
   const updateData = {
     farmer_name: req.body.farmer_name,
     farmer_address: req.body.farmer_address,
     farm_name: req.body.farm_name,
-    mobile_number: req.body.mobile_number
+    mobile_number: req.body.mobile_number,
   };
 
   Farmer.findOneAndUpdate(
@@ -57,7 +56,6 @@ exports.editFarmer = (req, res) => {
         success: true,
         message: `Farmer Profile edited.`,
         data: user,
-       
       });
     })
     .catch((err) => {
@@ -69,7 +67,7 @@ exports.editFarmer = (req, res) => {
     });
 };
 
-// for concetanate the object for upload the proposa
+// for concetanate the object for upload the proposal
 function mergeRequestBody(reqBody, additionalProps) {
   return { ...reqBody, ...additionalProps };
 }
@@ -84,23 +82,22 @@ exports.createCultivationProposal = (req, res) => {
   var roi_farmer = 0;
   var roi_investor = 0;
 
-  if(of_farmer< (total_amount/2)){
-    roi_farmer = (of_farmer/total_amount*100)+15;
-    roi_investor = 100-roi_farmer;
-  }else{
-    roi_farmer = of_farmer/total_amount*100;
-    roi_investor = of_investor/total_amount*100;
+  if (of_farmer < total_amount / 2) {
+    roi_farmer = (of_farmer / total_amount) * 100 + 15;
+    roi_investor = 100 - roi_farmer;
+  } else {
+    roi_farmer = (of_farmer / total_amount) * 100;
+    roi_investor = (of_investor / total_amount) * 100;
   }
 
-
   const tempObj = {
-    land_img_path : file.path,
+    land_img_path: file.path,
     investment_of_investor: of_investor.toString(),
     roi_farmer: roi_farmer.toString(),
-    roi_investor: roi_investor.toString()
+    roi_investor: roi_investor.toString(),
   };
   const resultObj = mergeRequestBody(req.body, tempObj);
-  const prop = new CulProposal(resultObj); 
+  const prop = new CulProposal(resultObj);
 
   prop
     .save()
@@ -117,11 +114,7 @@ exports.createCultivationProposal = (req, res) => {
         data: err,
       });
     });
-
-  
-
 };
-
 
 exports.createProductProposal = (req, res) => {
   const file = req.file;
@@ -132,13 +125,12 @@ exports.createProductProposal = (req, res) => {
   const unit_price = parseFloat(req.body.unit_price);
   const total_price = quantity * unit_price;
 
-
   const tempObj2 = {
-    product_img_path : file.path,
-    total_price: total_price.toString()
+    product_img_path: file.path,
+    total_price: total_price.toString(),
   };
   const resultObj = mergeRequestBody(req.body, tempObj2);
-  const prod = new ProProposal(resultObj); 
+  const prod = new ProProposal(resultObj);
 
   prod
     .save()
@@ -155,7 +147,44 @@ exports.createProductProposal = (req, res) => {
         data: err,
       });
     });
+};
 
-  
 
+exports.getPendingCultivation = (req, res) => {
+  CulProposal.aggregate([
+    {
+      $lookup: {
+        from: "farmer_details",
+        localField: "farmer_email",
+        foreignField: "email",
+        as: "farmerDetails",
+      },
+    },
+    { $unwind: "$farmerDetails" },
+    {
+      $match: {
+        proposal_status: "pending",
+        "farmerDetails.email": req.body.email,
+      },
+    },
+  ])
+    .then((proposals) => {
+      if (!proposals) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Proposals not found!" });
+      }
+      return res.status(200).json({
+        success: true,
+        message: `Proposal found`,
+        proposalDetails: proposals,
+      });
+    })
+    .catch((err) => {
+      return res.status(200).json({
+        success: true,
+        message: "Something went wrong",
+        data: err,
+      });
+    });
 };

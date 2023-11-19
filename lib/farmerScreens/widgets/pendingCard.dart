@@ -1,22 +1,31 @@
-import 'package:farmwise/buyerScreens/models/product.dart';
-import 'package:farmwise/farmerScreens/reviewOngoing.dart';
+import 'package:farmwise/farmerScreens/models/product.dart';
 import 'package:flutter/material.dart';
+import 'package:farmwise/farmerScreens/reviewPages/reviewPending.dart';
+import 'package:farmwise/farmerScreens/data/pendingProposalList.dart';
 
+class pendingCard extends StatefulWidget {
+  const pendingCard({super.key, required this.proposalList});
 
-
-class ongoingCard extends StatelessWidget {
-  const ongoingCard({super.key, required this.productList});
-
-  final product productList;
+  final ProposalDetails proposalList;
 
   @override
+  State<pendingCard> createState() => _pendingCardState();
+}
+
+class _pendingCardState extends State<pendingCard> {
+  @override
   Widget build(BuildContext context) {
+    final proposalList = widget.proposalList;
+
     return GestureDetector(
       onTap: () => {
-        Navigator.push(context, MaterialPageRoute (builder:
-        // ignore: non_constant_identifier_names
-        ( Context)=> const reviewOngoing(),),
-        
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder:
+                // ignore: non_constant_identifier_names
+                (Context) => const reviewPending(),
+          ),
         )
       },
       child: Card(
@@ -39,9 +48,11 @@ class ongoingCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                  image: AssetImage(
-                    productList.image,
-                  ),
+                  image: NetworkImage((proposalList != '' &&
+                          proposalList.land_img_path != '')
+                      ? 'http://localhost:5005/${proposalList.land_img_path}' ??
+                          'http://localhost:5005/uploads/culproposal/default.png'
+                      : 'http://localhost:5005/uploads/culproposal/default.png'),
                   fit: BoxFit.cover,
                 )),
                 child: SizedBox(
@@ -63,7 +74,7 @@ class ongoingCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(bottom: 8.0),
                     child: Text(
-                      productList.name,
+                      proposalList.crop_name,
                       style: TextStyle(fontSize: 13),
                     ),
                   ),
@@ -73,13 +84,10 @@ class ongoingCard extends StatelessWidget {
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                            text: "Cost :Rs.35000",
-                            
+                            text: "Total :Rs.${proposalList.total_amount}",
                             style: TextStyle(
                               fontSize: 15,
                             )),
-                        
-                            
                       ])),
                       SizedBox(
                           width: 30,

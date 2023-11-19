@@ -1,21 +1,15 @@
-import 'package:farmwise/buyerScreens/models/product.dart';
-
-
+import 'package:farmwise/farmerScreens/models/product.dart';
 
 List<product> productList = [
-   product(
+  product(
       name: 'Tomato',
       description: "Sample",
       image: "assets/tomato.jpeg",
-      
       price: 220.00,
       unit: "1 kg",
       rating: 3.86,
       quantity: 0),
-
-         
-    
-   product(
+  product(
       name: 'Rice seeds',
       description: "Sample",
       image: "assets/riceseeds.jpg",
@@ -23,6 +17,4 @@ List<product> productList = [
       unit: "1 kg",
       rating: 3.35,
       quantity: 0),
-   
-    
 ];

@@ -1,8 +1,9 @@
 import 'package:farmwise/farmerScreens/createProductProposal.dart';
-import 'package:farmwise/farmerScreens/createProposal.dart';
-import 'package:farmwise/farmerScreens/widgets/rejectCard.dart';
+import 'package:farmwise/farmerScreens/data/productProposalList.dart';
+import 'package:farmwise/farmerScreens/widgets/products/listedProductsCard.dart';
+import 'package:farmwise/farmerScreens/widgets/products/pendingProductsCard.dart';
+import 'package:farmwise/farmerScreens/widgets/products/soldProductsCard.dart';
 import 'package:flutter/material.dart';
-import 'package:farmwise/farmerScreens/widgets/completedCard.dart';
 import 'package:farmwise/farmerScreens/data/productList.dart';
 
 class ProductProposal extends StatefulWidget {
@@ -13,6 +14,10 @@ class ProductProposal extends StatefulWidget {
 }
 
 class _myInvestmentState extends State<ProductProposal> {
+  List<ProductProposalDetails> fetchedPendingProducts = [];
+  List<ProductProposalDetails> fetchedListedProducts = [];
+  List<ProductProposalDetails> fetchedSoldProducts = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +36,32 @@ class _myInvestmentState extends State<ProductProposal> {
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
+          Container(
+            margin: const EdgeInsets.fromLTRB(0, 15, 0, 20),
+            child: const Text(
+              "Listed Products",
+              style: TextStyle(
+                color: Colors.green,
+                fontSize: 23,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 0.85,
+            ),
+            itemCount: productList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return listedProductCard(
+                  productproposalList: fetchedListedProducts[index]);
+            },
+          ),
           Container(
             margin: const EdgeInsets.fromLTRB(0, 15, 0, 20),
             child: const Text(
@@ -53,13 +84,14 @@ class _myInvestmentState extends State<ProductProposal> {
             ),
             itemCount: productList.length,
             itemBuilder: (BuildContext context, int index) {
-              return completedCard(productList: productList[index]);
+              return pendingProductCard(
+                  productproposalList: fetchedPendingProducts[index]);
             },
           ),
           Container(
             margin: const EdgeInsets.fromLTRB(0, 15, 0, 20),
             child: const Text(
-              "Approved Products",
+              "Sold Products",
               style: TextStyle(
                 color: Colors.green,
                 fontSize: 23,
@@ -78,7 +110,8 @@ class _myInvestmentState extends State<ProductProposal> {
             ),
             itemCount: productList.length,
             itemBuilder: (BuildContext context, int index) {
-              return rejectCard(productList: productList[index]);
+              return soldProductCard(
+                  productproposalList: fetchedSoldProducts[index]);
             },
           )
         ],

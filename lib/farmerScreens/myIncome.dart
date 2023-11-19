@@ -24,7 +24,7 @@ class _myIncomeState extends State<myIncome> {
                     // For example, print the tapped index
                     print('Tapped index: $index');
                   },
-                  child: NotificationCard(
+                  child: IncomeCard(
                     invid: '000 $index',
                     total: 150000,
                     my: 30000,
@@ -47,7 +47,7 @@ class _myIncomeState extends State<myIncome> {
   }
 }
 
-class NotificationCard extends StatelessWidget {
+class IncomeCard extends StatelessWidget {
   final String invid;
   final double total;
   final double my;
@@ -55,7 +55,7 @@ class NotificationCard extends StatelessWidget {
   final double expecIncome;
   final VoidCallback onPressed;
 
-  const NotificationCard({
+  const IncomeCard({
     Key? key,
     required this.invid,
     required this.total,

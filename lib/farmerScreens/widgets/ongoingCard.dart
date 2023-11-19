@@ -1,20 +1,29 @@
-import 'package:farmwise/buyerScreens/models/product.dart';
-import 'package:farmwise/farmerScreens/reviewOngoing.dart';
+import 'package:farmwise/farmerScreens/models/product.dart';
+import 'package:farmwise/farmerScreens/reviewPages/reviewOngoing.dart';
 import 'package:flutter/material.dart';
 
-class productCard extends StatelessWidget {
-  const productCard({super.key, required this.productList});
+class ongoingCard extends StatefulWidget {
+  const ongoingCard({super.key, required this.productList});
 
   final product productList;
 
   @override
+  State<ongoingCard> createState() => _ongoingCardState();
+}
+
+class _ongoingCardState extends State<ongoingCard> {
+  @override
   Widget build(BuildContext context) {
+    final productList = widget.productList;
     return GestureDetector(
       onTap: () => {
-        Navigator.push(context, MaterialPageRoute (builder:
-        // ignore: non_constant_identifier_names
-        ( Context)=> const reviewOngoing(),),
-        
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder:
+                // ignore: non_constant_identifier_names
+                (Context) => const reviewOngoing(),
+          ),
         )
       },
       child: Card(
@@ -71,13 +80,10 @@ class productCard extends StatelessWidget {
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                            text: "Cost :Rs.25000",
-                            
+                            text: "Cost :Rs.${productList.price}",
                             style: TextStyle(
                               fontSize: 15,
                             )),
-                        
-                            
                       ])),
                       SizedBox(
                           width: 30,

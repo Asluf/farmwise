@@ -1,4 +1,4 @@
-import 'package:farmwise/farmerScreens/reviewPages/products/reviewlistedProducts.dart';
+import 'package:farmwise/farmerScreens/reviewPages/products/reviewListedProducts.dart';
 import 'package:flutter/material.dart';
 import 'package:farmwise/farmerScreens/data/productProposalList.dart';
 
@@ -23,7 +23,8 @@ class _listedProductCardState extends State<listedProductCard> {
           MaterialPageRoute(
             builder:
                 // ignore: non_constant_identifier_names
-                (Context) => const reviewListedProducts(),
+                (Context) => reviewListedProducts(
+                    productproposalList: productproposalList),
           ),
         )
       },
@@ -68,44 +69,62 @@ class _listedProductCardState extends State<listedProductCard> {
                 )),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 8.0),
-                    child: Text(
-                      productproposalList.product_name,
-                      style: TextStyle(fontSize: 13),
+              child: Center(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        productproposalList.product_name,
+                        style: TextStyle(fontSize: 15),
+                      ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text:
+                                  "Unit Price : Rs.${productproposalList.unit_price}",
+                              style: const TextStyle(
+                                fontSize: 15,
+                              )),
+                        ])),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
                             text:
-                                "Unit Price :Rs.${productproposalList.unit_price}",
+                                "Qunatity: ${productproposalList.quantity} kg",
                             style: const TextStyle(
                               fontSize: 15,
-                            )),
-                        TextSpan(
-                          text:
-                              "Total Price: Rs.${productproposalList.unit_price}",
-                          style: const TextStyle(
-                            fontSize: 15,
+                            ),
                           ),
-                        ),
-                      ])),
-                      SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: IconButton(
-                              padding: EdgeInsets.zero,
-                              onPressed: () {},
-                              icon: const Icon(null)))
-                    ],
-                  )
-                ],
+                        ])),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                            text:
+                                "Total Price: Rs.${productproposalList.total_price}",
+                            style: const TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                        ])),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             )
           ],

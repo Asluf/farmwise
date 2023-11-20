@@ -1,16 +1,16 @@
 import 'package:farmwise/farmerScreens/data/productProposalList.dart';
 import 'package:flutter/material.dart';
 
-class reviewPendingProducts extends StatefulWidget {
-  const reviewPendingProducts({super.key, required this.productproposalList});
+class reviewRejectedProducts extends StatefulWidget {
+  const reviewRejectedProducts({super.key, required this.productproposalList});
 
   final ProductProposalDetails productproposalList;
 
   @override
-  State<reviewPendingProducts> createState() => _MyWidgetState();
+  State<reviewRejectedProducts> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<reviewPendingProducts> {
+class _MyWidgetState extends State<reviewRejectedProducts> {
   late Future<String> futureData;
   @override
   void initState() {

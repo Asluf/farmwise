@@ -12,8 +12,15 @@ class registerInvestor extends StatefulWidget {
 }
 
 class _FormScreenState extends State<registerInvestor> {
-  void sendInvestor() async {
+  late Future<bool> futureData = Future.value(false);
+  bool isLoading = false;
+
+  Future<void> sendInvestor() async {
     try {
+      setState(() {
+        isLoading = true;
+        futureData = Future.value(true);
+      });
       final Map<String, String> headers = {
         'Content-Type': 'application/json', // Set the content type
       };
@@ -37,17 +44,23 @@ class _FormScreenState extends State<registerInvestor> {
       );
 
       if (response.statusCode == 200) {
-        // Request was successful
-        print('Investor registerred successfully');
-        print(response.body);
-        // call to alert fn
+        setState(() {
+          isLoading = false;
+          futureData = Future.value(false);
+        });
         _showRegistrationConfirm();
       } else {
-        // Request failed
-        print('Failed to send POST request');
+        setState(() {
+          isLoading = false;
+          futureData = Future.value(false);
+        });
         _showRegistrationError();
       }
     } catch (er) {
+      setState(() {
+        isLoading = false;
+        futureData = Future.value(false);
+      });
       print(er);
     }
   }
@@ -268,165 +281,170 @@ class _FormScreenState extends State<registerInvestor> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Register as an Investor',
-            style: TextStyle(color: Color.fromARGB(255, 192, 226, 190)),
-          ),
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context, Placeholder());
-            },
-            icon: const Icon(Icons.arrow_back,
-                color: Color.fromARGB(255, 192, 226, 190)),
-          ),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("bgAppbar.jpg"),
-                fit: BoxFit.cover,
+    return FutureBuilder(
+      future: futureData,
+      builder: (context, snapshot) {
+        if (isLoading) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'Login',
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 192, 226, 190),
+                ),
               ),
-            ),
-          ),
-        ),
-        body: Container(
-          child: SingleChildScrollView(
-              child: Stack(
-            children: [
-              // Image.asset("assets/bg.png"),
-              // BackdropFilter(
-              //   filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-              //   child: Container(
-              //       //color: Colors.black.withOpacity(0.1),
-              //       ),
-              // ),
-              // Title(
-              //   color: Colors.black,
-              //   child: const Text("Personal Information"),
-              // ),
-              Container(
-                margin: const EdgeInsets.all(24.0),
-                // decoration: BoxDecoration(
-                //   color: Colors.transparent,
-                //   border: Border.all(
-                //     color: Colors.black, // Border color
-                //     width: 0.5, // Border width
-                //   ),
-                //   borderRadius: BorderRadius.circular(10.0), // Border radius
-                // ),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      // const Text(
-                      //   'Personal Information',
-                      //   style: TextStyle(
-                      //     fontSize: 20.0,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: _buildNameField(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: _buildNICField(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: _buildAddressField(),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: _buildMobileNumberField(),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: _buildEmailField(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: _buildPasswordField(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: _buildConfirmPasswordField(),
-                      ),
-
-                      // const Text(
-                      //   'Cultivation Information',
-                      //   style: TextStyle(
-                      //     fontSize: 20.0,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
-                      const SizedBox(height: 50),
-                      Container(
-                        width: 150,
-                        child: ElevatedButton(
-                          child: const Text(
-                            'Submit',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 18, 17, 18),
-                              fontSize: 16.0,
-                            ),
-                          ),
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              print('valid form');
-                              _formKey.currentState!.save();
-                              sendInvestor();
-                            } else {
-                              print('not valid form');
-                              return;
-                            }
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                                Color.fromARGB(255, 192, 226, 190)),
-                            shape:
-                                MaterialStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25),
-                            )),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 25)
-                    ],
+              leading: IconButton(
+                onPressed: () {
+                  // Navigator.pop(context, Placeholder());
+                  Navigator.pushNamed(context, '/');
+                },
+                icon: const Icon(
+                  Icons.home,
+                  color: const Color.fromARGB(255, 192, 226, 190),
+                ),
+              ),
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("bgAppbar.jpg"),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-            ],
-          )),
-        )
-        // bottomNavigationBar: BottomNavigationBar(
-        //   items: const <BottomNavigationBarItem>[
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.home),
-        //       label: 'Home',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.message),
-        //       label: 'Messages',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.person),
-        //       label: 'Profile',
-        //     ),
-        //   ],
-        // ),
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {
-        //     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-        //       return Fifthpage();
-        //     }));
-        //   },
-        //   child: const Icon(Icons.add),
-        // ),
-        );
+            ),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Colors.green.shade600,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    "Please wait",
+                    style: TextStyle(
+                      color: Colors.green.shade600,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          return Scaffold(
+              appBar: AppBar(
+                title: const Text(
+                  'Register as an Investor',
+                  style: TextStyle(color: Color.fromARGB(255, 192, 226, 190)),
+                ),
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context, Placeholder());
+                  },
+                  icon: const Icon(Icons.arrow_back,
+                      color: Color.fromARGB(255, 192, 226, 190)),
+                ),
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("bgAppbar.jpg"),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+              body: Container(
+                child: SingleChildScrollView(
+                    child: Stack(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(24.0),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: _buildNameField(),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: _buildNICField(),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: _buildAddressField(),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: _buildMobileNumberField(),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: _buildEmailField(),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: _buildPasswordField(),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: _buildConfirmPasswordField(),
+                            ),
+
+                            // const Text(
+                            //   'Cultivation Information',
+                            //   style: TextStyle(
+                            //     fontSize: 20.0,
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            // ),
+                            const SizedBox(height: 50),
+                            Container(
+                              width: 150,
+                              child: ElevatedButton(
+                                child: const Text(
+                                  'Submit',
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 18, 17, 18),
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    print('valid form');
+                                    _formKey.currentState!.save();
+                                    sendInvestor();
+                                  } else {
+                                    print('not valid form');
+                                    return;
+                                  }
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll(
+                                      Color.fromARGB(255, 192, 226, 190)),
+                                  shape: MaterialStatePropertyAll(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                  )),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 25)
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+              ));
+        }
+      },
+    );
   }
 }

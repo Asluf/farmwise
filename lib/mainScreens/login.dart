@@ -15,9 +15,15 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final AuthService _authService = AuthService();
+  late Future<bool> futureData = Future.value(false);
+  bool isLoading = false;
 
-  void loginUser() async {
+  Future<void> loginUser() async {
     try {
+      setState(() {
+        isLoading = true;
+        futureData = Future.value(true);
+      });
       final Map<String, String> headers = {
         'Content-Type': 'application/json', // Set the content type
       };
@@ -40,6 +46,10 @@ class _LoginPageState extends State<LoginPage> {
         await _authService.saveToken(token);
         await _authService.saveRole(role);
         await _authService.saveEmail(email);
+        setState(() {
+          isLoading = false;
+          futureData = Future.value(false);
+        });
         if (role == "farmer") {
           _showLoginConfirm();
           Future.delayed(const Duration(seconds: 2), () {
@@ -60,21 +70,53 @@ class _LoginPageState extends State<LoginPage> {
           });
         }
       } else {
-        // Request failed
+        setState(() {
+          isLoading = false;
+          futureData = Future.value(false);
+        });
         print('Failed to send POST request');
         _showLoginError();
       }
     } catch (er) {
+      setState(() {
+        isLoading = false;
+        futureData = Future.value(false);
+      });
       print(er);
+    } finally {
+      setState(() {
+        isLoading = false;
+        futureData = Future.value(false);
+      });
     }
   }
 
   void _showLoginConfirm() {
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.success,
-      title: "Login",
-      text: 'Successfull!',
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              Icons.check_circle_outline,
+              color: Colors.white,
+            ),
+            SizedBox(width: 8), // Add spacing between icon and text
+            Text(
+              'Successfully Logged In!',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.green.shade600, // Set the background color
+        duration: Duration(seconds: 1), // Set the duration for the Snackbar
+        behavior: SnackBarBehavior.fixed,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), // Set border radius
+        ),
+      ),
     );
   }
 
@@ -149,230 +191,280 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     double wid = MediaQuery.of(context).size.width;
     double hei = MediaQuery.of(context).size.height;
-    var grey;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Login',
-          style: TextStyle(
-            color: const Color.fromARGB(255, 192, 226, 190),
-          ),
-        ),
-        leading: IconButton(
-          onPressed: () {
-            // Navigator.pop(context, Placeholder());
-            Navigator.pushNamed(context, '/');
-          },
-          icon: const Icon(
-            Icons.home,
-            color: const Color.fromARGB(255, 192, 226, 190),
-          ),
-        ),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("bgAppbar.jpg"),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-      ),
-      body: Center(
-        child: Container(
-          child: SingleChildScrollView(
-              child: Stack(
-            children: [
-              Image.asset(
-                "assets/bg.png",
-              ),
-              BackdropFilter(
-                child: Container(
-                  color: Colors.black.withOpacity(0.1),
+
+    return FutureBuilder(
+      future: futureData,
+      builder: (context, snapshot) {
+        if (isLoading) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'Login',
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 192, 226, 190),
                 ),
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
               ),
-              Container(
-                child: const Center(
-                  child: Column(
-                    children: [
-                      SizedBox(height: 30),
-                      Icon(
-                        Icons.lock,
-                        size: 40,
-                      ),
-                      SizedBox(height: 32),
-                      Text(
-                        "Welcome Back !",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
+              leading: IconButton(
+                onPressed: () {
+                  // Navigator.pop(context, Placeholder());
+                  Navigator.pushNamed(context, '/');
+                },
+                icon: const Icon(
+                  Icons.home,
+                  color: const Color.fromARGB(255, 192, 226, 190),
+                ),
+              ),
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("bgAppbar.jpg"),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.all(24.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(height: 50),
-                      // const SizedBox(height: 100),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 100, 8, 8),
-                        child: _buildEmailField(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: _buildPasswordField(),
-                      ),
+            ),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Colors.green.shade600,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    "Please wait",
+                    style: TextStyle(
+                      color: Colors.green.shade600,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
 
-                      SizedBox(
-                        height: 10,
-                      ),
-
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        width: 150,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              print('valid form');
-                              _formKey.currentState!.save();
-                              loginUser();
-                            } else {
-                              print('not valid form');
-                              return;
-                            }
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: const MaterialStatePropertyAll(
-                                Color.fromARGB(255, 192, 226, 190)),
-                            shape:
-                                MaterialStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25),
-                            )),
-                          ),
-                          child: const Text(
-                            'Login',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 4, 4, 4),
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 45,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(
-                              onPressed: () {
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context, '/forgot', (route) => false);
-                              },
-                              child: Text(
-                                "Forgot Password ?",
-                                style: TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 16),
-                              ))
-                          // Text(
-                          //   "Forgot Password ?",
-                          //   style: TextStyle(
-                          //       color: Colors.grey,
-                          //       fontWeight: FontWeight.w300,
-                          //       fontSize: 16),
-                          // ),
-                        ],
-                      ),
-
-                      SizedBox(height: 35),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                        child: Row(
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                'Login',
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 192, 226, 190),
+                ),
+              ),
+              leading: IconButton(
+                onPressed: () {
+                  // Navigator.pop(context, Placeholder());
+                  Navigator.pushNamed(context, '/');
+                },
+                icon: const Icon(
+                  Icons.home,
+                  color: const Color.fromARGB(255, 192, 226, 190),
+                ),
+              ),
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("bgAppbar.jpg"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            body: Center(
+              child: Container(
+                child: SingleChildScrollView(
+                    child: Stack(
+                  children: [
+                    Container(
+                      child: const Center(
+                        child: Column(
                           children: [
-                            Expanded(
-                              child: Divider(
-                                thickness: 0.5,
-                                color: Colors.grey[400],
+                            SizedBox(height: 30),
+                            Icon(Icons.lock,
+                                size: 40, color: Color.fromARGB(255, 5, 46, 2)),
+                            SizedBox(height: 32),
+                            Text(
+                              "Welcome Back !",
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 5, 46, 2),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
                               ),
                             ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              child: Text(
-                                "or",
-                                style: TextStyle(
-                                    color: Colors.grey[400], fontSize: 16),
-                              ),
-                            ),
-                            Expanded(
-                                child: Divider(
-                              thickness: 0.5,
-                              color: Colors.grey[400],
-                            ))
                           ],
                         ),
                       ),
-                      SizedBox(height: 35),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        width: 250,
-                        child: ElevatedButton(
-                          child: const Text(
-                            'Create New Account',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 4, 4, 4),
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(24.0),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(height: 50),
+                            // const SizedBox(height: 100),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 100, 8, 8),
+                              child: _buildEmailField(),
                             ),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (_) {
-                              return registerSelection();
-                            }));
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: const MaterialStatePropertyAll(
-                                Color.fromARGB(255, 192, 226, 190)),
-                            shape:
-                                MaterialStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25),
-                            )),
-                            padding: MaterialStatePropertyAll(
-                                EdgeInsets.symmetric(horizontal: 52)),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: _buildPasswordField(),
+                            ),
+
+                            SizedBox(
+                              height: 10,
+                            ),
+
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              width: 150,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    print('valid form');
+                                    _formKey.currentState!.save();
+                                    loginUser();
+                                  } else {
+                                    print('not valid form');
+                                    return;
+                                  }
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      const MaterialStatePropertyAll(
+                                          Color.fromARGB(255, 62, 97, 60)),
+                                  shape: MaterialStatePropertyAll(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                  )),
+                                ),
+                                child: const Text(
+                                  'Login',
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 45,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context, '/forgot', (route) => false);
+                                    },
+                                    child: Text(
+                                      "Forgot Password ?",
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 16),
+                                    ))
+                                // Text(
+                                //   "Forgot Password ?",
+                                //   style: TextStyle(
+                                //       color: Colors.grey,
+                                //       fontWeight: FontWeight.w300,
+                                //       fontSize: 16),
+                                // ),
+                              ],
+                            ),
+
+                            SizedBox(height: 35),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Divider(
+                                      thickness: 0.5,
+                                      color: Colors.grey[400],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    child: Text(
+                                      "or",
+                                      style: TextStyle(
+                                          color: Colors.grey[400],
+                                          fontSize: 16),
+                                    ),
+                                  ),
+                                  Expanded(
+                                      child: Divider(
+                                    thickness: 0.5,
+                                    color: Colors.grey[400],
+                                  ))
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 35),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              width: 250,
+                              child: ElevatedButton(
+                                child: const Text(
+                                  'Create New Account',
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .push(MaterialPageRoute(builder: (_) {
+                                    return registerSelection();
+                                  }));
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      const MaterialStatePropertyAll(
+                                          Color.fromARGB(255, 62, 97, 60)),
+                                  shape: MaterialStatePropertyAll(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                  )),
+                                  padding: MaterialStatePropertyAll(
+                                      EdgeInsets.symmetric(horizontal: 52)),
+                                ),
+                              ),
+                            ),
+                            // Row(
+                            //   children: [
+                            //     Text("Not a member ?"),
+                            //     const SizedBox(width: 4),
+                            //     Text("Register Now")
+                            //   ],
+                            // ),
+                            SizedBox(
+                              width: wid,
+                              height: hei / 2,
+                            )
+                          ],
                         ),
                       ),
-                      // Row(
-                      //   children: [
-                      //     Text("Not a member ?"),
-                      //     const SizedBox(width: 4),
-                      //     Text("Register Now")
-                      //   ],
-                      // ),
-                      SizedBox(
-                        width: wid,
-                        height: hei / 2,
-                      )
-                    ],
-                  ),
-                ),
+                    ),
+                  ],
+                )),
               ),
-            ],
-          )),
-        ),
-      ),
+            ),
+          );
+        }
+      },
     );
   }
 }

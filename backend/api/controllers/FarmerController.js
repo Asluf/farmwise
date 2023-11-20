@@ -2,6 +2,7 @@ const { Farmer } = require("../models/FarmerModel");
 const { User } = require("../models/UserModel");
 const { CulProposal } = require("../models/CulProposalModel");
 const { ProProposal } = require("../models/ProProposalModel");
+const { Progress } = require("../models/ProgressModel");
 
 exports.getFarmer = (req, res) => {
   Farmer.findOne({ email: req.body.email })
@@ -30,7 +31,7 @@ exports.getFarmer = (req, res) => {
       }
     })
     .catch((err) => {
-      return res.status(200).json({
+      return res.status(500).json({
         success: true,
         message: "Something went wrong",
         data: err,
@@ -51,15 +52,22 @@ exports.editFarmer = (req, res) => {
     { $set: updateData },
     { new: true, useFindAndModify: false }
   )
-    .then((user) => {
-      return res.status(200).json({
-        success: true,
-        message: `Farmer Profile edited.`,
-        data: user,
-      });
+    .then((data) => {
+      if (!data) {
+        return res.status(404).json({
+          success: false,
+          message: "Resource not found",
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: `Farmer Profile edited.`,
+          data: data,
+        });
+      }
     })
     .catch((err) => {
-      return res.status(200).json({
+      return res.status(500).json({
         success: true,
         message: "Something went wrong",
         data: err,
@@ -108,7 +116,7 @@ exports.createCultivationProposal = (req, res) => {
       });
     })
     .catch((err) => {
-      return res.status(422).json({
+      return res.status(500).json({
         success: false,
         message: "Something went wrong!",
         data: err,
@@ -141,14 +149,13 @@ exports.createProductProposal = (req, res) => {
       });
     })
     .catch((err) => {
-      return res.status(422).json({
+      return res.status(500).json({
         success: false,
         message: "Something went wrong!",
         data: err,
       });
     });
 };
-
 
 exports.getCultivation = (req, res) => {
   CulProposal.aggregate([
@@ -170,8 +177,8 @@ exports.getCultivation = (req, res) => {
       },
     },
   ])
-    .then((proposals) => {
-      if (!proposals) {
+    .then((data) => {
+      if (!data) {
         return res
           .status(404)
           .json({ success: false, message: "Proposals not found!" });
@@ -179,11 +186,11 @@ exports.getCultivation = (req, res) => {
       return res.status(200).json({
         success: true,
         message: `Proposal found`,
-        proposalDetails: proposals,
+        proposalDetails: data,
       });
     })
     .catch((err) => {
-      return res.status(200).json({
+      return res.status(500).json({
         success: true,
         message: "Something went wrong",
         data: err,
@@ -212,8 +219,8 @@ exports.getProduct = (req, res) => {
       },
     },
   ])
-    .then((proposals) => {
-      if (!proposals) {
+    .then((data) => {
+      if (!data) {
         return res
           .status(404)
           .json({ success: false, message: "Proposals not found!" });
@@ -221,13 +228,179 @@ exports.getProduct = (req, res) => {
       return res.status(200).json({
         success: true,
         message: `Proposal found`,
-        productproposalDetails: proposals,
+        productproposalDetails: data,
       });
     })
     .catch((err) => {
-      return res.status(200).json({
+      return res.status(500).json({
         success: true,
         message: "Something went wrong",
+        data: err,
+      });
+    });
+};
+
+exports.deleteProposal = (req, res) => {
+  CulProposal.findByIdAndDelete(req.body.proposal_id)
+    .then((data) => {
+      if (!data) {
+        return res.status(404).json({
+          success: false,
+          message: "Resource not found",
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: `Proposal deleted`,
+          data: data,
+        });
+      }
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        success: true,
+        message: "Something went wrong",
+        data: err,
+      });
+    });
+};
+
+exports.getProgress = (req, res) => {
+  Progress.findOne({ cultivation_id: req.body.cultivation_id })
+    .then((data) => {
+      if (!data) {
+        return res.status(404).json({
+          success: false,
+          message: "Resource not found",
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: `Progress found`,
+          data: data,
+        });
+      }
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        success: true,
+        message: "Something went wrong",
+        data: err,
+      });
+    });
+};
+
+exports.uploadProgressImage = (req, res, next) => {
+  const file = req.file;
+  if (!file) {
+    return res.status(400).json({ error: "No file uploaded." });
+  }
+  console.log(req.file);
+  const filter = {cultivation_id: req.body.cultivation_id};
+  var update = {};
+  if(req.body.which_image == 'img1'){
+    update = {
+      $set:{
+        'img_paths.img1' : file.path,
+        'img_paths.date1': new Date()
+      }
+    };
+  }else if(req.body.which_image == 'img2'){
+    update = {
+      $set:{
+        'img_paths.img2' : file.path,
+        'img_paths.date2': new Date()
+      }
+    };
+  }else if(req.body.which_image == 'img3'){
+    update = {
+      $set:{
+        'img_paths.img3' : file.path,
+        'img_paths.date3': new Date()
+      }
+    };
+  }else if(req.body.which_image == 'img4'){
+    update = {
+      $set:{
+        'img_paths.img4' : file.path,
+        'img_paths.date4': new Date()
+      }
+    };
+  }else if(req.body.which_image == 'img5'){
+    update = {
+      $set:{
+        'img_paths.img5' : file.path,
+        'img_paths.date5': new Date()
+      }
+    };
+  }else if(req.body.which_image == 'img6'){
+    update = {
+      $set:{
+        'img_paths.img6' : file.path,
+        'img_paths.date6': new Date()
+      }
+    };
+  }else if(req.body.which_image == 'img7'){
+    update = {
+      $set:{
+        'img_paths.img7' : file.path,
+        'img_paths.date7': new Date()
+      }
+    };
+  }else if(req.body.which_image == 'img8'){
+    update = {
+      $set:{
+        'img_paths.img8' : file.path,
+        'img_paths.date8': new Date()
+      }
+    };
+  }else if(req.body.which_image == 'img9'){
+    update = {
+      $set:{
+        'img_paths.img9' : file.path,
+        'img_paths.date9': new Date()
+      }
+    };
+  }else if(req.body.which_image == 'img10'){
+    update = {
+      $set:{
+        'img_paths.img10' : file.path,
+        'img_paths.date10': new Date()
+      }
+    };
+  }else if(req.body.which_image == 'img11'){
+    update = {
+      $set:{
+        'img_paths.img11' : file.path,
+        'img_paths.date11': new Date()
+      }
+    };
+  }else if(req.body.which_image == 'img12'){
+    update = {
+      $set:{
+        'img_paths.img12' : file.path,
+        'img_paths.date12': new Date()
+      }
+    };
+  }
+  Progress.findOneAndUpdate(filter, update, { new: true, useFindAndModify: false })
+    .then((data) => {
+      if (!data) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Cultivation id not found!" });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: `Progress Image uploaded successfully${req.file.path}`,
+          data: data,
+        });
+      }
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        success: true,
+        message: "Something went wrong! Please try again.",
         data: err,
       });
     });

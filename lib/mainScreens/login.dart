@@ -244,7 +244,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           );
-
         } else {
           return Scaffold(
             appBar: AppBar(

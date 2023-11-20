@@ -10,6 +10,9 @@ module.exports = function (app) {
   app.post("/createProductProposal", Auth,  upload.uploadProPropoal.single('image') ,FarmerController.createProductProposal);
   app.post("/getCultivation", Auth, FarmerController.getCultivation);
   app.post("/getProduct", Auth, FarmerController.getProduct);
+  app.post("/deleteProposal", Auth, FarmerController.deleteProposal);
+  app.post("/getProgress", Auth, FarmerController.getProgress);
+  app.post("/uploadProgress",Auth, upload.uploadProgressImage.single('image'), FarmerController.uploadProgressImage);
 
   // app.post("/testt", Auth, FarmerController.testt);
 

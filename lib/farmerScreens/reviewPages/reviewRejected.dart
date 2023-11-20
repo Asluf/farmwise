@@ -1,5 +1,4 @@
-import 'package:farmwise/farmerScreens/data/pendingProposalList.dart';
-import 'package:farmwise/farmerScreens/data/productList.dart';
+import 'package:farmwise/farmerScreens/data/cultivationProposalList.dart';
 import 'package:flutter/material.dart';
 
 class reviewRejected extends StatefulWidget {

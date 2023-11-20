@@ -1,17 +1,18 @@
-import 'package:farmwise/farmerScreens/reviewPages/products/reviewPendingProducts.dart';
+
+import 'package:farmwise/farmerScreens/reviewPages/products/reviewRejectedProducts.dart';
 import 'package:flutter/material.dart';
 import 'package:farmwise/farmerScreens/data/productProposalList.dart';
 
-class pendingProductCard extends StatefulWidget {
-  const pendingProductCard({super.key, required this.productproposalList});
+class rejectedProductCard extends StatefulWidget {
+  const rejectedProductCard({super.key, required this.productproposalList});
 
   final ProductProposalDetails productproposalList;
 
   @override
-  State<pendingProductCard> createState() => _pendingProductCardState();
+  State<rejectedProductCard> createState() => _rejectedProductCardState();
 }
 
-class _pendingProductCardState extends State<pendingProductCard> {
+class _rejectedProductCardState extends State<rejectedProductCard> {
   @override
   Widget build(BuildContext context) {
     final productproposalList = widget.productproposalList;
@@ -23,7 +24,7 @@ class _pendingProductCardState extends State<pendingProductCard> {
           MaterialPageRoute(
             builder:
                 // ignore: non_constant_identifier_names
-                (Context) => reviewPendingProducts(
+                (Context) => reviewRejectedProducts(
                     productproposalList: productproposalList),
           ),
         )

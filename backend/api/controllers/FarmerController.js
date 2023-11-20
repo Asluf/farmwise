@@ -159,6 +159,7 @@ exports.getCultivation = (req, res) => {
         foreignField: "email",
         as: "farmerDetails",
       },
+      //matching the farmer_email field in the CulProposal collection with the email field in the "farmer_details" collection.
     },
     { $unwind: "$farmerDetails" },
     {
@@ -179,6 +180,48 @@ exports.getCultivation = (req, res) => {
         success: true,
         message: `Proposal found`,
         proposalDetails: proposals,
+      });
+    })
+    .catch((err) => {
+      return res.status(200).json({
+        success: true,
+        message: "Something went wrong",
+        data: err,
+      });
+    });
+};
+
+exports.getProduct = (req, res) => {
+  ProProposal.aggregate([
+    {
+      $lookup: {
+        from: "farmer_details",
+        localField: "farmer_email",
+        foreignField: "email",
+        as: "farmerDetails",
+      },
+    },
+    { $unwind: "$farmerDetails" },
+    //deconstructing the array and creating separate documents for each element.
+    {
+      $match: {
+        proposal_status: req.body.proposal_status,
+        product_status: req.body.product_status,
+        //The email field in the unwound farmerDetails array must match req.body.email.
+        "farmerDetails.email": req.body.email,
+      },
+    },
+  ])
+    .then((proposals) => {
+      if (!proposals) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Proposals not found!" });
+      }
+      return res.status(200).json({
+        success: true,
+        message: `Proposal found`,
+        productproposalDetails: proposals,
       });
     })
     .catch((err) => {

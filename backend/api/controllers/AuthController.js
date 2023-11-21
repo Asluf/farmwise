@@ -150,7 +150,7 @@ exports.loginUser = (req, res) => {
       }
     })
     .catch((err) => {
-      return res.status(200).json({
+      return res.status(500).json({
         success: true,
         message: "Login attempt failed!",
         data: err,
@@ -183,7 +183,7 @@ exports.uploadDpImage = (req, res, next) => {
       }
     })
     .catch((err) => {
-      return res.status(200).json({
+      return res.status(500).json({
         success: true,
         message: "Something went wrong! Please try again.",
         data: err,

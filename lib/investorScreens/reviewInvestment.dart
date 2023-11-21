@@ -276,6 +276,7 @@ class _ReviewInvestmentState extends State<ReviewInvestment> {
                       ),
                     ),
                   ),
+                
                 ],
               ),
             ),

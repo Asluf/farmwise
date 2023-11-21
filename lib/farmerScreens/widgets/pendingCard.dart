@@ -1,7 +1,7 @@
 import 'package:farmwise/farmerScreens/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:farmwise/farmerScreens/reviewPages/reviewPending.dart';
-import 'package:farmwise/farmerScreens/data/pendingProposalList.dart';
+import 'package:farmwise/farmerScreens/data/cultivationProposalList.dart';
 
 class pendingCard extends StatefulWidget {
   const pendingCard({super.key, required this.proposalList});

@@ -87,6 +87,11 @@ var CulProposalSchema = new Schema({
         maxlength: 200,
         default: "pending"
     },
+    paid: {
+        type: String,
+        maxlength: 200,
+        default: "pending"
+    },
     created_date: {
         type: Date,
         maxlength: 200,

@@ -2,7 +2,7 @@ import 'package:farmwise/farmerScreens/models/product.dart';
 import 'package:farmwise/farmerScreens/reviewPages/reviewRejected.dart';
 import 'package:flutter/material.dart';
 import 'package:farmwise/farmerScreens/reviewPages/reviewPending.dart';
-import 'package:farmwise/farmerScreens/data/pendingProposalList.dart';
+import 'package:farmwise/farmerScreens/data/cultivationProposalList.dart';
 
 class rejectedCard extends StatefulWidget {
   const rejectedCard({super.key, required this.proposalList});

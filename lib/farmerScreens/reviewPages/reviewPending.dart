@@ -1,6 +1,8 @@
-import 'package:farmwise/farmerScreens/data/pendingProposalList.dart';
-import 'package:farmwise/farmerScreens/data/productList.dart';
+import 'package:farmwise/farmerScreens/data/cultivationProposalList.dart';
 import 'package:flutter/material.dart';
+import '../../services/auth_services.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class reviewPending extends StatefulWidget {
   const reviewPending({super.key, required this.proposalList});
@@ -12,6 +14,9 @@ class reviewPending extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<reviewPending> {
+  final AuthService _authService = AuthService();
+  String token = '';
+
   late Future<String> futureData;
   @override
   void initState() {
@@ -20,8 +25,88 @@ class _MyWidgetState extends State<reviewPending> {
   }
 
   Future<String> fetchData() async {
+    token = await _authService.getToken();
     await Future.delayed(const Duration(seconds: 1));
     return "done";
+  }
+
+  Future<void> deleteProposal() async {
+    var propId = widget.proposalList.proposal_id;
+    // print(propId);
+    try {
+      final Map<String, String> headers = {
+        'authorization': 'Bearer $token',
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      };
+      final Map<String, dynamic> data = {"proposal_id": propId};
+
+      final response = await http.post(
+        Uri.parse('http://localhost:5005/api/deleteProposal'),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Proposal Deleted!')));
+
+        Future.delayed(const Duration(seconds: 2), () {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/farmerDash', (route) => false);
+        });
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Please try again!')));
+      }
+    } catch (er) {
+      print(er);
+    }
+  }
+
+  Future<void> _showADeleteConfirmationDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          alignment: Alignment.topCenter,
+          buttonPadding: const EdgeInsets.fromLTRB(0, 0, 30, 30),
+          content: const Text('Are you sure you want to delete or cancel?'),
+          actions: [
+            ElevatedButton(
+              onPressed: deleteProposal,
+              style: ButtonStyle(
+                backgroundColor: const MaterialStatePropertyAll(
+                    Color.fromARGB(255, 177, 24, 3)),
+                elevation: const MaterialStatePropertyAll(4),
+                shape: MaterialStatePropertyAll(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+              ),
+              child: const Text("Delete"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              style: ButtonStyle(
+                backgroundColor: const MaterialStatePropertyAll(
+                    Color.fromARGB(255, 5, 46, 2)),
+                elevation: const MaterialStatePropertyAll(4),
+                shape: MaterialStatePropertyAll(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+              ),
+              child: const Text("Dismiss"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -39,7 +124,7 @@ class _MyWidgetState extends State<reviewPending> {
             ),
           ),
         ),
-        title: Text("Pending Overview"),
+        title: const Text("Pending Overview"),
       ),
       body: FutureBuilder<String>(
         future: futureData,
@@ -71,6 +156,7 @@ class _MyWidgetState extends State<reviewPending> {
     String roiFarmerString = proposalList.roi_farmer;
     double roiFarmer = double.parse(roiFarmerString);
     double roundedRoiFarmer = double.parse(roiFarmer.toStringAsFixed(2));
+   
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -113,7 +199,7 @@ class _MyWidgetState extends State<reviewPending> {
                 Row(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       width: (screenWidth - 60) / 2,
                       child: const Text(
                         "Crop Name:",
@@ -121,10 +207,10 @@ class _MyWidgetState extends State<reviewPending> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Text(
                         proposalList.crop_name,
-                        style: TextStyle(fontSize: 17),
+                        style: const TextStyle(fontSize: 17),
                       ),
                     ),
                   ],
@@ -135,7 +221,7 @@ class _MyWidgetState extends State<reviewPending> {
                 Row(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       width: (screenWidth - 60) / 2,
                       child: const Text(
                         "Crop Details:",
@@ -143,11 +229,11 @@ class _MyWidgetState extends State<reviewPending> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       width: (screenWidth - 60) / 2,
                       child: Text(
                         proposalList.crop_details,
-                        style: TextStyle(fontSize: 17),
+                        style: const TextStyle(fontSize: 17),
                       ),
                     ),
                   ],
@@ -158,7 +244,7 @@ class _MyWidgetState extends State<reviewPending> {
                 Row(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       width: (screenWidth - 60) / 2,
                       child: const Text(
                         "Start date:",
@@ -166,11 +252,11 @@ class _MyWidgetState extends State<reviewPending> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       width: (screenWidth - 60) / 2,
                       child: Text(
                         proposalList.start_date,
-                        style: TextStyle(fontSize: 17),
+                        style: const TextStyle(fontSize: 17),
                       ),
                     ),
                   ],
@@ -181,7 +267,7 @@ class _MyWidgetState extends State<reviewPending> {
                 Row(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       width: (screenWidth - 60) / 2,
                       child: const Text(
                         "Total Amount:",
@@ -189,10 +275,10 @@ class _MyWidgetState extends State<reviewPending> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Text(
                         proposalList.total_amount,
-                        style: TextStyle(fontSize: 17),
+                        style: const TextStyle(fontSize: 17),
                       ),
                     ),
                   ],
@@ -203,7 +289,7 @@ class _MyWidgetState extends State<reviewPending> {
                 Row(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       width: (screenWidth - 60) / 2,
                       child: const Text(
                         "From Farmer:",
@@ -211,10 +297,10 @@ class _MyWidgetState extends State<reviewPending> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Text(
                         proposalList.investment_of_farmer,
-                        style: TextStyle(fontSize: 17),
+                        style: const TextStyle(fontSize: 17),
                       ),
                     ),
                   ],
@@ -225,7 +311,7 @@ class _MyWidgetState extends State<reviewPending> {
                 Row(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       width: (screenWidth - 60) / 2,
                       child: const Text(
                         "Amount Needed (Investor):",
@@ -234,10 +320,10 @@ class _MyWidgetState extends State<reviewPending> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Text(
                         proposalList.investment_of_investor,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -249,7 +335,7 @@ class _MyWidgetState extends State<reviewPending> {
                 Row(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       width: (screenWidth - 60) / 2,
                       child: const Text(
                         "Expected ROI:",
@@ -257,10 +343,10 @@ class _MyWidgetState extends State<reviewPending> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Text(
                         "$roundedRoiFarmer %",
-                        style: TextStyle(fontSize: 17),
+                        style: const TextStyle(fontSize: 17),
                       ),
                     ),
                   ],
@@ -271,7 +357,7 @@ class _MyWidgetState extends State<reviewPending> {
                 Row(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       width: (screenWidth - 60) / 2,
                       child: const Text(
                         "Proposal Status:",
@@ -279,10 +365,10 @@ class _MyWidgetState extends State<reviewPending> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Text(
                         proposalList.proposal_status,
-                        style: TextStyle(fontSize: 17),
+                        style: const TextStyle(fontSize: 17),
                       ),
                     ),
                   ],
@@ -291,6 +377,40 @@ class _MyWidgetState extends State<reviewPending> {
                   color: Color.fromARGB(255, 5, 46, 2),
                 ),
               ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+            child: ElevatedButton(
+              onPressed: () {
+                _showADeleteConfirmationDialog(context);
+              },
+              style: ButtonStyle(
+                backgroundColor: const MaterialStatePropertyAll(
+                    Color.fromARGB(255, 177, 24, 3)),
+                elevation: const MaterialStatePropertyAll(4),
+                minimumSize: MaterialStatePropertyAll(Size(100, 50)),
+                maximumSize: MaterialStatePropertyAll(Size(150, 50)),
+                // padding: const MaterialStatePropertyAll(
+                //     EdgeInsets.symmetric(horizontal: 70)),
+                shape: MaterialStatePropertyAll(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+              ),
+              child: Container(
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Delete",
+                      style: TextStyle(color: Colors.white, fontSize: 22),
+                    ),
+                    Icon(Icons.delete)
+                  ],
+                ),
+              ),
             ),
           ),
         ],

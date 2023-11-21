@@ -18,6 +18,8 @@ import 'package:flutter/material.dart';
 import '../services/auth_services.dart';
 import 'package:farmwise/farmerScreens/verificationForgot.dart';
 
+import 'test2.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -84,6 +86,7 @@ class _MyAppState extends State<MyApp> {
               255, 5, 46, 2), // Set the selected item color to green
         ),
       ),
+      // initialRoute: '/test2',
       initialRoute: initialIdentifier,
       routes: {
         '/': (context) => const Homepage(),
@@ -93,7 +96,7 @@ class _MyAppState extends State<MyApp> {
         "/investorDash": (context) => const DashboardInvestor(),
         '/buyerDash': (context) => const buyerDashboard(),
         '/logout': (context) => const Logout(),
-        '/test': (context) => Test(),
+        '/test2': (context) => Test2(),
         '/forgot': (context) => ForgotPassword(),
         '/verification': (context) => VerificationForgot(),
         '/newPassword': (context) => NewPassword(),

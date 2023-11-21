@@ -5,5 +5,5 @@ module.exports = function(app) {
     
     app.post("/getInvestor", Auth, InvestorController.getInvestor);
     app.post("/editInvestor", Auth, InvestorController.editInvestor);
-    
+    app.post("/showCultivation", Auth, InvestorController.getApprovedCultivation);
 };

@@ -1,31 +1,4 @@
-// import 'package:farmwise/farmerScreens/models/proposal.dart';
-
-class PendingProposalData {
-  bool success;
-  String message;
-  UserData data; // Assuming UserData is another class representing user data
-  List<ProposalDetails> proposalDetails;
-
-  PendingProposalData({
-    required this.success,
-    required this.message,
-    required this.data,
-    required this.proposalDetails,
-  });
-
-  factory PendingProposalData.fromJson(Map<String, dynamic> json) {
-    return PendingProposalData(
-      success: json['success'],
-      message: json['message'],
-      data: UserData.fromJson(json['data']),
-      proposalDetails: (json['proposalDetails'] as List<dynamic>)
-          .map((detailsJson) => ProposalDetails.fromJson(detailsJson))
-          .toList(),
-    );
-  }
-}
-
-class UserData {
+class FarmerData {
   String farmer_name;
   String farmer_address;
   String farm_address;
@@ -38,7 +11,7 @@ class UserData {
   String district;
   String city;
 
-  UserData({
+  FarmerData({
     required this.farmer_name,
     required this.farmer_address,
     required this.farm_address,
@@ -52,8 +25,8 @@ class UserData {
     required this.city,
   });
 
-  factory UserData.fromJson(Map<String, dynamic> json) {
-    return UserData(
+  factory FarmerData.fromJson(Map<String, dynamic> json) {
+    return FarmerData(
       farmer_name: json['farmer_name'] ?? '',
       farmer_address: json['farmer_address'] ?? '',
       farm_address: json['farm_address'] ?? '',
@@ -69,7 +42,7 @@ class UserData {
   }
 }
 
-class ProposalDetails {
+class ApprovedProposalDetails {
   String proposal_id;
   String farmer_email;
   String crop_name;
@@ -88,9 +61,9 @@ class ProposalDetails {
   String investor_email;
   String cultivation_status;
   String created_date;
-  UserData farmerDetails;
+  FarmerData farmerDetails;
 
-  ProposalDetails({
+  ApprovedProposalDetails({
     required this.proposal_id,
     required this.farmer_email,
     required this.crop_name,
@@ -112,8 +85,8 @@ class ProposalDetails {
     required this.farmerDetails,
   });
 
-  factory ProposalDetails.fromJson(Map<String, dynamic> json) {
-    return ProposalDetails(
+  factory ApprovedProposalDetails.fromJson(Map<String, dynamic> json) {
+    return ApprovedProposalDetails(
       proposal_id: json['_id'] ?? '',
       farmer_email: json['farmer_email'] ?? '',
       crop_name: json['crop_name'] ?? '',
@@ -132,7 +105,7 @@ class ProposalDetails {
       investor_email: json['investor_email'] ?? '',
       cultivation_status: json['cultivation_status'] ?? '',
       created_date: json['created_date'] ?? '',
-      farmerDetails: UserData.fromJson(json['farmerDetails'] ?? {}),
+      farmerDetails: FarmerData.fromJson(json['farmerDetails'] ?? {}),
     );
   }
 }

@@ -45,8 +45,11 @@ class _FullScreenImageState extends State<FullScreenImage> {
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Image.asset(
-            widget.imagePath, // Replace with your image
+          Image.network(
+            (widget.imagePath != '')
+                ? 'http://localhost:5005/${widget.imagePath}' ??
+                    'http://localhost:5005/uploads/progressImages/add.png'
+                : 'http://localhost:5005/uploads/progressImages/add.png',
             fit: BoxFit.contain,
           ),
           Positioned(

@@ -1,15 +1,13 @@
 import React from "react";
-import Navbar from "./components/Navbar";
-//import Footer from "./components/Footer";
-//import Sidebar from "./components/Sidebar";
-//import ReactDOM from 'react-dom';
-//import RoutesNav from "./components/RoutesNav";
+import AdminIndex from "./components/adminScreens/AdminIndex";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import HomeIndex from "./components/mainScreens/HomeIndex";
 
 function App() {
   return (
     <div>
-      <Navbar/>
-     
+      {/* <AdminIndex/> */}
+      <HomeIndex/>
     </div>
   );
 }

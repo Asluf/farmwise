@@ -9,7 +9,7 @@ import 'package:farmwise/farmerScreens/data/productList.dart';
 import '../services/auth_services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:farmwise/farmerScreens/data/pendingProposalList.dart';
+import 'package:farmwise/farmerScreens/data/cultivationProposalList.dart';
 
 class myInvestment extends StatefulWidget {
   const myInvestment({super.key});
@@ -165,7 +165,7 @@ class _MyWidgetState extends State<myInvestment> {
     } catch (er) {
       print(er);
     }
-    await Future.delayed(const Duration(seconds: 1));
+    // await Future.delayed(const Duration(seconds: 1));
     return "done";
   }
 

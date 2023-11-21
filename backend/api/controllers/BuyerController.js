@@ -28,7 +28,7 @@ exports.getBuyer = (req, res) => {
       }
     })
     .catch((err) => {
-      return res.status(200).json({
+      return res.status(500).json({
         success: true,
         message: "Something went wrong",
         data: err,
@@ -37,11 +37,10 @@ exports.getBuyer = (req, res) => {
 };
 
 exports.editBuyer = (req, res) => {
-
   const updateData = {
     buyer_name: req.body.buyer_name,
     address: req.body.address,
-    mobile_number: req.body.mobile_number
+    mobile_number: req.body.mobile_number,
   };
 
   Buyer.findOneAndUpdate(
@@ -49,15 +48,22 @@ exports.editBuyer = (req, res) => {
     { $set: updateData },
     { new: true, useFindAndModify: false }
   )
-    .then((user) => {
-      return res.status(200).json({
-        success: true,
-        message: `Buyer Profile edited.`,
-        data: user,
-      });
+    .then((data) => {
+      if (!data) {
+        return res.status(404).json({
+          success: false,
+          message: "Resource not found",
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: `Buyer Profile edited.`,
+          data: data,
+        });
+      }
     })
     .catch((err) => {
-      return res.status(200).json({
+      return res.status(500).json({
         success: true,
         message: "Something went wrong",
         data: err,

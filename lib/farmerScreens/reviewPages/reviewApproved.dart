@@ -5,9 +5,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class reviewApproved extends StatefulWidget {
-  const reviewApproved({super.key, required this.proposalList});
-
+  const reviewApproved({super.key, required this.proposalList}); 
+  //constructor for reviewapproved class
+// a required named parameter proposalList of type ProposalDetails. 
+//The required keyword indicates that this parameter must be provided when creating an instance of the class.
   final ProposalDetails proposalList;
+  // This line declares a final field named proposalList of type ProposalDetails. 
+  ///This field will store the data related to the proposal.
 
   @override
   State<reviewApproved> createState() => _MyWidgetState();

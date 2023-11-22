@@ -13,6 +13,7 @@ module.exports = function (app) {
   app.post("/deleteProposal", Auth, FarmerController.deleteProposal);
   app.post("/getProgress", Auth, FarmerController.getProgress);
   app.post("/uploadProgress",Auth, upload.uploadProgressImage.single('image'), FarmerController.uploadProgressImage);
+  app.post("/getRequestedNotification", Auth, FarmerController.getRequestedNotification);
 
   // app.post("/testt", Auth, FarmerController.testt);
 

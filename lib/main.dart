@@ -14,6 +14,7 @@ import 'package:farmwise/mainScreens/homePage.dart';
 import 'package:farmwise/mainScreens/splashScreen.dart';
 import 'package:farmwise/services/logout.dart';
 import 'package:farmwise/test.dart';
+import 'package:farmwise/test3.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_services.dart';
 import 'package:farmwise/farmerScreens/verificationForgot.dart';
@@ -75,18 +76,17 @@ class _MyAppState extends State<MyApp> {
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       theme: ThemeData(
-        hintColor: Color.fromARGB(
-            255, 76, 72, 76), // Set the accent color for buttons, etc.
-
+        appBarTheme: AppBarTheme(
+          color: Color.fromARGB(255, 13, 55, 16),
+        ),
+        hintColor: Color.fromARGB(255, 76, 72, 76),
         brightness: Brightness.light,
         primaryColor: customGreenColor,
-
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedItemColor: Color.fromARGB(
-              255, 5, 46, 2), // Set the selected item color to green
+          selectedItemColor: Color.fromARGB(255, 5, 46, 2),
         ),
       ),
-      // initialRoute: '/test2',
+      // initialRoute: '/test3',
       initialRoute: initialIdentifier,
       routes: {
         '/': (context) => const Homepage(),
@@ -100,6 +100,7 @@ class _MyAppState extends State<MyApp> {
         '/forgot': (context) => ForgotPassword(),
         '/verification': (context) => VerificationForgot(),
         '/newPassword': (context) => NewPassword(),
+        '/test3': (context) => Test3(),
       },
     );
   }

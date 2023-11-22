@@ -6,4 +6,8 @@ module.exports = function(app) {
     app.post("/getInvestor", Auth, InvestorController.getInvestor);
     app.post("/editInvestor", Auth, InvestorController.editInvestor);
     app.post("/showCultivation", Auth, InvestorController.getApprovedCultivation);
+    app.post("/showRequestedCultivation", Auth, InvestorController.getRequestedCultivation);
+    app.post("/requestCultivation", Auth, InvestorController.requestCultivation);
+    app.post("/deleteRequestedCultivation", Auth, InvestorController.deleteRequestedCultivation);
+
 };

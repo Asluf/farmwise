@@ -61,6 +61,8 @@ class ApprovedProposalDetails {
   String investor_email;
   String cultivation_status;
   String created_date;
+  String payment_status;
+  String proposal_response;
   FarmerData farmerDetails;
 
   ApprovedProposalDetails({
@@ -81,6 +83,8 @@ class ApprovedProposalDetails {
     required this.proposal_status,
     required this.investor_email,
     required this.cultivation_status,
+    required this.payment_status,
+    required this.proposal_response,
     required this.created_date,
     required this.farmerDetails,
   });
@@ -105,6 +109,8 @@ class ApprovedProposalDetails {
       investor_email: json['investor_email'] ?? '',
       cultivation_status: json['cultivation_status'] ?? '',
       created_date: json['created_date'] ?? '',
+      payment_status: json['payment_status'] ?? '',
+      proposal_response: json['proposal_response'] ?? '',
       farmerDetails: FarmerData.fromJson(json['farmerDetails'] ?? {}),
     );
   }

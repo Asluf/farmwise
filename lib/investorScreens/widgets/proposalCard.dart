@@ -16,8 +16,7 @@ class ProposalCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  ReviewProposal(proposalId: proposalList.proposal_id)),
+              builder: (context) => ReviewProposal(proposalList: proposalList)),
         );
       },
       child: Card(
@@ -60,7 +59,7 @@ class ProposalCard extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
                     child: Text(
-                      "ROI: ${proposalList.roi_farmer}%",
+                      "ROI: ${proposalList.roi_investor}%",
                       style: TextStyle(fontSize: 13),
                     ),
                   ),

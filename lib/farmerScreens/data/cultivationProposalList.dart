@@ -88,7 +88,8 @@ class ProposalDetails {
   String investor_email;
   String cultivation_status;
   String created_date;
-  String paid;
+  String payment_status;
+  String prposal_response;
   UserData farmerDetails;
 
   ProposalDetails({
@@ -110,7 +111,8 @@ class ProposalDetails {
     required this.investor_email,
     required this.cultivation_status,
     required this.created_date,
-    required this.paid,
+    required this.payment_status,
+    required this.prposal_response,
     required this.farmerDetails,
   });
 
@@ -134,7 +136,8 @@ class ProposalDetails {
       investor_email: json['investor_email'] ?? '',
       cultivation_status: json['cultivation_status'] ?? '',
       created_date: json['created_date'] ?? '',
-      paid: json['paid'] ?? '',
+      payment_status: json['payment_status'] ?? '',
+      prposal_response: json['proposal_response'] ?? '',
       farmerDetails: UserData.fromJson(json['farmerDetails'] ?? {}),
     );
   }

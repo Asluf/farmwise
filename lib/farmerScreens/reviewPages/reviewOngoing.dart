@@ -453,7 +453,7 @@ class _MyWidgetState extends State<reviewOngoing> {
                         Container(
                           padding: const EdgeInsets.all(10),
                           child: Text(
-                            proposalList.paid,
+                            proposalList.payment_status,
                             style: const TextStyle(fontSize: 17),
                           ),
                         ),

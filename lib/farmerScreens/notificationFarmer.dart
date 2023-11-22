@@ -1,4 +1,9 @@
+import 'package:farmwise/farmerScreens/data/cultivationProposalList.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:farmwise/services/auth_services.dart';
 
 class NotificationFarmer extends StatefulWidget {
   const NotificationFarmer({Key? key}) : super(key: key);
@@ -8,6 +13,63 @@ class NotificationFarmer extends StatefulWidget {
 }
 
 class _NotificationFarmerState extends State<NotificationFarmer> {
+  final AuthService _authService = AuthService();
+  String token = '';
+  String email = '';
+  List<ProposalDetails> fetchedRequestedNotifications = [];
+
+  late Future<String> futureData;
+
+  @override
+  void initState() {
+    super.initState();
+    futureData = fetchRequestedProposal();
+  }
+
+  Future<String> fetchRequestedProposal() async {
+    token = await _authService.getToken();
+    email = await _authService.getEmail();
+    try {
+      final Map<String, dynamic> data = {"farmer_email": email};
+      final Map<String, String> headers = {
+        'authorization': 'Bearer $token',
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      };
+      // requested Notifications
+      final response = await http.post(
+        Uri.parse('http://localhost:5005/api/getRequestedNotification'),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonData = json.decode(response.body);
+        List<dynamic> proposalsJson = jsonData['data'];
+
+        for (var proposalJson in proposalsJson) {
+          ProposalDetails proposal = ProposalDetails.fromJson(proposalJson);
+          setState(() {
+            fetchedRequestedNotifications.add(proposal);
+          });
+        }
+      } else {
+        print('Failed to fetch data ${response.body}');
+      }
+    } catch (er) {
+      print(er);
+    }
+
+    return "fetched";
+  }
+
+  Future<void> acceptRequest(String x) async {
+    print("Accept $x");
+  }
+
+  Future<void> rejectRequest(String x) async {
+    print("Reject $x");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,82 +85,99 @@ class _NotificationFarmerState extends State<NotificationFarmer> {
         title: const Text("Notifications"),
       ),
       backgroundColor: Colors.grey[200],
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle Mark All Notifications button press
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 5, 46, 2),
-                  ),
-                  child: const Text('Mark All Notifications'),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 4,
-              itemBuilder: (context, index) {
-                bool isAccepted = index.isEven;
-                return GestureDetector(
-                  onTap: () {
-                    // Handle the tap on the NotificationCard
-                    // For example, print the tapped index
-                    print('Tapped index: $index');
-                  },
-                  child: NotificationCard(
-                    name: 'Ishani $index',
-                    isAccepted: isAccepted,
-                    date: 'Date',
-                    // Replace 'Date' with the actual date
-                    time: 'Time', // Replace 'Time' with the actual time
-                    onPressed: () {
-                      // Handle individual notification button press
-                      print('Button in notification $index pressed.');
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: ElevatedButton(
-              onPressed: () {
-                // Handle View All Notifications button press
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 5, 46, 2),
+      body: FutureBuilder<String>(
+        future: futureData,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // If the Future is still running, display a loading spinner or an animation
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Colors.green.shade600), // Set your desired color
               ),
-              child: const Text('View All Notifications'),
-            ),
-          ),
-        ],
+            );
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            return Notifications(context);
+          }
+        },
       ),
+    );
+  }
+
+  Widget Notifications(BuildContext context) {
+    return Column(
+      children: [
+        // Requsting for accept or reject
+        Container(
+          child: Expanded(
+            child: fetchedRequestedNotifications.length > 0
+                ? ListView.builder(
+                    itemCount: fetchedRequestedNotifications.length,
+                    itemBuilder: (context, index) {
+                      bool isAccepted = index.isEven;
+                      return GestureDetector(
+                        onTap: () {
+                          print('Tapped index: $index');
+                        },
+                        child: NotificationCard(
+                          crop_name:
+                              fetchedRequestedNotifications[index].crop_name,
+                          date: 'Date',
+                          time: 'Time',
+                          index: index + 1,
+                          onAccept: () {
+                            acceptRequest(fetchedRequestedNotifications[index]
+                                .proposal_id);
+                          },
+                          onReject: () {
+                            rejectRequest(fetchedRequestedNotifications[index]
+                                .proposal_id);
+                          },
+                          onPressed: () {
+                            print('Button in notification $index pressed.');
+                          },
+                        ),
+                      );
+                    },
+                  )
+                : const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "No Notifications",
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                      ],
+                    ),
+                  ),
+          ),
+        ),
+        // Any other notofication
+      ],
     );
   }
 }
 
 class NotificationCard extends StatelessWidget {
-  final String name;
-  final bool isAccepted;
+  final String crop_name;
   final String date;
   final String time;
+  final int index;
+  final VoidCallback onAccept;
+  final VoidCallback onReject;
   final VoidCallback onPressed;
 
   const NotificationCard({
     Key? key,
-    required this.name,
-    required this.isAccepted,
+    required this.crop_name,
     required this.date,
     required this.time,
+    required this.index,
+    required this.onAccept,
+    required this.onReject,
     required this.onPressed,
   }) : super(key: key);
 
@@ -106,14 +185,14 @@ class NotificationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       // margin: const EdgeInsets.symmetric(horizontal: 16.0),
-      margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+      margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: <Widget>[
-            Icon(
-              Icons.notifications, // Use the notifications icon
-              size: 30,
+            const Icon(
+              Icons.notification_add_rounded,
+              size: 20,
             ),
             const SizedBox(width: 20),
             Expanded(
@@ -121,34 +200,56 @@ class NotificationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    name,
-                    style: const TextStyle(fontSize: 18),
+                    "Investor is willing to invest in your ${crop_name} proposal. Would you like to proceed now? ",
+                    style: const TextStyle(fontSize: 14),
                   ),
-                  
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                    
-                      Text(
-                        'Description',
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Spacer(),
-                      Text(
-                        'Date: $date, Time: $time',
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ],
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        const Spacer(),
+                        // Text(
+                        //   'Date: $date, Time: $time',
+                        //   style: const TextStyle(fontSize: 14),
+                        // ),
+                        ElevatedButton(
+                          onPressed: onAccept,
+                          style: ButtonStyle(
+                            backgroundColor: const MaterialStatePropertyAll(
+                                Color.fromARGB(255, 5, 46, 2)),
+                            elevation: const MaterialStatePropertyAll(4),
+                            shape: MaterialStatePropertyAll(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                            ),
+                          ),
+                          child: const Text("Accept"),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        ElevatedButton(
+                          onPressed: onReject,
+                          style: ButtonStyle(
+                            backgroundColor: const MaterialStatePropertyAll(
+                                Color.fromARGB(255, 177, 24, 3)),
+                            elevation: const MaterialStatePropertyAll(4),
+                            shape: MaterialStatePropertyAll(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                            ),
+                          ),
+                          child: const Text("Reject"),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-            
           ],
         ),
       ),

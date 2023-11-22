@@ -2,6 +2,7 @@ import 'package:farmwise/investorScreens/allProposal.dart';
 import 'package:farmwise/investorScreens/data/approvedProposalList.dart';
 import 'package:farmwise/investorScreens/searchProposal.dart';
 import 'package:farmwise/investorScreens/widgets/proposalCard.dart';
+import 'package:farmwise/investorScreens/widgets/requestedCard.dart';
 import 'package:farmwise/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:farmwise/investorScreens/data/proposalList.dart';
@@ -18,7 +19,9 @@ class ProposalInvestor extends StatefulWidget {
 class _MyWidgetState extends State<ProposalInvestor> {
   final AuthService _authService = AuthService();
   String token = '';
+  String email = '';
   List<ApprovedProposalDetails> fetchedApprovedProposals = [];
+  List<ApprovedProposalDetails> fetchedRequestedProposals = [];
 
   late Future<String> futureData;
 
@@ -30,15 +33,16 @@ class _MyWidgetState extends State<ProposalInvestor> {
 
   Future<String> fetchApprovedData() async {
     token = await _authService.getToken();
+    email = await _authService.getEmail();
 
     try {
+      final Map<String, dynamic> data = {"investor_email": email};
       final Map<String, String> headers = {
         'authorization': 'Bearer $token',
         'x-access-token': token,
         'Content-Type': 'application/json',
       };
       // pendingData
-
       final response = await http.post(
         Uri.parse('http://localhost:5005/api/showCultivation'),
         headers: headers,
@@ -53,6 +57,26 @@ class _MyWidgetState extends State<ProposalInvestor> {
               ApprovedProposalDetails.fromJson(proposalJson);
           setState(() {
             fetchedApprovedProposals.add(proposal);
+          });
+        }
+      } else {
+        print('Failed to fetch data ${response.body}');
+      }
+      // requestedData
+      final response2 = await http.post(
+        Uri.parse('http://localhost:5005/api/showRequestedCultivation'),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+      if (response2.statusCode == 200) {
+        Map<String, dynamic> jsonData = json.decode(response2.body);
+        List<dynamic> proposalsJson = jsonData['requestedProposalDetails'];
+
+        for (var proposalJson in proposalsJson) {
+          ApprovedProposalDetails proposal =
+              ApprovedProposalDetails.fromJson(proposalJson);
+          setState(() {
+            fetchedRequestedProposals.add(proposal);
           });
         }
       } else {
@@ -94,7 +118,7 @@ class _MyWidgetState extends State<ProposalInvestor> {
   }
 
   Widget Home(BuildContext context) {
-    return ListView(padding: EdgeInsets.all(16), children: [
+    return ListView(padding: const EdgeInsets.all(16), children: [
       //filter
       Padding(
         padding: const EdgeInsets.only(bottom: 15),
@@ -160,7 +184,8 @@ class _MyWidgetState extends State<ProposalInvestor> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text("Get free support from our customer service"),
+                        const Text(
+                            "Get free support from our customer service"),
                         ElevatedButton(
                             style: ButtonStyle(
                               backgroundColor: const MaterialStatePropertyAll(
@@ -171,7 +196,7 @@ class _MyWidgetState extends State<ProposalInvestor> {
                               )),
                             ),
                             onPressed: () {},
-                            child: Text(
+                            child: const Text(
                               "Call now",
                               style: TextStyle(),
                             ))
@@ -193,10 +218,10 @@ class _MyWidgetState extends State<ProposalInvestor> {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          const Text(
             "Featured Proposals",
             style: TextStyle(
-              color: const Color.fromARGB(255, 4, 5, 4),
+              color: Color.fromARGB(255, 4, 5, 4),
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -247,7 +272,56 @@ class _MyWidgetState extends State<ProposalInvestor> {
                 ),
                 SizedBox(height: 16.0),
                 Text(
-                  "No pending proposals",
+                  "No featured proposals",
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ],
+            ),
+      Container(
+        margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Requested Proposals",
+              style: TextStyle(
+                color: Color.fromARGB(255, 4, 5, 4),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+      // Requested Items card
+      fetchedRequestedProposals.length > 0
+          ? GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 0.68,
+              ),
+              itemCount: fetchedRequestedProposals.length,
+              itemBuilder: (BuildContext context, int index) {
+                // returning the cart
+                return RequestedCard(
+                    proposalList: fetchedRequestedProposals[index]);
+              },
+            )
+          : const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error,
+                  size: 48.0,
+                  color: Color.fromARGB(255, 119, 114, 114),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  "No requested proposals",
                   style: TextStyle(fontSize: 18.0),
                 ),
               ],

@@ -1,9 +1,14 @@
 import React from "react";
-
+import { useToggleState   } from './ToggleState';
 export default function Home() {
+  const { isToggled, toggle } = useToggleState();
   return (
-    <div>
-      <h1>Home</h1>
-    </div>
+    <>
+      <div id="main" className={isToggled ? 'toggled' : ''}>
+        {/* <NavBar /> */}
+        <div className="container-fluid">
+          <h1>Home</h1>
+        </div>
+      </div></>
   );
 }

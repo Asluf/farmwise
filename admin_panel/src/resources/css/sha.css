@@ -1,0 +1,61 @@
+#sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0px;
+    background: rgb(216, 208, 208);
+    padding-top: 10px;
+    transition: all 0.3s;
+}
+#sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #0e0d0d;
+    display: block;
+    transition: 0.3s;
+}
+#sidebar a:hover{
+    color: rgb(161, 126, 27);
+}
+#main {
+    margin-left: 250px; /* Adjust based on the width of your sidebar */
+    transition: margin-left 0.3s;
+}
+.container-fluid {
+    padding: 20px; /* Add padding to the main content */
+}
+#navText{
+    margin-left: 20px;
+}
+
+@media (max-width: 768px) {
+    #main {
+        margin-left: 60px; /* If the screen is smaller, set margin-left to 0 to allow the sidebar to cover the entire width */
+    }
+    #sidebar {
+        margin-left: -190px; 
+    }
+    #sidebar a i {
+        margin-left: 180px; 
+    }
+    #navText {
+        display: none;
+    }
+}
+#main.toggled {
+    margin-left: 60px;
+}
+
+#sidebar.toggled {
+    margin-left: -190px;
+}
+
+#sidebar.toggled a i {
+    margin-left: 180px;
+}
+
+#sidebar.toggled #navText {
+    display: none;
+}

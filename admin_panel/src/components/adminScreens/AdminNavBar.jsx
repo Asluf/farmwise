@@ -1,17 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import "../../resources/css/styles.css";
 import "../../resources/css/sidebar.css";
-import {Link, Outlet} from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 function NavBar() {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{background:'linear-gradient(to right, #00cc99, #006666)'}}>
-        <a className="navbar-brand" href="#">
-          Navbar
-        </a>
-        <button
+      <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{ background: 'linear-gradient(to right, #00cc99, #006666)' }}>
+        {/* <button
           className="navbar-toggler"
           type="button"
           data-toggle="collapse"
@@ -21,7 +18,11 @@ function NavBar() {
           aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
-        </button>
+
+        </button> */}
+        {/* <div>
+          <span><Link className="nav-link" to="/">Home</Link></span><span><Link className="nav-link" to="about">About</Link></span>
+        </div> */}
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
@@ -35,10 +36,10 @@ function NavBar() {
               <Link className="nav-link" to="login">Logout</Link>
             </li> */}
           </ul>
-          
+
         </div>
       </nav>
-      <Outlet/>
+      <Outlet />
     </>
   );
 }

@@ -14,6 +14,8 @@ module.exports = function (app) {
   app.post("/getProgress", Auth, FarmerController.getProgress);
   app.post("/uploadProgress",Auth, upload.uploadProgressImage.single('image'), FarmerController.uploadProgressImage);
   app.post("/getRequestedNotification", Auth, FarmerController.getRequestedNotification);
+  app.post("/acceptCultivationRequest", Auth, FarmerController.acceptCultivationRequest);
+  app.post("/rejectCultivationRequest", Auth, FarmerController.rejectCultivationRequest);
 
   // app.post("/testt", Auth, FarmerController.testt);
 

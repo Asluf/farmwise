@@ -436,3 +436,69 @@ exports.getRequestedNotification = (req, res) => {
       });
     });
 };
+
+exports.acceptCultivationRequest = (req, res) => {
+  const updateData = {
+    proposal_response: "accepted"
+  };
+
+  CulProposal.findOneAndUpdate(
+    { _id: req.body.proposal_id },
+    { $set: updateData },
+    { new: true, useFindAndModify: false }
+  )
+    .then((data) => {
+      if (!data) {
+        return res.status(404).json({
+          success: false,
+          message: "Resource not found",
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: `Farmer proposal accepted.`,
+        });
+      }
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        success: true,
+        message: "Something went wrong",
+        data: err,
+      });
+    });
+};
+
+exports.rejectCultivationRequest = (req, res) => {
+  const updateData = {
+    investor_email : "",
+    cultivation_status: "pending",
+    proposal_response: ""
+  };
+
+  CulProposal.findOneAndUpdate(
+    { _id: req.body.proposal_id },
+    { $set: updateData },
+    { new: true, useFindAndModify: false }
+  )
+    .then((data) => {
+      if (!data) {
+        return res.status(404).json({
+          success: false,
+          message: "Resource not found",
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: `Farmer proposal rejected.`,
+        });
+      }
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        success: true,
+        message: "Something went wrong",
+        data: err,
+      });
+    });
+};

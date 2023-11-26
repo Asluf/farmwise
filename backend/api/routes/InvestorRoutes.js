@@ -9,5 +9,6 @@ module.exports = function(app) {
     app.post("/showRequestedCultivation", Auth, InvestorController.getRequestedCultivation);
     app.post("/requestCultivation", Auth, InvestorController.requestCultivation);
     app.post("/deleteRequestedCultivation", Auth, InvestorController.deleteRequestedCultivation);
+    app.post("/getAcceptedNotification", Auth, InvestorController.getAcceptedNotification);
 
 };

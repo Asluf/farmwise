@@ -1,0 +1,27 @@
+.main-footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    background-color: #43A047;
+    padding-top: 3em;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.col1 img{
+    width: 100px;
+    height: 100px;
+}
+
+.col1,
+.col2,
+.col3 {
+  flex: 1; 
+}
+
+.unorder-list{
+    list-style: none;
+    padding: 0;
+}

@@ -9,7 +9,7 @@ export default function AdminIndex() {
       <ToggleStateProvider>
         <AdminNaviRoute />
 
-        <FooterContent />
+        {/* <FooterContent /> */}
       </ToggleStateProvider>
 
 

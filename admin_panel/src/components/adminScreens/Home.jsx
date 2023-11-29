@@ -1,7 +1,7 @@
 import React from "react";
 import "./Card.css";
 import { useToggleState } from "./ToggleState";
-
+import Footer from '../mainScreens/Footer';
 const Card = ({ imageUrl, title, content }) => {
   return (
     <div className="card">
@@ -47,6 +47,7 @@ const Home = () => {
             ))}
           </div>
         </div>
+        <Footer/>
       </div>
     </>
   );

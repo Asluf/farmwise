@@ -1,36 +1,55 @@
-import React from 'react'
-import './Footer.css'
+import React from "react";
+import "../../resources/css/footer.css";
 
-import logo from './Assets/logo.png'
+import logo from "./Assets/logo.png";
 
 export default function Footer() {
   return (
-    <div className='main-footer'>
-        
-        
-            <div className='row'>
-                {/* column1 */}
-                <div className='col1'>
-                <img src={logo} alt=''/>                
-                </div>
-                
-                {/* column2 */}
-                <div className='col2'>
-                    <h4>FARMWISE</h4>
-                </div>
-                
-                {/* column3 */}
-                <div className='col3'>
-                    <h4>farmwise</h4>
-                    <ul className='unorder-list'>
-                        <li>name</li>
-                        <li>address</li>
-                    </ul>
+    // <div className="fixed-bottom">
+    //   <div className="main-footer">
+    //     <div className="row">
+    //       <div className="col1">
+    //         <img src={logo} alt="" />
+    //       </div>
 
-                </div>
-            </div>
-            
-             
-    </div>
-  )
+    //       <div className="col2">
+    //         <h4>FARMWISE</h4>
+    //       </div>
+
+    //       <div className="col3">
+    //         <h4>farmwise</h4>
+    //         <ul className="unorder-list">
+    //           <li>name</li>
+    //           <li>address</li>
+    //         </ul>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
+
+    <footer class="footer mt-auto">
+      {/* <div class="container"> */}
+      {/* <span class="text-muted">Your Footer Content Goes Here</span> */}
+      <div className="main-footer">
+        <div className="row">
+          <div className="col1">
+            <img src={logo} alt="" />
+          </div>
+
+          <div className="col2">
+            <h4>FARMWISE</h4>
+          </div>
+
+          <div className="col3">
+            <h4>farmwise</h4>
+            <ul className="unorder-list">
+              <li>name</li>
+              <li>address</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      {/* </div> */}
+    </footer>
+  );
 }

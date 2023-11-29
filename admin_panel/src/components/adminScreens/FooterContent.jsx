@@ -3,9 +3,14 @@ import React from "react";
 function FooterContent() {
   return (
     <>
-      <footer className="footer fixed-bottom" style={{textAlign:"center"}}>
-        This is the footer
-      </footer>
+
+      <div className="ourFooter">
+        {/* <footer className=" fixed-bottom bg-dark" style={{ textAlign: "center" }}>
+          This is the footer
+        </footer> */}
+
+        This is a Footer
+      </div>
     </>
   );
 }

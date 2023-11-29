@@ -1,0 +1,98 @@
+/*.background-image{
+    background-image: url("C:\Flutter Apps\loginpage\src\components\mainScreens\assets\bgLeaves.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    
+}*/
+
+.sub-container{
+    display: flex;
+    flex-direction: column;        
+    margin: auto;
+    margin-top: 100px;
+    width: 600px;
+    box-shadow: 11px 12px 13px 12px rgb(150, 150, 150);
+    padding-bottom: 30px;
+    border-radius: 60px;
+    background-color: white;
+}
+
+.header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.text{
+    font-weight: 500;
+    font-size: 30px;
+}
+
+.inputs{
+    display: flex;
+    margin-top: 55px;
+    flex-direction: column;
+    gap: 5px;                        
+}
+
+.input{
+    display: flex;
+    align-items: center;
+    margin: auto;
+    width: 480px;
+    height: 80px;
+    background: #eaeaea;
+    border-radius: 6px;
+}
+
+.input img{
+    margin: 0px 30px;
+    width: 30px;
+    height: 30px;
+}
+
+.input input{
+    height: 50px;
+    width: 400px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #797979;
+    font-size: 19px;
+}
+
+.forgot-password{
+    align-self: center;
+    margin-top: 27px;
+    color: #797979;
+    font-size: 18px;
+}
+
+.submit-container{
+    display: flex;
+    gap: 30px;
+    margin: 30px auto;
+}
+
+.submit{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+    height: 59px;
+    color: black;
+    background: #43A047;
+    border-radius: 50px;
+    font-size: 19px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.gray{
+    background: #EAEAEA;
+    color: #676767;
+}

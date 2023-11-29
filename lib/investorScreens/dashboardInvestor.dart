@@ -1,4 +1,6 @@
 import 'package:farmwise/investorScreens/incomeInvestor.dart';
+import 'package:farmwise/investorScreens/data/cultivationProposalList.dart';
+
 import 'package:farmwise/investorScreens/investmentInvestor.dart';
 import 'package:farmwise/investorScreens/notificationInvestor.dart';
 import 'package:farmwise/investorScreens/profileInvestor.dart';
@@ -7,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'proposalInvestor.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:farmwise/services/auth_services.dart';
 
 class DashboardInvestor extends StatefulWidget {
   const DashboardInvestor({super.key});
@@ -16,6 +21,55 @@ class DashboardInvestor extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<DashboardInvestor> {
+  final AuthService _authService = AuthService();
+  String token = '';
+  String email = '';
+  List<ProposalDetails> fetchedAcceptedNotifications = [];
+
+  late Future<String> futureData;
+
+  @override
+  void initState() {
+    super.initState();
+    futureData = fetchAcceptedProposal();
+  }
+
+  Future<String> fetchAcceptedProposal() async {
+    token = await _authService.getToken();
+    email = await _authService.getEmail();
+    try {
+      final Map<String, dynamic> data = {"investor_email": email};
+      final Map<String, String> headers = {
+        'authorization': 'Bearer $token',
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      };
+      // requested Notifications
+      final response = await http.post(
+        Uri.parse('http://localhost:5005/api/getAcceptedNotification'),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonData = json.decode(response.body);
+        List<dynamic> proposalsJson = jsonData['data'];
+
+        for (var proposalJson in proposalsJson) {
+          ProposalDetails proposal = ProposalDetails.fromJson(proposalJson);
+          setState(() {
+            fetchedAcceptedNotifications.add(proposal);
+          });
+        }
+      } else {
+        print('Failed to fetch data ${response.body}');
+      }
+    } catch (er) {
+      print(er);
+    }
+
+    return "fetched";
+  }
+
   final pages = [
     const ProposalInvestor(),
     const InvestmentInvestor(),
@@ -51,18 +105,30 @@ class _MyWidgetState extends State<DashboardInvestor> {
             ],
           ),
           actions: [
-            IconButton.filledTonal(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NotificationInvestor()),
-                );
+            FutureBuilder<String>(
+              future: futureData,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // If the Future is still running, display a loading spinner or an animation
+                  return IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NotificationInvestor()),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.notifications, // Change to the appropriate icon
+                      color: Colors.white, // Change the icon color
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return NotificationsCount(context);
+                }
               },
-              icon: Icon(
-                Icons.notification_add_outlined,
-                color: const Color.fromARGB(255, 192, 226, 190),
-              ),
             ),
             PopupMenuButton<String>(
               icon: Icon(Icons.more_vert),
@@ -144,63 +210,55 @@ class _MyWidgetState extends State<DashboardInvestor> {
             ]));
   }
 
-//   void _showLogoutConfirmationDialog(BuildContext context) {
-//     showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           alignment: Alignment.topCenter,
-//           icon: Icon(Icons.logout),
-//           buttonPadding: EdgeInsets.fromLTRB(0, 0, 30, 30),
-//           // title: Text('Confirm Logout'),
-//           content: Text('Are you sure you want to logout or cancel?'),
-//           actions: [
-//             ElevatedButton(
-//               onPressed: () {
-//                 // Handle logout action here
-//                 // Im just redirect to homepage
-//                 Navigator.pushNamedAndRemoveUntil(
-//                     context, '/logout', (route) => false);
-//               },
-//               style: ButtonStyle(
-//                 backgroundColor:
-//                     MaterialStatePropertyAll(Color.fromARGB(255, 5, 46, 2)),
-//                 elevation: MaterialStatePropertyAll(4),
-//                 shape: MaterialStatePropertyAll(
-//                   RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(25),
-//                   ),
-//                 ),
-//               ),
-//               child: Icon(
-//                 Icons.check,
-//                 color: Colors.white,
-//               ),
-//             ),
-//             ElevatedButton(
-//               onPressed: () {
-//                 Navigator.of(context).pop(); // Close the dialog
-//               },
-//               style: ButtonStyle(
-//                 backgroundColor:
-//                     MaterialStatePropertyAll(Color.fromARGB(255, 177, 24, 3)),
-//                 elevation: MaterialStatePropertyAll(4),
-//                 shape: MaterialStatePropertyAll(
-//                   RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(25),
-//                   ),
-//                 ),
-//               ),
-//               child: Icon(
-//                 Icons.close,
-//                 color: Colors.white,
-//               ),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
+  Widget NotificationsCount(BuildContext context) {
+    return Container(
+      child: fetchedAcceptedNotifications.isNotEmpty
+          ? Stack(
+              alignment: Alignment.topRight,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationInvestor()),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.notifications,
+                    color: Colors.white,
+                  ),
+                ),
+                CircleAvatar(
+                  radius: 8,
+                  backgroundColor: Colors.red,
+                  child: Text(
+                    fetchedAcceptedNotifications.length.toString(),
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NotificationInvestor()),
+                );
+              },
+              icon: Icon(
+                Icons.notifications, // Change to the appropriate icon
+                color: Colors.white, // Change the icon color
+              ),
+            ),
+    );
+  }
+
   void _showLogoutConfirmationDialog(BuildContext context) {
     QuickAlert.show(
         context: context,

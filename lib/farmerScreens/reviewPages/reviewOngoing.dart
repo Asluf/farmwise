@@ -18,7 +18,6 @@ class _MyWidgetState extends State<reviewOngoing> {
   final AuthService _authService = AuthService();
   bool _isExpandedd = false;
   late Future<String> futureData;
-  late Future<String> futureData2;
   String token = '';
   Map<String, dynamic> fetchedProgressImageDetails = {};
   List<String> img = [];
@@ -119,7 +118,6 @@ class _MyWidgetState extends State<reviewOngoing> {
         future: futureData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // If the Future is still running, display a loading spinner or an animation
             return Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(
@@ -127,11 +125,8 @@ class _MyWidgetState extends State<reviewOngoing> {
               ),
             );
           } else if (snapshot.hasError) {
-            // If there's an error in the Future, display an error message
             return Text('Error: ${snapshot.error}');
           } else {
-            // If the Future is complete and data is received, display the data
-            // return Text('Data: ${snapshot.data}');
             return review(context);
           }
         },

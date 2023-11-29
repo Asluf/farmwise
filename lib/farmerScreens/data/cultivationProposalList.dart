@@ -1,9 +1,7 @@
-// import 'package:farmwise/farmerScreens/models/proposal.dart';
-
 class PendingProposalData {
   bool success;
   String message;
-  UserData data; // Assuming UserData is another class representing user data
+  UserData data; 
   List<ProposalDetails> proposalDetails;
 
   PendingProposalData({

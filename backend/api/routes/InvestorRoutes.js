@@ -11,4 +11,6 @@ module.exports = function(app) {
     app.post("/deleteRequestedCultivation", Auth, InvestorController.deleteRequestedCultivation);
     app.post("/getAcceptedNotification", Auth, InvestorController.getAcceptedNotification);
 
+    app.post("/getOngoingCultivation", Auth, InvestorController.getOngoingCultivation);
+
 };

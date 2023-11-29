@@ -8,6 +8,7 @@
     padding-top: 10px;
     transition: all 0.3s;
 }
+
 #sidebar a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
@@ -16,34 +17,100 @@
     display: block;
     transition: 0.3s;
 }
-#sidebar a:hover{
+
+#sidebar a:hover {
     color: rgb(161, 126, 27);
 }
+
 #main {
-    margin-left: 250px; /* Adjust based on the width of your sidebar */
+    margin-left: 250px;
+    /* Adjust based on the width of your sidebar */
     transition: margin-left 0.3s;
 }
+
 .container-fluid {
-    padding: 20px; /* Add padding to the main content */
+    padding: 20px;
+    /* Add padding to the main content */
 }
-#navText{
+
+#navText {
     margin-left: 20px;
 }
 
+.dropText {
+    margin-left: 20px;
+
+}
+
+.dropbtn {
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    margin-left: 50px;
+    border-radius: 5px;
+    background-color: rgb(197, 189, 189);
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a:hover {
+    background-color: rgb(185, 177, 177)
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.hrLine {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.logout {
+    position: fixed;
+    bottom: 0;
+    margin-bottom: 20px;
+}
+
+
 @media (max-width: 768px) {
     #main {
-        margin-left: 60px; /* If the screen is smaller, set margin-left to 0 to allow the sidebar to cover the entire width */
+        margin-left: 60px;
     }
+
     #sidebar {
-        margin-left: -190px; 
+        margin-left: -190px;
     }
+
     #sidebar a i {
-        margin-left: 180px; 
+        margin-left: 180px;
     }
+
     #navText {
         display: none;
     }
+
+    #bars {
+        display: none;
+    }
+
 }
+
 #main.toggled {
     margin-left: 60px;
 }
@@ -58,4 +125,22 @@
 
 #sidebar.toggled #navText {
     display: none;
+}
+
+#sidebar.toggled .dropdown-content {
+    margin-left: 235px;
+    margin-top: -35px;
+    padding: 0px;
+}
+
+#sidebar.toggled #navText {
+    margin-left: 20px;
+}
+
+.ourFooter{
+    display:inline-flex;
+    position: fixed;
+    bottom: 0px;
+    background-color: gray;
+    width: 100%;
 }

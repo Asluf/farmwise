@@ -1,5 +1,6 @@
 import React from "react";
-import { useToggleState   } from './ToggleState';
+import { useToggleState } from './ToggleState';
+import FooterContent from "./FooterContent";
 export default function Home() {
   const { isToggled, toggle } = useToggleState();
   return (
@@ -9,6 +10,8 @@ export default function Home() {
         <div className="container-fluid">
           <h1>Home</h1>
         </div>
-      </div></>
+        <FooterContent />
+      </div>
+    </>
   );
 }

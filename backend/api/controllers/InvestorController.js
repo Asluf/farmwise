@@ -221,3 +221,31 @@ exports.deleteRequestedCultivation = (req, res) => {
       });
     });
 };
+
+exports.getAcceptedNotification = (req, res) => {
+  CulProposal.find({
+    investor_email: req.body.investor_email,
+    cultivation_status: "requested",
+    proposal_response: "accepted",
+  })
+    .then((data) => {
+      if (!data) {
+        return res
+          .status(404)
+          .json({ success: false, message: "User email not found!" });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: `Notifications found`,
+          data: data,
+        });
+      }
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        success: true,
+        message: "Something went wrong",
+        data: err,
+      });
+    });
+};

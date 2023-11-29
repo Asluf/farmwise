@@ -62,12 +62,92 @@ class _NotificationFarmerState extends State<NotificationFarmer> {
     return "fetched";
   }
 
-  Future<void> acceptRequest(String x) async {
-    print("Accept $x");
+  void callAcceptRequest(String proposal_id) {
+    setState(() {
+      futureData;
+      futureData = acceptRequest(proposal_id);
+    });
   }
 
-  Future<void> rejectRequest(String x) async {
-    print("Reject $x");
+  Future<String> acceptRequest(String proposal_id) async {
+    try {
+      final Map<String, String> headers = {
+        'authorization': 'Bearer $token',
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      };
+      final Map<String, dynamic> data = {"proposal_id": proposal_id};
+
+      final response = await http.post(
+        Uri.parse(
+          "http://localhost:5005/api/acceptCultivationRequest",
+        ),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Proposal accepted successful!')));
+
+        Future.delayed(const Duration(seconds: 1), () {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/farmerDash', (route) => false);
+        });
+      } else {
+        // print('Failed to fetch data ${response.body}');
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to fetch data. Try again!')));
+      }
+    } catch (er) {
+      print(er);
+    }
+    // await Future.delayed(Duration(seconds: 1));
+    return "done";
+  }
+
+  void callRejectRequest(String proposal_id) {
+    setState(() {
+      futureData;
+      futureData = rejectRequest(proposal_id);
+    });
+  }
+
+  Future<String> rejectRequest(String proposal_id) async {
+    try {
+      final Map<String, String> headers = {
+        'authorization': 'Bearer $token',
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      };
+      final Map<String, dynamic> data = {"proposal_id": proposal_id};
+
+      final response = await http.post(
+        Uri.parse(
+          "http://localhost:5005/api/rejectCultivationRequest",
+        ),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Proposal rejected successful!')));
+
+        Future.delayed(const Duration(seconds: 1), () {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/farmerDash', (route) => false);
+        });
+      } else {
+        // print('Failed to fetch data ${response.body}');
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to fetch data. Try again!')));
+      }
+    } catch (er) {
+      print(er);
+    }
+    // await Future.delayed(Duration(seconds: 1));
+    return "done";
   }
 
   @override
@@ -128,12 +208,14 @@ class _NotificationFarmerState extends State<NotificationFarmer> {
                           time: 'Time',
                           index: index + 1,
                           onAccept: () {
-                            acceptRequest(fetchedRequestedNotifications[index]
-                                .proposal_id);
+                            callAcceptRequest(
+                                fetchedRequestedNotifications[index]
+                                    .proposal_id);
                           },
                           onReject: () {
-                            rejectRequest(fetchedRequestedNotifications[index]
-                                .proposal_id);
+                            callRejectRequest(
+                                fetchedRequestedNotifications[index]
+                                    .proposal_id);
                           },
                           onPressed: () {
                             print('Button in notification $index pressed.');

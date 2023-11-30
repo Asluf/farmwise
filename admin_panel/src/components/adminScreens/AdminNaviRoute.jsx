@@ -5,6 +5,7 @@ import About from "./About";
 import NoContent from "./NoContent";
 import { Routes, Route } from "react-router-dom";
 import AdminSideBar from "./AdminSideBar";
+import TableAdmin from "./TableAdmin";
 
 export default function AdminNaviRoute() {
   return (
@@ -15,6 +16,7 @@ export default function AdminNaviRoute() {
             <Route index element={<Home />} />
             <Route path="home" element={<Home />} />
             <Route path="about" element={<About />} />
+            <Route path="table" element={<TableAdmin />} />
             <Route path="*" element={<NoContent />} />
           </Route>
         </Routes>

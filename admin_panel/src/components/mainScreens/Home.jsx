@@ -7,6 +7,7 @@ export default function Home() {
       <h1>Home</h1>
 
       <Footer/>
+      <script src="../"></script>
     </div>
   );
 }

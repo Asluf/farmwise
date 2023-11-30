@@ -5,7 +5,6 @@ import 'package:farmwise/farmerScreens/widgets/pendingCard.dart';
 import 'package:farmwise/farmerScreens/widgets/completedCard.dart';
 import 'package:farmwise/farmerScreens/widgets/rejectCard.dart';
 import 'package:flutter/material.dart';
-import 'package:farmwise/farmerScreens/data/productList.dart';
 import '../services/auth_services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -178,29 +177,25 @@ class _MyWidgetState extends State<myInvestment> {
             return CreateProposal();
           }));
         }, // Action to be taken on press
-        child: Icon(Icons.add), // Icon to be displayed
         backgroundColor: const Color.fromARGB(
             255, 5, 46, 2), // Optional: specify the background color
         foregroundColor: Colors.white, // Optional: specify the icon color
         tooltip: 'Add Proposal', // Optional: tooltip text on hover
+        child: const Icon(Icons.add),
       ),
       body: FutureBuilder<String>(
         future: futureData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // If the Future is still running, display a loading spinner or an animation
             return Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(
-                    Colors.green.shade600), // Set your desired color
+                    Colors.green.shade600), 
               ),
             );
           } else if (snapshot.hasError) {
-            // If there's an error in the Future, display an error message
             return Text('Error: ${snapshot.error}');
           } else {
-            // If the Future is complete and data is received, display the data
-            // return Text('Data: ${snapshot.data}');
             return Home(context);
           }
         },
@@ -209,9 +204,8 @@ class _MyWidgetState extends State<myInvestment> {
   }
 
   Widget Home(BuildContext context) {
-    // print(fetchedProposals[1].crop_name);
     return ListView(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 15),
@@ -227,7 +221,7 @@ class _MyWidgetState extends State<myInvestment> {
                       borderSide: BorderSide(
                         color: Colors.grey.shade300,
                       ),
-                      borderRadius: BorderRadius.all(
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(99),
                       ),
                     ),
@@ -238,7 +232,7 @@ class _MyWidgetState extends State<myInvestment> {
                 padding: const EdgeInsets.only(left: 12),
                 child: IconButton.filled(
                   onPressed: () {},
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.search,
                     color: Color.fromARGB(255, 107, 156, 104),
                   ),
@@ -272,7 +266,8 @@ class _MyWidgetState extends State<myInvestment> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text("Get free support from our customer service"),
+                          const Text(
+                              "Get free support from our customer service"),
                           ElevatedButton(
                             style: ButtonStyle(
                               backgroundColor: const MaterialStatePropertyAll(
@@ -284,7 +279,7 @@ class _MyWidgetState extends State<myInvestment> {
                               ),
                             ),
                             onPressed: () {},
-                            child: Text(
+                            child: const Text(
                               "Call now",
                               style: TextStyle(),
                             ),
@@ -316,7 +311,7 @@ class _MyWidgetState extends State<myInvestment> {
               ),
               Text(
                 '(${fetchedOngoingProposals.length})',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.green,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -370,7 +365,7 @@ class _MyWidgetState extends State<myInvestment> {
               ),
               Text(
                 '(${fetchedPendingProposals.length})',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.green,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -424,7 +419,7 @@ class _MyWidgetState extends State<myInvestment> {
               ),
               Text(
                 '(${fetchedApprovedProposals.length})',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.green,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -478,7 +473,7 @@ class _MyWidgetState extends State<myInvestment> {
               ),
               Text(
                 '(${fetchedCompletedProposals.length})',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.green,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -532,7 +527,7 @@ class _MyWidgetState extends State<myInvestment> {
               ),
               Text(
                 '(${fetchedRejectedProposals.length})',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.green,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

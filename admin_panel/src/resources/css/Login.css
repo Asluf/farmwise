@@ -1,0 +1,116 @@
+.sub-container {
+    display: flex;
+    flex-direction: column;        
+    margin: auto;
+    margin-top: 120px;
+    width: 350px; /* Adjusted width */
+    height: 400px; /* Adjusted height */
+    box-shadow: 11px 12px 13px 12px rgb(150, 150, 150);
+    padding-bottom: 20px; /* Adjusted padding */
+    border-radius: 40px; /* Adjusted border-radius */
+    background-color: white;
+  }
+
+  .text {
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .inputs {
+    display: flex;
+    margin-top: 30px; /* Adjusted margin */
+    flex-direction: column;
+    gap: 15px; /* Adjusted gap */
+  }
+  
+  .input {
+    display: flex;
+    align-items: center;
+    margin: auto;
+    width: 300px; /* Adjusted width */
+    height: 40px; /* Adjusted height */
+    background: #eaeaea;
+    border-radius: 6px;
+  }
+  
+  .input img {
+    margin: 0px 20px; /* Adjusted margin */
+    width: 25px; /* Adjusted width */
+    height: 25px; /* Adjusted height */
+  }
+  
+  .input input {
+    height: 40px;
+    width: 220px; /* Adjusted width */
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #797979;
+    font-size: 16px; /* Adjusted font-size */
+  }
+  
+  .forgot-password {
+    text-align: center;
+    margin-top: 20px; /* Adjusted margin */
+    color: #797979;
+    font-size: 16px; /* Adjusted font-size */
+  }
+  
+  .submit-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto; 
+    width: 180px; 
+    height: 50px; 
+    background: rgb(182, 175, 175);
+    border-radius: 25px; 
+    font-size: 16px; 
+    font-weight: 500;
+    cursor: pointer;
+  }
+  
+  .submit-container button {
+    border: none;
+    outline: none;
+    background: transparent; 
+    color: white; 
+    cursor: pointer;
+  }
+  
+  .row1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px; 
+  }
+  
+  .row1 img {
+    width: 60px; 
+    height: 60px; 
+    margin-right: 20px; 
+    margin-top: 10px;
+  }
+  
+  h1 {
+    font-size: 24px; 
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+  }
+
+  .error.name {
+    color: red;
+    font-size: 14px;
+    position: absolute;
+    bottom: 300px; /* Adjust this value as needed */
+  }
+  
+  .error.password {
+    color: red;
+    font-size: 14px;
+    position: absolute;
+    bottom: 280px; /* Adjust this value as needed */
+  }
+  
+  

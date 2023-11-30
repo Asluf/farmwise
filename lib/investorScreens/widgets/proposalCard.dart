@@ -10,6 +10,8 @@ class ProposalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double value = double.parse(proposalList.roi_investor);
+    String roundedValue = value.toStringAsFixed(2);
     return GestureDetector(
       onTap: () {
         // Navigate to the second page when the card is tapped
@@ -59,7 +61,7 @@ class ProposalCard extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
                     child: Text(
-                      "ROI: ${proposalList.roi_investor}%",
+                      "ROI: $roundedValue %",
                       style: TextStyle(fontSize: 13),
                     ),
                   ),

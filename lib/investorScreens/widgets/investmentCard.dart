@@ -1,14 +1,21 @@
-import 'package:farmwise/investorScreens/models/proposal.dart';
 import 'package:farmwise/investorScreens/reviewInvestment.dart';
 import 'package:flutter/material.dart';
+import 'package:farmwise/investorScreens/data/cultivationProposalList.dart';
 
-class InvestmentCard extends StatelessWidget {
+class InvestmentCard extends StatefulWidget {
   const InvestmentCard({super.key, required this.proposalList});
-
-  final Proposal proposalList;
+  final ProposalDetails proposalList;
 
   @override
+  State<InvestmentCard> createState() => _InvestmentCardState();
+}
+
+class _InvestmentCardState extends State<InvestmentCard> {
+  @override
   Widget build(BuildContext context) {
+    final proposalList = widget.proposalList;
+    double value = double.parse(proposalList.roi_investor);
+    String roundedValue = value.toStringAsFixed(2);
     return GestureDetector(
       onTap: () {
         // Navigate to the second page when the card is tapped
@@ -16,7 +23,7 @@ class InvestmentCard extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  ReviewInvestment(proposalId: proposalList.proposalId)),
+                  ReviewInvestment(proposalList: proposalList)),
         );
       },
       child: Card(
@@ -40,9 +47,11 @@ class InvestmentCard extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                   image: DecorationImage(
-                image: AssetImage(
-                  proposalList.image,
-                ),
+                image: NetworkImage((proposalList != '' &&
+                        proposalList.land_img_path != '')
+                    ? 'http://localhost:5005/${proposalList.land_img_path}' ??
+                        'http://localhost:5005/uploads/culproposal/default.png'
+                    : 'http://localhost:5005/uploads/culproposal/default.png'),
                 fit: BoxFit.cover,
               )),
             ),
@@ -51,18 +60,18 @@ class InvestmentCard extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    proposalList.cropName,
+                    proposalList.crop_name,
                     style: TextStyle(fontSize: 13),
                   ),
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
                     child: Text(
-                      "ROI: ${proposalList.expectedRoiInvestor}%",
+                      "ROI: ${roundedValue}%",
                       style: TextStyle(fontSize: 13),
                     ),
                   ),
                   Text(
-                    "Farmer: ${proposalList.farmerName}",
+                    "Farmer: ${proposalList.farmerDetails.farmer_name}",
                     style: TextStyle(fontSize: 15),
                   ),
                 ],

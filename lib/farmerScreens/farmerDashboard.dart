@@ -23,6 +23,7 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
   String token = '';
   String email = '';
   List<ProposalDetails> fetchedRequestedNotifications = [];
+  Map<String, dynamic> profileInfo = {};
 
   late Future<String> futureData;
 
@@ -56,6 +57,16 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
           ProposalDetails proposal = ProposalDetails.fromJson(proposalJson);
           setState(() {
             fetchedRequestedNotifications.add(proposal);
+          });
+        }
+        final response2 = await http.post(
+          Uri.parse('http://localhost:5005/api/getFarmer'),
+          headers: headers,
+          body: jsonEncode({"email": email}),
+        );
+        if (response2.statusCode == 200) {
+          setState(() {
+            profileInfo = jsonDecode(response2.body);
           });
         }
       } else {
@@ -125,10 +136,10 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => NotificationFarmer()),
+                          builder: (context) => const NotificationFarmer()),
                     );
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.notifications, // Change to the appropriate icon
                     color: Colors.white, // Change the icon color
                   ),
@@ -184,7 +195,11 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
           ),
         ],
       ),
-      body: pages[currentIndex],
+      body: (profileInfo != null &&
+              profileInfo['data'] != null &&
+              profileInfo['data']['farmer_approval'] == 'approved')
+          ? pages[currentIndex]
+          : const PendingFarmer(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: (index) {
@@ -234,7 +249,7 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => NotificationFarmer()),
+                          builder: (context) => const NotificationFarmer()),
                     );
                   },
                   icon: const Icon(
@@ -247,7 +262,7 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
                   backgroundColor: Colors.red,
                   child: Text(
                     fetchedRequestedNotifications.length.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 10,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -260,10 +275,11 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NotificationFarmer()),
+                  MaterialPageRoute(
+                      builder: (context) => const NotificationFarmer()),
                 );
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.notifications, // Change to the appropriate icon
                 color: Colors.white, // Change the icon color
               ),
@@ -283,5 +299,38 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
           Navigator.pushNamedAndRemoveUntil(
               context, '/logout', (route) => false);
         });
+  }
+}
+
+class PendingFarmer extends StatelessWidget {
+  const PendingFarmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[200],
+      body: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              Icons.hourglass_empty,
+              size: 50,
+              color: Color.fromARGB(255, 51, 131, 55),
+            ),
+            SizedBox(height: 16),
+            Text(
+              'Your profile is under review.',
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Please wait.',
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

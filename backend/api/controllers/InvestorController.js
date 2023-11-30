@@ -249,3 +249,44 @@ exports.getAcceptedNotification = (req, res) => {
       });
     });
 };
+
+exports.getOngoingCultivation = (req, res) => {
+  CulProposal.aggregate([
+    {
+      $lookup: {
+        from: "farmer_details",
+        localField: "farmer_email",
+        foreignField: "email",
+        as: "farmerDetails",
+      },
+      //matching the farmer_email field in the CulProposal collection with the email field in the "farmer_details" collection.
+    },
+    { $unwind: "$farmerDetails" },
+    {
+      $match: {
+        proposal_status: "approved",
+        cultivation_status: "ongoing",
+        investor_email: req.body.email,
+      },
+    },
+  ])
+    .then((data) => {
+      if (!data) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Proposals not found!" });
+      }
+      return res.status(200).json({
+        success: true,
+        message: `Proposal found`,
+        proposalDetails: data,
+      });
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        success: true,
+        message: "Something went wrong",
+        data: err,
+      });
+    });
+};

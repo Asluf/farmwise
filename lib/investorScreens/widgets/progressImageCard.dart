@@ -3,9 +3,17 @@ import 'package:farmwise/investorScreens/widgets/fullScreenImage.dart';
 import 'package:flutter/material.dart';
 
 class ProgressImageCard extends StatefulWidget {
-  const ProgressImageCard({super.key, required this.progressImageList});
+  const ProgressImageCard(
+      {super.key,
+      required this.progressImagePath,
+      required this.progressImageDate,
+      required this.cultivation_id,
+      required this.index});
 
-  final ProgressImage progressImageList;
+  final String progressImagePath;
+  final String progressImageDate;
+  final String cultivation_id;
+  final int index;
 
   @override
   State<ProgressImageCard> createState() => _ProgressImageCardState();
@@ -17,20 +25,24 @@ class _ProgressImageCardState extends State<ProgressImageCard> {
       context,
       MaterialPageRoute(
         builder: (context) =>
-            FullScreenImage(imagePath: widget.progressImageList.imagePath),
+            FullScreenImage(imagePath: widget.progressImagePath),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    DateTime dateTime = DateTime.parse(widget.progressImageDate);
+    String formattedDate = "${dateTime.year}-${dateTime.month}-${dateTime.day}";
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => FullScreenImage(
-                  imagePath: widget.progressImageList.imagePath)),
+            builder: (context) =>
+                FullScreenImage(imagePath: widget.progressImagePath),
+          ),
         );
       },
       child: Card(
@@ -54,7 +66,10 @@ class _ProgressImageCardState extends State<ProgressImageCard> {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                   image: DecorationImage(
-                image: AssetImage(widget.progressImageList.imagePath),
+                image: NetworkImage((widget.progressImagePath != '')
+                    ? 'http://localhost:5005/${widget.progressImagePath}' ??
+                        'http://localhost:5005/uploads/progressImages/no.png'
+                    : 'http://localhost:5005/uploads/progressImages/no.png'),
                 fit: BoxFit.cover,
               )),
             ),
@@ -63,7 +78,7 @@ class _ProgressImageCardState extends State<ProgressImageCard> {
               child: Column(
                 children: [
                   Text(
-                    "${widget.progressImageList.postedDate}",
+                    "$formattedDate",
                     style: TextStyle(fontSize: 13),
                   ),
                 ],

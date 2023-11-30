@@ -94,6 +94,10 @@ var FarmerSchema = new Schema({
         type: Date,
         default: ''
     },
+    farmer_approval: {
+        type: String,
+        default: 'pending'
+    },
     created_date: {
         type: Date,
         maxlength: 200,

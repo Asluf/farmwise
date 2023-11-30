@@ -14,6 +14,9 @@ class RequestedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double value = double.parse(proposalList.roi_investor);
+    String roundedValue = value.toStringAsFixed(2);
+
     final ProposalInvestor objProposalInvestor = ProposalInvestor();
     final AuthService _authService = AuthService();
     String token = '';
@@ -101,7 +104,7 @@ class RequestedCard extends StatelessWidget {
                     style: const TextStyle(fontSize: 13),
                   ),
                   Text(
-                    "ROI: ${proposalList.roi_investor}%",
+                    "ROI: $roundedValue %",
                     style: const TextStyle(fontSize: 13),
                   ),
                   Text(

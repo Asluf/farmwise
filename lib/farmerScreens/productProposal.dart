@@ -5,7 +5,6 @@ import 'package:farmwise/farmerScreens/widgets/products/pendingProductsCard.dart
 import 'package:farmwise/farmerScreens/widgets/products/rejectedProductsCard.dart';
 import 'package:farmwise/farmerScreens/widgets/products/soldProductsCard.dart';
 import 'package:flutter/material.dart';
-import 'package:farmwise/farmerScreens/data/productList.dart';
 import '../services/auth_services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -336,7 +335,7 @@ class _MyWidgetState extends State<ProductProposal> {
                   mainAxisSpacing: 16,
                   childAspectRatio: 0.73,
                 ),
-                itemCount: productList.length,
+                itemCount: fetchedSoldProducts.length,
                 itemBuilder: (BuildContext context, int index) {
                   return soldProductCard(
                       productproposalList: fetchedSoldProducts[index]);

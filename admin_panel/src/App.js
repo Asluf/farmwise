@@ -11,8 +11,8 @@ import Footer from './components/mainScreens/Footer';
 function App() {
   return (
     <div>
-      {/* <AdminIndex/> */}
-      <HomeIndex/>
+      <AdminIndex/>
+      {/* <HomeIndex/> */}
     </div>
   );
 }

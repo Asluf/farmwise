@@ -1,6 +1,4 @@
 import 'dart:async';
-
-//import 'package:farmwise/buyerScreens/data/cartData.dart';
 import 'package:farmwise/buyerScreens/models/product.dart';
 import 'package:flutter/material.dart';
 

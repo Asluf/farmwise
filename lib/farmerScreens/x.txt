@@ -1,0 +1,95 @@
+Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "No Notifications",
+                              style: TextStyle(fontSize: 18.0),
+                            ),
+                          ],
+                        ),
+                      )
+
+
+
+
+
+                      // ==================async
+
+
+
+
+
+                      ListView.builder(
+                        itemCount: fetchedRequestedProductNotifications.length,
+                        itemBuilder: (context, index) {
+                          bool isAccepted = index.isEven;
+                          return GestureDetector(
+                            onTap: () {
+                              print('Tapped index: $index');
+                            },
+                            child: ProductNotificationCard(
+                              product_name:
+                                  fetchedRequestedProductNotifications[index]
+                                      .product_name,
+                              date: 'Date',
+                              time: 'Time',
+                              index: index + 1,
+                              onAccept: () {
+                                callProductAcceptRequest(
+                                    fetchedRequestedProductNotifications[index]
+                                        .product_id);
+                              },
+                              onReject: () {
+                                callProductRejectRequest(
+                                    fetchedRequestedProductNotifications[index]
+                                        .product_id);
+                              },
+                              onPressed: () {
+                                print('Button in notification $index pressed.');
+                              },
+                            ),
+                          );
+                        },
+                      )
+
+
+
+
+
+                      //======================async
+
+
+
+                      ListView.builder(
+                    itemCount: fetchedRequestedNotifications.length,
+                    itemBuilder: (context, index) {
+                      bool isAccepted = index.isEven;
+                      return GestureDetector(
+                        onTap: () {
+                          print('Tapped index: $index');
+                        },
+                        child: NotificationCard(
+                          crop_name:
+                              fetchedRequestedNotifications[index].crop_name,
+                          date: 'Date',
+                          time: 'Time',
+                          index: index + 1,
+                          onAccept: () {
+                            callAcceptRequest(
+                                fetchedRequestedNotifications[index]
+                                    .proposal_id);
+                          },
+                          onReject: () {
+                            callRejectRequest(
+                                fetchedRequestedNotifications[index]
+                                    .proposal_id);
+                          },
+                          onPressed: () {
+                            print('Button in notification $index pressed.');
+                          },
+                        ),
+                      );
+                    },
+                  )
+                

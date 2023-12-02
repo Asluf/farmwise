@@ -1,5 +1,6 @@
 import 'package:farmwise/farmerScreens/FarmerProfile.dart';
 import 'package:farmwise/farmerScreens/data/cultivationProposalList.dart';
+import 'package:farmwise/farmerScreens/data/productProposalList.dart';
 import 'package:farmwise/farmerScreens/myInvestment.dart';
 import 'package:farmwise/farmerScreens/myIncome.dart';
 import 'package:farmwise/farmerScreens/notificationFarmer.dart';
@@ -23,6 +24,9 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
   String token = '';
   String email = '';
   List<ProposalDetails> fetchedRequestedNotifications = [];
+  List<ProductProposalDetails> fetchedRequestedProductNotifications = [];
+
+  int totalNotification = 0;
   Map<String, dynamic> profileInfo = {};
 
   late Future<String> futureData;
@@ -57,6 +61,7 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
           ProposalDetails proposal = ProposalDetails.fromJson(proposalJson);
           setState(() {
             fetchedRequestedNotifications.add(proposal);
+            totalNotification = fetchedRequestedNotifications.length;
           });
         }
         final response2 = await http.post(
@@ -68,6 +73,7 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
           setState(() {
             profileInfo = jsonDecode(response2.body);
           });
+          fetchRequestedProductProposal();
         }
       } else {
         print('Failed to fetch data ${response.body}');
@@ -77,6 +83,44 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
     }
 
     return "fetched";
+  }
+
+  Future<void> fetchRequestedProductProposal() async {
+    token = await _authService.getToken();
+    email = await _authService.getEmail();
+    try {
+      final Map<String, dynamic> data = {"farmer_email": email};
+      final Map<String, String> headers = {
+        'authorization': 'Bearer $token',
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      };
+      // requested Notifications
+      final response = await http.post(
+        Uri.parse('http://localhost:5005/api/getRequestedProductNotification'),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonData = json.decode(response.body);
+        List<dynamic> proposalsJson = jsonData['data'];
+
+        for (var proposalJson in proposalsJson) {
+          ProductProposalDetails proposal =
+              ProductProposalDetails.fromJson(proposalJson);
+          setState(() {
+            fetchedRequestedProductNotifications.add(proposal);
+            totalNotification += fetchedRequestedProductNotifications.length;
+          });
+        }
+      } else {
+        print('Failed to fetch data ${response.body}');
+      }
+    } catch (er) {
+      print(er);
+    }
+
+    // return "fetched";
   }
 
   final pages = [
@@ -240,7 +284,7 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
 
   Widget NotificationsCount(BuildContext context) {
     return Container(
-      child: fetchedRequestedNotifications.isNotEmpty
+      child: totalNotification != 0
           ? Stack(
               alignment: Alignment.topRight,
               children: [
@@ -261,7 +305,7 @@ class _FarmerDashboardState extends State<FarmerDashboard> {
                   radius: 8,
                   backgroundColor: Colors.red,
                   child: Text(
-                    fetchedRequestedNotifications.length.toString(),
+                    totalNotification.toString(),
                     style: const TextStyle(
                       fontSize: 10,
                       color: Colors.white,

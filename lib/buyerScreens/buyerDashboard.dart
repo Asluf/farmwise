@@ -1,11 +1,15 @@
 import 'package:farmwise/buyerScreens/Explore.dart';
 import 'package:farmwise/buyerScreens/buyerOrder.dart';
 import 'package:farmwise/buyerScreens/buyerProfile.dart';
-import 'package:farmwise/buyerScreens/cartPage.dart';
+import 'package:farmwise/buyerScreens/data/ApprovedProductList.dart';
+import 'package:farmwise/buyerScreens/myProducts.dart';
 import 'package:farmwise/mainScreens/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:farmwise/services/auth_services.dart';
 
 class buyerDashboard extends StatefulWidget {
   const buyerDashboard({super.key});
@@ -15,7 +19,56 @@ class buyerDashboard extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<buyerDashboard> {
-  final pages = [const explorePage(), const cartPage(), const cartPage()];
+  final AuthService _authService = AuthService();
+  String token = '';
+  String email = '';
+  // List<ProductProposalDetails> fetchedAcceptedNotifications = [];
+
+  late Future<String> futureData;
+
+  @override
+  void initState() {
+    super.initState();
+    // futureData = fetchAcceptedProposal();
+  }
+
+  // Future<String> fetchAcceptedProposal() async {
+  //   token = await _authService.getToken();
+  //   email = await _authService.getEmail();
+  //   try {
+  //     final Map<String, dynamic> data = {"investor_email": email};
+  //     final Map<String, String> headers = {
+  //       'authorization': 'Bearer $token',
+  //       'x-access-token': token,
+  //       'Content-Type': 'application/json',
+  //     };
+  //     // requested Notifications
+  //     final response = await http.post(
+  //       Uri.parse('http://localhost:5005/api/getAcceptedNotification'),
+  //       headers: headers,
+  //       body: jsonEncode(data),
+  //     );
+  //     if (response.statusCode == 200) {
+  //       Map<String, dynamic> jsonData = json.decode(response.body);
+  //       List<dynamic> proposalsJson = jsonData['data'];
+
+  //       for (var proposalJson in proposalsJson) {
+  //         ProposalDetails proposal = ProposalDetails.fromJson(proposalJson);
+  //         setState(() {
+  //           fetchedAcceptedNotifications.add(proposal);
+  //         });
+  //       }
+  //     } else {
+  //       print('Failed to fetch data ${response.body}');
+  //     }
+  //   } catch (er) {
+  //     print(er);
+  //   }
+
+  //   return "fetched";
+  // }
+
+  final pages = [const explorePage(), const Myproducts()];
   int currentIndex = 0;
 
   @override
@@ -126,7 +179,7 @@ class _MyWidgetState extends State<buyerDashboard> {
                 icon: Icon(Icons.shopping_cart,
                     color: Color.fromARGB(255, 107, 156, 104)),
                 activeIcon: Icon(Icons.shopping_cart),
-                label: 'Cart',
+                label: 'My Products',
               ),
               // BottomNavigationBarItem(
               //   icon: Icon(Icons.shopping_bag,

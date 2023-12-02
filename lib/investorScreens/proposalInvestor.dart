@@ -97,7 +97,6 @@ class _MyWidgetState extends State<ProposalInvestor> {
         future: futureData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // If the Future is still running, display a loading spinner or an animation
             return Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(
@@ -105,11 +104,8 @@ class _MyWidgetState extends State<ProposalInvestor> {
               ),
             );
           } else if (snapshot.hasError) {
-            // If there's an error in the Future, display an error message
             return Text('Error: ${snapshot.error}');
           } else {
-            // If the Future is complete and data is received, display the data
-            // return Text('Data: ${snapshot.data}');
             return Home(context);
           }
         },

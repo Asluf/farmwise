@@ -59,14 +59,14 @@ export default function Login() {
           </div>
 
           <div className='inputs'>
-            <div className='input'>
+            <div className='user-input'>
               <img src={person_icon} alt='' />
               <input type='text' placeholder='Username' value={values.name} name='name' onChange={handleChange} />
               <div className='error-message'>{errors.name}</div>
             </div>
-            <div className='input'>
+            <div className='user-input'>
               <img src={password_icon} alt='' />
-              <input type='password' placeholder='Password' value={values.password} name='password' onChange={handleChange} />
+              <input type='password' placeholder='Password' value={values.password} name='password' onChange={handleChange}  />
               <div className='error-message'>{errors.password}</div>
             </div>
           </div>

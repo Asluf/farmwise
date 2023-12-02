@@ -1,16 +1,63 @@
 import 'package:farmwise/buyerScreens/data/ApprovedProductList.dart';
 import 'package:farmwise/buyerScreens/reviewApprovedProducts.dart';
+import 'package:farmwise/services/auth_services.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class ApprovedProductCard extends StatelessWidget {
-  const ApprovedProductCard({super.key, required this.productproposalList});
+class requestedProductCard extends StatelessWidget {
+  const requestedProductCard({super.key, required this.productproposalList});
 
   final ApprovedProductProposalDetails productproposalList;
 
   @override
   Widget build(BuildContext context) {
-    // double value = double.parse(approvedproductList.);
-    // String roundedValue = value.toStringAsFixed(2);
+    final AuthService _authService = AuthService();
+    String token = '';
+    String email = '';
+
+    Future<void> deleteRequestedProducts(String product_id) async {
+      token = await _authService.getToken();
+      email = await _authService.getEmail();
+      try {
+        final Map<String, String> headers = {
+          'authorization': 'Bearer $token',
+          'x-access-token': token,
+          'Content-Type': 'application/json'
+        };
+        final Map<String, dynamic> data = {
+          "buyer_email": email,
+          "product_id": product_id
+        };
+
+        final response = await http.post(
+          Uri.parse('http://localhost:5005/api/deleteRequestedProducts'),
+          headers: headers,
+          body: jsonEncode(data),
+        );
+        //saving the response
+        if (response.statusCode == 200) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Request Deleted successfully!')));
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/buyerDash', (route) => false);
+          });
+        } else {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('Oops! Try again..')));
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/buyerDash', (route) => false);
+          });
+        }
+      } catch (er) {
+        print(er);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(er.toString())));
+      }
+    }
+
     return GestureDetector(
       onTap: () {
         // Navigate to the second page when the card is tapped
@@ -101,6 +148,19 @@ class ApprovedProductCard extends StatelessWidget {
                       ])),
                     ],
                   ),
+                  const Text(
+                    "Requested",
+                    style: TextStyle(
+                        fontSize: 15, color: Color.fromARGB(214, 110, 99, 87)),
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        deleteRequestedProducts(productproposalList.product_id);
+                      },
+                      child: const Icon(
+                        Icons.delete_forever_rounded,
+                        color: Color.fromARGB(255, 157, 67, 60),
+                      ))
                 ],
               ),
             )

@@ -16,6 +16,9 @@ module.exports = function (app) {
   app.post("/getRequestedNotification", Auth, FarmerController.getRequestedNotification);
   app.post("/acceptCultivationRequest", Auth, FarmerController.acceptCultivationRequest);
   app.post("/rejectCultivationRequest", Auth, FarmerController.rejectCultivationRequest);
+  app.post("/getRequestedProductNotification", Auth, FarmerController.getRequestedProductNotification);
+  app.post("/acceptProductCultivationRequest", Auth, FarmerController.acceptProductCultivationRequest);
+  app.post("/rejectProductCultivationRequest", Auth, FarmerController.rejectProductCultivationRequest);
 
   // app.post("/testt", Auth, FarmerController.testt);
 

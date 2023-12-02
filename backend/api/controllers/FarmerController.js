@@ -408,7 +408,7 @@ exports.uploadProgressImage = (req, res, next) => {
       });
     });
 };
-
+// For Cultivation Proposals
 exports.getRequestedNotification = (req, res) => {
   CulProposal.find({
     farmer_email: req.body.farmer_email,
@@ -491,6 +491,100 @@ exports.rejectCultivationRequest = (req, res) => {
         return res.status(200).json({
           success: true,
           message: `Farmer proposal rejected.`,
+        });
+      }
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        success: true,
+        message: "Something went wrong",
+        data: err,
+      });
+    });
+};
+
+// For Product Proposals
+exports.getRequestedProductNotification = (req, res) => {
+  ProProposal.find({
+    farmer_email: req.body.farmer_email,
+    product_status: "requested",
+    response: "sent",
+  })
+    .then((data) => {
+      if (!data) {
+        return res
+          .status(404)
+          .json({ success: false, message: "User email not found!" });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: `Notifications found`,
+          data: data,
+        });
+      }
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        success: true,
+        message: "Something went wrong",
+        data: err,
+      });
+    });
+};
+exports.acceptProductCultivationRequest = (req, res) => {
+  const updateData = {
+    response: "accepted"
+  };
+
+  ProProposal.findOneAndUpdate(
+    { _id: req.body.product_id },
+    { $set: updateData },
+    { new: true, useFindAndModify: false }
+  )
+    .then((data) => {
+      if (!data) {
+        return res.status(404).json({
+          success: false,
+          message: "Resource not found",
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: `Farmer product proposal accepted.`,
+        });
+      }
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        success: true,
+        message: "Something went wrong",
+        data: err,
+      });
+    });
+};
+
+exports.rejectProductCultivationRequest = (req, res) => {
+  const updateData = {
+    buyer_email : "",
+    product_status: "available",
+    response: ""
+  };
+
+  ProProposal.findOneAndUpdate(
+    { _id: req.body.product_id },
+    { $set: updateData },
+    { new: true, useFindAndModify: false }
+  )
+    .then((data) => {
+      if (!data) {
+        return res.status(404).json({
+          success: false,
+          message: "Resource not found",
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: `Farmer product proposal rejected.`,
         });
       }
     })

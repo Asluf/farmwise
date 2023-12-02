@@ -67,6 +67,11 @@ var ProProposalSchema = new Schema({
     maxlength: 200,
     default: "pending",
   },
+  response: {
+    type: String,
+    maxlength: 200,
+    default: "",
+  },
   created_date: {
     type: Date,
     maxlength: 200,

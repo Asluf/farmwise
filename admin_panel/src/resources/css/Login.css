@@ -3,11 +3,11 @@
     flex-direction: column;        
     margin: auto;
     margin-top: 120px;
-    width: 350px; /* Adjusted width */
-    height: 400px; /* Adjusted height */
+    width: 350px; 
+    height: 400px; 
     box-shadow: 11px 12px 13px 12px rgb(150, 150, 150);
-    padding-bottom: 20px; /* Adjusted padding */
-    border-radius: 40px; /* Adjusted border-radius */
+    padding-bottom: 20px; 
+    border-radius: 40px; 
     background-color: white;
   }
 
@@ -15,45 +15,65 @@
     text-align: center;
     font-weight: bold;
   }
+
+  .error-message {
+    color: red;
+    font-size: 14px;
+    position: absolute;
+    bottom: -25px;
+  }
   
   .inputs {
     display: flex;
-    margin-top: 30px; /* Adjusted margin */
+    margin-top: 30px; 
     flex-direction: column;
-    gap: 15px; /* Adjusted gap */
+    gap: 25px; 
   }
   
-  .input {
+  .user-input {
     display: flex;
     align-items: center;
     margin: auto;
-    width: 300px; /* Adjusted width */
-    height: 40px; /* Adjusted height */
+    width: 300px; 
+    height: 30px;
     background: #eaeaea;
     border-radius: 6px;
+    position: relative;
   }
   
-  .input img {
-    margin: 0px 20px; /* Adjusted margin */
-    width: 25px; /* Adjusted width */
-    height: 25px; /* Adjusted height */
+  .user-input img {
+    margin: 0px 20px; 
+    width: 25px; 
+    height: 25px; 
   }
   
-  .input input {
+  .user-input input {
     height: 40px;
-    width: 220px; /* Adjusted width */
+    width: 220px; 
     background: transparent;
     border: none;
     outline: none;
     color: #797979;
-    font-size: 16px; /* Adjusted font-size */
+    font-size: 16px; 
+  }
+
+  .user-input:hover .error-message {
+    display: block;
+  }
+  
+  .user-input input:focus + .error-message {
+    display: block;
+  }
+  
+  .error-message {
+    display: none;
   }
   
   .forgot-password {
     text-align: center;
-    margin-top: 20px; /* Adjusted margin */
+    margin-top: 20px; 
     color: #797979;
-    font-size: 16px; /* Adjusted font-size */
+    font-size: 16px; 
   }
   
   .submit-container {
@@ -99,18 +119,7 @@
     color: #333;
   }
 
-  .error.name {
-    color: red;
-    font-size: 14px;
-    position: absolute;
-    bottom: 300px; /* Adjust this value as needed */
-  }
   
-  .error.password {
-    color: red;
-    font-size: 14px;
-    position: absolute;
-    bottom: 280px; /* Adjust this value as needed */
-  }
+  
   
   

@@ -1,0 +1,167 @@
+
+/* ---------- chart -------#ffffffbb---  */
+.total-circle-box {
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    margin: 40px 0 0 0;
+  }
+  
+  .skill {
+    width: 160px;
+    height: 160px;
+    /*     background: #00AFF0;
+   */
+    border-radius: 50%;
+    position: relative;
+  }
+  .outer {
+    height: 157px;
+    width: 157px;
+    border-radius: 50%;
+    box-shadow: 6px 6px 10px -1px rgba(0, 0, 0, 0.15),
+      -6px -6px 10px -1px rgba(255, 255, 255, 0.7);
+  }
+  
+  .inner {
+    height: 130px;
+    width: 130px;
+    border-radius: 50%;
+    transform: translate(14px, 14px);
+    box-shadow: inset 4px 4px 6px -1px rgba(0, 0, 0, 0.2),
+      inset -4px -4px 6px -1px rgba(255, 255, 255, 0.7),
+      -0.5px -0.5px 0px rgba(0, 0, 0, 0.15),
+      0px 12px 10px -10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .inner img {
+    height: 80px;
+    width: 80px;
+    transform: translate(23px, 20px);
+  }
+  
+  .circle1 {
+    fill: none;
+    stroke: #00aff0;
+    stroke-width: 14px;
+    stroke-dasharray: 472;
+    stroke-dashoffset: 472;
+    animation: anim 2s linear forwards;
+  }
+  
+  .svg1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  @keyframes anim {
+    100% {
+      stroke-dasharray: 0;
+    }
+  }
+  
+  .cricle1-sub-box,
+  .cricle2-sub-box,
+  .cricle3-sub-box,
+  .cricle4-sub-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .cricle1-sub-box h3,
+  .cricle2-sub-box h3,
+  .cricle3-sub-box h3,
+  .cricle4-sub-box h3 {
+    font-weight: 600;
+    margin: 20px 0 10px 0;
+    font-size: 17px;
+    color: #595757;
+  }
+  
+  .cricle1-sub-box h2,
+  .cricle2-sub-box h2,
+  .cricle3-sub-box h2,
+  .cricle4-sub-box h2 {
+    font-size: 19px;
+  }
+  
+  .circle2 {
+    fill: none;
+    stroke: #71d875;
+    stroke-width: 14px;
+    stroke-dasharray: 472;
+    stroke-dashoffset: 472;
+    animation: anim1 2s linear forwards;
+  }
+  
+  .svg2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  @keyframes anim1 {
+    100% {
+      stroke-dashoffset: 130;
+    }
+  }
+  
+  .circle3 {
+    fill: none;
+    stroke: #ffc107;
+    stroke-width: 14px;
+    stroke-dasharray: 472;
+    stroke-dashoffset: 472;
+    animation: anim3 2s linear forwards;
+  }
+  
+  .svg3 {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  @keyframes anim3 {
+    100% {
+      stroke-dashoffset: 250;
+    }
+  }
+  
+  .circle4 {
+    fill: none;
+    stroke: #ff5274;
+    stroke-width: 14px;
+    stroke-dasharray: 472;
+    stroke-dashoffset: 472;
+    animation: anim4 2s linear forwards;
+  }
+  
+  .svg4 {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  @keyframes anim4 {
+    100% {
+      stroke-dashoffset: 380;
+    }
+  }
+  .totalNumber {
+    color: #00aff0;
+  }
+  
+  .avilableStocks {
+    color: #71d875;
+  }
+  .lowStock {
+    color: #ffc107;
+  }
+  
+  .outOfStock {
+    color: #ff5274;
+  }
+  

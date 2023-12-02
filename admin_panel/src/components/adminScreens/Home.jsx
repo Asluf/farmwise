@@ -1,7 +1,9 @@
 import React from "react";
 import "./Card.css";
 import { useToggleState } from "./ToggleState";
-import Footer from '../mainScreens/Footer';
+import Footer from "../mainScreens/Footer";
+import "../../resources/css/Card.css";
+
 const Card = ({ imageUrl, title, content }) => {
   return (
     <div className="card">
@@ -32,7 +34,7 @@ const Home = () => {
   ];
 
   const columns = 4;
-   // Number of cards in each row
+  // Number of cards in each row
 
   return (
     <>
@@ -42,12 +44,157 @@ const Home = () => {
             {cardData.map((card, index) => (
               <React.Fragment key={index}>
                 <Card {...card} />
-                {(index + 1) % columns === 0 && <div className="column-spacing" />}
+                {(index + 1) % columns === 0 && (
+                  <div className="column-spacing" />
+                )}
               </React.Fragment>
             ))}
           </div>
         </div>
-        <Footer/>
+
+        <div class="total-circle-box">
+          <div class="cricle1-sub-box">
+            <div class="skill">
+              <div class="outer">
+                <div class="inner">
+                  <img
+                    src="<?php echo base_url(); ?>resources/frontend/img/total.png"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+            <svg
+              class="svg1"
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              width="160px"
+              height="160px"
+            >
+              <defs>
+                <linearGradient id="GradientColor">
+                  <stop offset="0%" stop-color="#e91e63" />
+                  <stop offset="100%" stop-color="#673ab7" />
+                </linearGradient>
+              </defs>
+              <circle
+                class="circle1"
+                cx="80"
+                cy="80"
+                r="70"
+                stroke-linecap="round"
+              />
+            </svg>
+            <h3>Total Stocks</h3>
+            <h2 class="totalNumber">700</h2>
+          </div>
+          <div class="cricle2-sub-box">
+            <div class="skill">
+              <div class="outer">
+                <div class="inner">
+                  <img
+                    src="<?php echo base_url(); ?>resources/frontend/img/avilable.png"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+            <svg
+              class="svg2"
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              width="160px"
+              height="160px"
+            >
+              <defs>
+                <linearGradient id="GradientColor">
+                  <stop offset="0%" stop-color="#e91e63" />
+                  <stop offset="100%" stop-color="#673ab7" />
+                </linearGradient>
+              </defs>
+              <circle
+                class="circle2"
+                cx="80"
+                cy="80"
+                r="70"
+                stroke-linecap="round"
+              />
+            </svg>
+            <h3>Available Stocks</h3>
+            <h2 class="avilableStocks">500</h2>
+          </div>
+          <div class="cricle3-sub-box">
+            <div class="skill">
+              <div class="outer">
+                <div class="inner">
+                  <img
+                    src="<?php echo base_url(); ?>resources/frontend/img/Low stock.png"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+            <svg
+              class="svg3"
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              width="160px"
+              height="160px"
+            >
+              <defs>
+                <linearGradient id="GradientColor">
+                  <stop offset="0%" stop-color="#e91e63" />
+                  <stop offset="100%" stop-color="#673ab7" />
+                </linearGradient>
+              </defs>
+              <circle
+                class="circle3"
+                cx="80"
+                cy="80"
+                r="70"
+                stroke-linecap="round"
+              />
+            </svg>
+            <h3>Low Stocks</h3>
+            <h2 class="lowStock">1000</h2>
+          </div>
+          <div class="cricle4-sub-box">
+            <div class="skill">
+              <div class="outer">
+                <div class="inner">
+                  <img
+                    src="<?php echo base_url(); ?>resources/frontend/img/unavilable.png"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+            <svg
+              class="svg4"
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              width="160px"
+              height="160px"
+            >
+              <defs>
+                <linearGradient id="GradientColor">
+                  <stop offset="0%" stop-color="#e91e63" />
+                  <stop offset="100%" stop-color="#673ab7" />
+                </linearGradient>
+              </defs>
+              <circle
+                class="circle4"
+                cx="80"
+                cy="80"
+                r="70"
+                stroke-linecap="round"
+              />
+            </svg>
+            <h3>Out Of Stocks</h3>
+            <h2 class="outOfStock">200 </h2>
+          </div>
+        </div>
+        <Footer />
       </div>
     </>
   );

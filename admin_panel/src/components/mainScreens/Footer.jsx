@@ -1,55 +1,56 @@
 import React from "react";
 import "../../resources/css/footer.css";
 
-import logo from "./Assets/logo.png";
+import fbImg from "./Assets/fblmg.png"
+import twitterImg from "./Assets/twitterImg.png"
+import instaImg from "./Assets/instaImg.png"
+// import linkImg from "./Assets/linkImg.jpg"
+// import mailImg from "./Assets/mailImg.jpeg"
 
 export default function Footer() {
   return (
-    // <div className="fixed-bottom">
-    //   <div className="main-footer">
-    //     <div className="row">
-    //       <div className="col1">
-    //         <img src={logo} alt="" />
-    //       </div>
-
-    //       <div className="col2">
-    //         <h4>FARMWISE</h4>
-    //       </div>
-
-    //       <div className="col3">
-    //         <h4>farmwise</h4>
-    //         <ul className="unorder-list">
-    //           <li>name</li>
-    //           <li>address</li>
-    //         </ul>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
-
-    <footer class="footer mt-auto">
-      {/* <div class="container"> */}
-      {/* <span class="text-muted">Your Footer Content Goes Here</span> */}
+    <footer className="footer mt-auto">
       <div className="main-footer">
-        <div className="row">
+        {/* Row 1 */}
+        <div className="row1">
+          <img src={fbImg} alt="" />
+          <img src={twitterImg} alt="" />
+          {/* <img src={mailImg} alt="" /> */}
+          <img src={instaImg} alt="" />
+          {/* <img src={linkImg} alt="" /> */}
+        </div> 
+
+        {/* Row 2 */}
+        <div className="row2">
           <div className="col1">
-            <img src={logo} alt="" />
+            <h4>CONTACT INFO</h4>
+            <ul className="unorder-list">
+              <li>TEL: 011-000-0000</li>
+              <li>EMAIL: farmwise@gmail.com</li>              
+            </ul>
           </div>
 
           <div className="col2">
-            <h4>FARMWISE</h4>
-          </div>
-
-          <div className="col3">
-            <h4>farmwise</h4>
+            <h4>QUICK LINKS</h4>
             <ul className="unorder-list">
-              <li>name</li>
-              <li>address</li>
+            <li><a href="/farmwise">Farmwise</a></li>
+            <li><a href="/about">About</a></li>
             </ul>
           </div>
         </div>
+        
+
+        <hr />
+
+        {/* Row 3 */}
+        <div className="row3">
+          <p>
+            &copy;{new Date().getFullYear()} FARMWISE | All right reserved | Terms of service | Privacy
+          </p>
+        </div>
       </div>
-      {/* </div> */}
     </footer>
   );
 }
+
+

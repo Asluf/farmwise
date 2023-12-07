@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import "../../resources/css/Login.css";
 
-import person_icon from './Assets/person_icon.png';
-import password_icon from './Assets/password_icon.png';
-import logo from "./Assets/logo.png";
+import person_icon from '../../resources/Assets/person_icon.png';
+import password_icon from '../../resources/Assets/password_icon.png';
+import logo from "../../resources/Assets/logo.png";
 
 export default function Login() {
 

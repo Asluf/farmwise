@@ -1,47 +1,50 @@
 /* sidebarStyles.css */
 
 .sidebar {
-    background-color: #333;
-    padding: 10px;
-    color: white;
-    width: 250px;
+  background-color: #333;
+  padding: 10px;
+  color: white;
+  width: 250px;
   height: 100%;
   position: fixed;
   overflow-y: auto;
   transition: 0.5s;
-  transform: translateX(-250px);  /* Add a smooth transition for better aesthetics */
+  transform: translateX(
+    -250px
+  ); /* Add a smooth transition for better aesthetics */
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
+.sidebar a:hover {
+  background-color: #555;
+}
+.show-sidebar .sidebar {
+  transform: translateX(
+    0
+  ); /* Show the sidebar when .show-sidebar is applied to the wrapper */
+}
+
+.sidebar-toggle {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  background: transparent;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: white;
+}
+
+/* Media query for responsiveness */
+@media screen and (max-width: 600px) {
+  .sidebar {
+    width: 0; /* Hide the sidebar by default on small screens */
   }
-  
-  .sidebar a {
-    display: block;
-    color: white;
-    text-decoration: none;
-    margin-bottom: 10px;
-  }
-  
-  .sidebar a:hover {
-    background-color: #555;
-  }
-  .show-sidebar .sidebar {
-    transform: translateX(0); /* Show the sidebar when .show-sidebar is applied to the wrapper */
-  }
-  
-  .sidebar-toggle {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 1;
-    background: transparent;
-    border: none;
-    font-size: 1.5em;
-    cursor: pointer;
-    color: white;
-  }
-  
-  /* Media query for responsiveness */
-  @media screen and (max-width: 600px) {
-    .sidebar {
-      width: 0; /* Hide the sidebar by default on small screens */
-    }
-  }
-  
+}

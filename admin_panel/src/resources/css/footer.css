@@ -4,10 +4,18 @@
     color: white;
     background: rgb(182, 175, 175);
     padding-top: 1em;
-    position: relative;
+    position:sticky bottom;
     bottom: 0;
     width: 100%;
     
+}
+.links{
+    text-align: center;
+}
+.links img{
+    height: 50px;
+    width: 50px;
+    padding: 5px;
 }
 
 .row2 {
@@ -42,5 +50,8 @@
     color: black;    
 }
 
+.unorder-list li a{
+    color: white;
+}
 
 
